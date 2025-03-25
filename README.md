@@ -6,7 +6,7 @@ This repository contains the frontend codebase for The Hub, a community-focused 
 
 ## Repository
 
-- **URL**: git@github.com:WBS-Bootcamp-Repos/the-hub-frontend.git
+- **URL**: https://github.com/WBS-Bootcamp-Repos/the-hub-frontend.git
 
 ## Tech Stack
 
