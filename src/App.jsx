@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
-    <>
-      <h1 className="flex items-center justify-center min-h-screen text-6xl text-green-300">The Hub frontend page</h1>
-    </>
-  )
+    <div className="flex items-center justify-center min-h-screen font-sora">
+      <h1 className="">The Hub frontend page</h1>
+    </div>
+  );
 }
 
-export default App
+export default App;

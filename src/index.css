@@ -1,3 +1,184 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
+@import "@flaticon/flaticon-uicons/css/all/all";
+
+@import "tailwindcss";
+
+@theme {
+  --font-sora: "Sora", sans-serif;
+
+  --color-base: #f5f5f5;
+  --color-text: #181a4d;
+  --color-lightText: #f5f5f5;
+  --color-primary: #d4dee8;
+  --color-secondary: #d5b4fb;
+  --color-accent: #d9e73c;
+  --color-error: #fd5c32;
+  /* Calendar */
+  --color-lilac: #d5b4fb;
+  /* Posts */
+  --color-neon: #d9e73c;
+  /* Lists */
+  --color-ultramarine: #5b4efe;
+  /* Messages */
+  --color-sage: #e2f5a6;
+}
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+@plugin "daisyui/theme" {
+  name: "thehub";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #f5f5f5;
+  --color-base-200: #d4dee8;
+  --color-base-300: #d4dee8;
+  --color-base-content: #181a4d;
+  --color-primary: #d4dee8;
+  --color-primary-content: #181a4d;
+  --color-secondary: #d5b4fb;
+  --color-secondary-content: #181a4d;
+  --color-accent: #d9e73c;
+  --color-accent-content: #181a4d;
+  --color-neutral: #181a4d;
+  --color-neutral-content: #f5f5f5;
+  --color-info: #283287;
+  --color-info-content: #f5f5f5;
+  --color-success: #d5b4fb;
+  --color-success-content: #181a4d;
+  --color-warning: #d5b4fb;
+  --color-warning-content: #181a4d;
+  --color-error: #fd5c32;
+  --color-error-content: #f5f5f5;
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
+  --radius-box: 2rem;
+}
+
+/* Apply typography styles globally */
+h1 {
+  @apply text-4xl font-black;
+}
+
+h2 {
+  @apply text-3xl font-bold;
+}
+
+h3 {
+  @apply text-2xl font-semibold;
+}
+
+p {
+  @apply text-text font-light;
+}
+
+a {
+  @apply font-bold hover:underline;
+}
+
+/* Customizing daisyUI buttons */
+
+@utility btn-primary {
+  @apply border-none shadow-none;
+}
+
+@utility btn-secondary {
+  @apply border-none shadow-none;
+}
+
+@utility btn-outline {
+  @apply border-2 shadow-none;
+}
+
+/* Icon Button */
+
+.btn-icon {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  border: none;
+  box-shadow: none;
+}
+
+/* Icon List 
+
+Lists 
+<i className="fi-rs-list-check"></i>
+
+ Calendar
+<i className="fi-rr-calendar"></i> 
+
+Messages
+<i className="fi-rr-megaphone"></i>
+
+Posts
+<i className="fi-rr-text"></i>
+
+Save
+<i className="fi-rr-disk"></i>
+
+Delete
+<i className="fi-rr-trash"></i>
+
+Log Out
+<i className="fi-ss-sign-out"></i>
+
+Profile Settings
+<i className="fi-rr-settings-sliders"></i>
+
+Community Settings
+<i className="fi-rs-settings"></i>
+
+Search
+<i className="fi-rr-search"></i>
+
+User
+<i className="fi fi-rr-user"></i>
+
+Notification Bell 
+<i className="fi-rs-bell"></i>
+
+Close X
+<i className="fi-rs-cross"></i>
+
+Plus
+<i className="fi-rr-plus-small"></i>
+
+Go back Arrow
+<i className="fi-ss-arrow-small-down"></i>
+
+Menu
+<i className="fi-rr-menu-burger"></i>
+
+Checkmark
+<i className="fi-ss-check"></i>
+
+Heart 
+<i className="fi-rr-heart"></i>
+
+Thumbs Up
+<i className="fi-rr-thumbs-up"></i>
+
+Thumbs Down
+<i className="fi-rr-thumbs-down"></i>
+
+Camera
+<i className="fi-rr-camera"></i>
+
+Arrow right / left / up / down
+<i className="fi-rr-angle-small-right"></i>
+<i className="fi-rr-angle-small-left"></i>
+<i className="fi-rr-angle-small-up"></i>
+<i className="fi-rr-angle-small-down"></i>
+
+Location
+<i className="fi-rr-home-location"></i>
+
+Edit pen
+<i className="fi-rr-pencil"></i> */
