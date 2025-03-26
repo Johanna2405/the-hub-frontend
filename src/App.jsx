@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router";
+import MainLayout from "./layouts/MainLayout.jsx";
+import Home from "./pages/Home.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="flex items-center justify-center min-h-screen font-sora">
-      <h1 className="">The Hub frontend page</h1>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
