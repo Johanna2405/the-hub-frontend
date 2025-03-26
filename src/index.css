@@ -110,7 +110,7 @@ p {
 }
 
 a {
-  @apply font-bold hover:underline;
+  @apply font-bold;
 }
 
 /* Customizing daisyUI buttons */
@@ -137,6 +137,7 @@ a {
   justify-content: space-between;
   border: none;
   box-shadow: none;
+  padding-top: 0.25rem;
 }
 
 /* Icon List 
