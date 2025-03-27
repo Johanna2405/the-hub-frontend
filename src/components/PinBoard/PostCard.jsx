@@ -6,6 +6,7 @@ const PostCard = () => {
 
   return (
     <div className="flex flex-col bg-neon gap-2 p-4 m-4 rounded-3xl max-w-64 transition-all duration-300">
+      <i className="fi-rr-text"></i>
       <h2 className="text-[#181B4D] font-bold text-lg">Post Title</h2>
 
       {/* Expanded part of the PostCard */}
