@@ -1,14 +1,17 @@
-import React from "react";
 import MessageBubble from "./MessageBubble";
 
-const MessageList = ({ messages }) => {
-    return (
-        <div>
-            {messages.map((msg) => (
-                <MessageBubble key={msg.id} message={msg} />
-            ))}
-        </div>
-    );
+const MessageList = ({ messages, currentUserId }) => {
+  return (
+    <div>
+      {messages.map((msg) => (
+        <MessageBubble
+          key={msg.id}
+          message={msg}
+          currentUserId={currentUserId}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default MessageList;

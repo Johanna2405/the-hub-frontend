@@ -127,6 +127,50 @@ a {
   @apply border-2 shadow-none;
 }
 
+@layer utilities {
+  .chat-bubble-lilac {
+    @apply chat-bubble;
+    background-color: var(--color-lilac);
+    color: var(--color-text);
+    position: relative;
+    min-inline-size: 4.5rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      right: 0.5rem;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 1rem solid transparent;
+      border-right: 1rem solid transparent;
+      border-top: 1rem solid var(--color-lilac);
+    }
+  }
+
+  .chat-bubble-sage {
+    @apply chat-bubble;
+    background-color: var(--color-sage);
+    color: var(--color-text);
+    position: relative;
+    min-inline-size: 4.5rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 2.5rem;
+      transform: translateX(-50%) rotate(180deg);
+      width: 0;
+      height: 0;
+      border-left: 1rem solid transparent;
+      border-right: 1rem solid transparent;
+      border-top: 1rem solid var(--color-sage);
+    }
+  }
+}
+
 /* Icon Button */
 
 .btn-icon {
@@ -208,7 +252,7 @@ Camera
 Arrow right / left / up / down
 <i className="fi-rr-angle-small-right"></i>
 <i className="fi-rr-angle-small-left"></i>
-<i className="fi-rr-angle-small-up"></i>
+<i className="fi fi-rr-arrow-small-up"></i>
 <i className="fi-rr-angle-small-down"></i>
 
 Location

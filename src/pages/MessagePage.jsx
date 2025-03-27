@@ -1,24 +1,66 @@
-import React from "react";
+import { useEffect, useRef } from "react";
 import MessageList from "../components/Messaging/MessageList";
 import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 
 const MessagePage = () => {
-    const [messages, setMessages] = useState([
-        { id: 1, text: "Lorem ipsum dolor sit amet...", sender: "other" },
-        { id: 2, text: "Lorem ipsum.", sender: "me" },
+  //   const currentUserId = 101;
+
+  const [messages, setMessages] = useState([]);
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = (text) => {
+    setMessages([
+      ...messages,
+      {
+        id: Date.now(),
+        text,
+        // userId: currentUserId,
+      },
     ]);
+  };
 
-    const handleSend = (text) => {
-        setMessages([...messages, { id: Date.now(), text, sender: "me" }]);
-    };
-
-    return (
-        <div className="max-w-md mx-auto flex flex-col h-screen">
-            <MessageList messages={messages} />
-            <MessageInput onSend={handleSend} />
+  return (
+    <>
+      {messages.length === 0 ? (
+        <div className="bg-primary rounded-xl p-4 w-full flex flex-col min-h-[75vh]">
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center text-text text-lg opacity-60 min-h-7">
+              Start your community chat here...
+            </div>
+          </div>
+          <MessageInput onSend={handleSend} />
         </div>
-    );
+      ) : (
+        <div className="flex items-end justify-end">
+          <div className="bg-primary rounded-xl p-4 w-full flex flex-col justify-end min-h-[75vh]">
+            <div className="mb-4 flex items-end justify-end">
+              <div
+                className="flex-grow overflow-y-auto mb-4 pt-2"
+                style={{ maxHeight: "calc(75vh - 100px)" }}
+              >
+                <MessageList
+                  messages={messages}
+                  //   currentUserId={currentUserId}
+                />
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+            <MessageInput onSend={handleSend} />
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default MessagePage;
