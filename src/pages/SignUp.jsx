@@ -37,26 +37,24 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base flex flex-col items-center justify-between">
+    <div className="min-h-screen flex flex-col items-center justify-between">
       {/* Main Content */}
       <div className="flex flex-col items-center w-full max-w-md px-4 py-8 sm:max-w-lg md:max-w-xl lg:max-w-2xl">
         {/* Logo */}
-        <div className="text-5xl font-bold text-blue-900 mb-2 sm:text-6xl">LOGO</div>
+        <div className="text-5xl mb-2 sm:text-6xl">LOGO</div>
 
         {/* Welcome Text */}
-        <h1 className="text-3xl font-semibold text-blue-900 mb-1 sm:text-4xl">
-          Welcome to the hub.
-        </h1>
-        <h2 className="text-xl font-medium text-neon mb-6 sm:text-2xl">Sign up</h2>
+        <h1 className="mb-1 sm:text-4xl">Welcome to the hub.</h1>
+        <h2 className="text-neon mb-6 sm:text-2xl">Sign up</h2>
 
         {/* Form */}
         <form onSubmit={handleSignUp} className="w-full space-y-4">
-          {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+          {error && <p className="text-error text-center text-sm">{error}</p>}
 
           {/* Username Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-blue-900 font-medium">Username</span>
+              <span className="label-text font-medium text-text">Username</span>
             </label>
             <input
               type="text"
@@ -71,7 +69,7 @@ const SignUp = () => {
           {/* Email Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-blue-900 font-medium">E-Mail</span>
+              <span className="label-text text-text font-medium">E-Mail</span>
             </label>
             <input
               type="email"
@@ -86,7 +84,7 @@ const SignUp = () => {
           {/* Password Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-blue-900 font-medium">Password</span>
+              <span className="label-text text-text font-medium">Password</span>
             </label>
             <input
               type="password"
@@ -101,7 +99,9 @@ const SignUp = () => {
           {/* Confirm Password Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-blue-900 font-medium">Confirm Password</span>
+              <span className="label-text text-text font-medium">
+                Confirm Password
+              </span>
             </label>
             <input
               type="password"
@@ -113,13 +113,11 @@ const SignUp = () => {
             />
           </div>
 
-
-
           {/* Sign Up Button */}
           <div className="mt-6 text-right">
             <button
               type="submit"
-              className="btn bg-lilac text-black w-32 self-end hover:bg-purple-500 border-none rounded-lg mt-4"
+              className="btn btn-secondary w-32 self-end mt-4"
             >
               sign up
             </button>
@@ -128,10 +126,10 @@ const SignUp = () => {
 
         {/* Sign In Link */}
         <div className="mt-6 text-center bg-primary w-full rounded-xl p-6">
-          <h2 className="text-black mb-2">Already have an account?</h2>
+          <h2 className=" mb-8">Already have an account?</h2>
           <button
             onClick={() => navigate("/signin")}
-            className="btn bg-blue-600 text-white w-32 hover:bg-blue-700 border-none rounded-lg"
+            className="btn bg-ultramarine text-base w-32 hover:bg-[#4536FF] border-none"
           >
             sign in
           </button>
