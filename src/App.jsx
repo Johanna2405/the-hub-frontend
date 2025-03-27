@@ -5,6 +5,7 @@ import MessagePage from "./pages/MessagePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import PinBoard from "./pages/PinBoard.jsx";
 import SignIn from "./pages/SignIn.jsx";
+import DailyCalendar from "./components/Calendar/DailyCalendar.jsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route path="pinboard" element={<PinBoard />} />
             <Route path="signin" element={<SignIn />} />
+            <Route path="dailycalendar" element={<DailyCalendar />} />
           </Route>
         </Routes>
       </BrowserRouter>
