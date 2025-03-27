@@ -2,8 +2,11 @@ import { useEffect, useRef } from "react";
 import MessageList from "../components/Messaging/MessageList";
 import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
+import Header from "../components/Header";
+import { useNavigate } from "react-router";
 
 const MessagePage = () => {
+  const navigate = useNavigate();
   //   const currentUserId = 101;
 
   const [messages, setMessages] = useState([]);
@@ -31,8 +34,13 @@ const MessagePage = () => {
 
   return (
     <>
+      <Header
+        title="Community Chat"
+        showBackButton={true}
+        onBack={() => navigate(-1)}
+      />
       {messages.length === 0 ? (
-        <div className="bg-primary rounded-xl p-4 w-full flex flex-col min-h-[75vh]">
+        <div className="bg-primary rounded-xl p-4 w-full flex flex-col min-h-[65vh]">
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center text-text text-lg opacity-60 min-h-7">
               Start your community chat here...
