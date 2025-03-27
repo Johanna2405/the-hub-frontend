@@ -1,17 +1,19 @@
-import { useState } from "react";
-import PostCard from "./components/PinBoard/PostCard";
-import ListCard from "./components/PinBoard/ListCard";
+import { BrowserRouter, Routes, Route } from "react-router";
+import MainLayout from "./layouts/MainLayout.jsx";
+import Home from "./pages/Home.jsx";
+import SignUp from "./pages/SignUp.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1 className="flex items-center justify-center min-h-screen text-6xl text-green-300">
-        The Hub frontend page
-      </h1>
-      <PostCard />
-      <ListCard />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+            <Route path="signup" element={<SignUp />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
