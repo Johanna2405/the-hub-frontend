@@ -10,11 +10,18 @@ const PinBoard = () => {
       <h2 className="text-neon">Hello username</h2>
       <h1>Good Morning</h1>
       <CardFilter />
-      <div className="grid grid-cols-2 ">
-        <ListCard />
-        <PostCard />
-        <EventCard />
-        <MessageCard />
+      <div className="flex">
+        {/* Column A */}
+        <div className="flex flex-col w-1/2">
+          <ListCard />
+          <EventCard />
+        </div>
+
+        {/* Column B */}
+        <div className="flex flex-col w-1/2">
+          <PostCard />
+          <MessageCard />
+        </div>
       </div>
     </div>
   );
