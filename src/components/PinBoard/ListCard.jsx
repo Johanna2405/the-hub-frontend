@@ -17,6 +17,7 @@ const ListCard = () => {
 
   return (
     <div className="flex flex-col bg-primary gap-2 p-4 m-4 rounded-3xl max-w-64 shadow">
+      <i className="fi-rs-list-check"></i>
       <h2 className="">To Do List</h2>
 
       <ul className="">
@@ -25,7 +26,7 @@ const ListCard = () => {
             <label className="flex items-center">
               <input
                 type="checkbox"
-                className="checkbox checkbox-xs border-text text-text checked:border-text mr-2"
+                className="checkbox checkbox-xs border border-text text-text checked:border-text mr-2"
               />
               {item}
             </label>
