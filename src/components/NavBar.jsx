@@ -10,7 +10,11 @@ const NavBar = ({ isOpen, setIsOpen }) => {
         <i className="fi-rr-sidebar"></i>
       </button>
       <Link to={"/"}>
-        <img src="./logoipsum-329.svg" alt="Logo" />
+        <img
+          src="./logoipsum-329.svg"
+          alt="Logo"
+          className={` ${isOpen ? "hidden" : "flex"}`}
+        />
       </Link>
       <div className="flex gap-2">
         <button className="btn btn-primary btn-icon text-xl">
