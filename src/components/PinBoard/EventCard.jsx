@@ -8,6 +8,7 @@ const EventCard = () => {
 
   return (
     <div className="flex flex-col bg-lilac gap-2 p-4 m-4 rounded-3xl max-w-64 shadow">
+      <i className="fi-rr-calendar"></i>
       <h2>Upcoming Events</h2>
 
       {/* Event element, later to be rendered for each calender item or up to e.g. 5 at once */}
