@@ -1,15 +1,20 @@
 import { Link, NavLink } from "react-router";
 
-const NavBar = () => {
+const NavBar = ({ isOpen, setIsOpen }) => {
   return (
     <div className="flex items-center justify-between p-4 gap-4">
-      <NavLink to={"/menu"}>
-        <button className="btn btn-primary btn-icon text-xl">
-          <i className="fi-rr-menu-burger"></i>
-        </button>
-      </NavLink>
+      <button
+        className={`btn btn-primary text-xl pt-1 ${isOpen ? "hidden" : "flex"}`}
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
+        <i className="fi-rr-sidebar"></i>
+      </button>
       <Link to={"/"}>
-        <img src="./logoipsum-329.svg" alt="Logo" />
+        <img
+          src="./logoipsum-329.svg"
+          alt="Logo"
+          className={` ${isOpen ? "hidden" : "flex"}`}
+        />
       </Link>
       <div className="flex gap-2">
         <button className="btn btn-primary btn-icon text-xl">
