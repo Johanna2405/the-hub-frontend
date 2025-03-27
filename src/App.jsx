@@ -3,6 +3,7 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
 import MessagePage from "./pages/MessagePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
+import SignIn from "./pages/SignIn.jsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="messages" element={<MessagePage />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="signin" element={<SignIn />} />
           </Route>
         </Routes>
       </BrowserRouter>

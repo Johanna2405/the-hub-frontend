@@ -44,7 +44,7 @@ const SignUp = () => {
         <div className="text-5xl mb-2 sm:text-6xl">LOGO</div>
 
         {/* Welcome Text */}
-        <h1 className="mb-1 sm:text-4xl">Welcome to the hub.</h1>
+        <h1 className="m-7 mb-8 sm:text-4xl">Welcome to the hub.</h1>
         <h2 className="text-neon mb-6 sm:text-2xl">Sign up</h2>
 
         {/* Form */}
@@ -117,7 +117,7 @@ const SignUp = () => {
           <div className="mt-6 text-right">
             <button
               type="submit"
-              className="btn btn-secondary w-32 self-end mt-4"
+              className="btn btn-secondary w-32 self-end mt-4 mb-8"
             >
               sign up
             </button>
@@ -125,7 +125,7 @@ const SignUp = () => {
         </form>
 
         {/* Sign In Link */}
-        <div className="mt-6 text-center bg-primary w-full rounded-xl p-6">
+        <div className="mt-6 mb-6 text-center bg-primary w-full rounded-xl p-6">
           <h2 className=" mb-8">Already have an account?</h2>
           <button
             onClick={() => navigate("/signin")}
