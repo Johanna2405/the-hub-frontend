@@ -16,7 +16,7 @@ const ListCard = () => {
   const visibleItems = expanded ? items : items.slice(0, 3);
 
   return (
-    <div className="flex flex-col bg-primary gap-2 p-4 m-4 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
+    <div className="flex flex-col bg-primary gap-2 p-4 m-2 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
       <i className="fi-rs-list-check"></i>
       <h2 className="">To Do List</h2>
 

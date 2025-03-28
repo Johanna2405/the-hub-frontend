@@ -7,7 +7,7 @@ const EventCard = () => {
   const formattedDate = today.toLocaleDateString("de-DE");
 
   return (
-    <div className="flex flex-col bg-lilac gap-2 p-4 m-4 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
+    <div className="flex flex-col bg-lilac gap-2 p-4 m-2 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
       <i className="fi-rr-calendar"></i>
       <h2>Upcoming Events</h2>
 

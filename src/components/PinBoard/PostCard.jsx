@@ -5,7 +5,7 @@ const PostCard = () => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="flex flex-col bg-neon gap-2 p-4 m-4 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
+    <div className="flex flex-col bg-neon gap-2 p-4 m-2 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
       <i className="fi-rr-text"></i>
       <h2 className="text-[#181B4D] font-bold text-lg">Post Title</h2>
 
