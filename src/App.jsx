@@ -8,6 +8,7 @@ import SignIn from "./pages/SignIn.jsx";
 import DailyCalendar from "./components/Calendar/DailyCalendar.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import WeeklyCalendar from "./components/Calendar/WeeklyCalendar.jsx";
+import MonthlyCalendar from "./components/Calendar/MonthlyCalendar.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="dailycalendar" element={<DailyCalendar />} />
             <Route path="weeklycalendar" element={<WeeklyCalendar />} />
+            <Route path="monthlycalendar" element={<MonthlyCalendar />} />
           </Route>
           <Route path="get-started" element={<LandingPage />} />
         </Routes>
