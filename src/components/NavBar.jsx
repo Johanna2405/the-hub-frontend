@@ -2,7 +2,7 @@ import { Link, NavLink } from "react-router";
 
 const NavBar = ({ isOpen, setIsOpen }) => {
   return (
-    <div className="flex items-center justify-between p-4 gap-4">
+    <div className="flex items-center justify-between p-4 gap-4 w-full">
       <button
         className={`btn btn-primary text-xl pt-1 ${isOpen ? "hidden" : "flex"}`}
         onClick={() => setIsOpen((prev) => !prev)}
