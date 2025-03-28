@@ -84,7 +84,7 @@ const LandingPage = () => {
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos
               assumenda, repellendus vitae eligendi veniam eum nemo dignissimos
               recusandae tenetur consectetur commodi dolorem quam ut rem quod
-              quae odio autem repudiandae.
+              quae odio autem repudiandae..
             </p>
           </div>
           <div className="p-4 py-8 flex flex-col gap-4 rounded-3xl hover:bg-primary">
