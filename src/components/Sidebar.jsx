@@ -46,7 +46,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <span className="font-normal text-lg">Messages</span>
             </div>
           </NavLink>
-          <NavLink to={"/calendar"}>
+          <NavLink to={"/dailycalendar"}>
             <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
               <i className="fi-rr-calendar text-lilac text-2xl pt-1"></i>
               <span className="font-normal text-lg">Calendar</span>
