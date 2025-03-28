@@ -6,6 +6,7 @@ import SignUp from "./pages/SignUp.jsx";
 import PinBoard from "./pages/PinBoard.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import DailyCalendar from "./components/Calendar/DailyCalendar.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 import WeeklyCalendar from "./components/Calendar/WeeklyCalendar.jsx";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="dailycalendar" element={<DailyCalendar />} />
             <Route path="weeklycalendar" element={<WeeklyCalendar />} />
           </Route>
+          <Route path="get-started" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>
     </>
