@@ -5,7 +5,7 @@ import IconBtn from "../IconBtn";
 
 const DailyCalendar = () => {
     const navigate = useNavigate();
-    const [selectedDay, setSelectedDay] = useState("25");
+    const [selectedDay, setSelectedDay] = useState();
 
     const days = [
         { day: "22", label: "Sat" },
