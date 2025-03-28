@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import Header from "../Header";
 
 const DailyCalendar = () => {
   const navigate = useNavigate();
@@ -33,18 +34,13 @@ const DailyCalendar = () => {
     },
   ];
 
-  return (
-    <div className="bg-base min-h-screen mx-auto">
-      {/* Header */}
-      <div className="flex items-center mb-6">
-        <button
-          showBackButton={true}
-          onClick={() => navigate(-1)}
-          className="flex items-center bg-blue-100 text-blue-900 font-bold text-md px-4 py-2 rounded-xl border-none"
-        >
-          <span className="text-lg mr-2"> ⬅ </span> Go back
-        </button>
-      </div>
+   return (
+        <div className="p-4 bg-base min-h-screen w-full md:w-4/5 lg:w-3/4 xl:w-2/3 mx-auto">
+            {/* Header */}
+            <Header
+                showBackButton={true}
+                onBack={() => navigate(-1)}
+            />
 
       {/* Title and Add */}
       <div className="flex items-center justify-between mb-8">
