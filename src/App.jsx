@@ -9,6 +9,7 @@ import DailyCalendar from "./components/Calendar/DailyCalendar.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import WeeklyCalendar from "./components/Calendar/WeeklyCalendar.jsx";
 import MonthlyCalendar from "./components/Calendar/MonthlyCalendar.jsx";
+import PostPage from "./pages/PostPage.jsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="dailycalendar" element={<DailyCalendar />} />
             <Route path="weeklycalendar" element={<WeeklyCalendar />} />
             <Route path="monthlycalendar" element={<MonthlyCalendar />} />
+            <Route path="posts" element={<PostPage />} />
           </Route>
           <Route path="get-started" element={<LandingPage />} />
         </Routes>
