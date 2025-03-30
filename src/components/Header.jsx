@@ -1,14 +1,15 @@
+import IconBtn from "../components/IconBtn";
+
 const Header = ({ title, showBackButton, onBack, RightAction }) => {
   return (
     <header className="mb-6">
       {showBackButton && (
         <div className="mb-4 flex items-center">
-          <button
-            className="rounded-xl bg-primary p-2 text-text"
+          <IconBtn
             onClick={onBack}
-          >
-            <i className="fi fi-ss-arrow-small-left" />
-          </button>
+            color={"text"}
+            icon={"fi-ss-arrow-small-left"}
+          />
           <span className="ml-2 font-medium text-text">Go Back</span>
         </div>
       )}

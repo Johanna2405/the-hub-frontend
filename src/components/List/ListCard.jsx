@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import ListItem from "./ListItem";
 
 const ListCard = ({
@@ -12,6 +14,8 @@ const ListCard = ({
   onAddItem = () => {},
   showAddItemInput = true,
 }) => {
+  const [expanded, setExpanded] = useState(false);
+
   const renderFilters = () => {
     if (filters.length === 0) return null;
     return (
@@ -34,14 +38,16 @@ const ListCard = ({
   };
 
   const cardStyles = {
-    default: "bg-gray-100 text-black",
-    grocery: "bg-blue-600 text-white",
-    packing: "bg-gray-200 text-black",
+    default: "bg-primary text-text",
+    grocery: "bg-ultramarine text-primary",
+    packing: "bg-primary text-text",
   };
+
+  const visibleItems = expanded ? items : items.slice(0, 3);
 
   return (
     <div
-      className={`rounded-xl p-4 mb-4 ${
+      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${
         cardStyles[type] || cardStyles.default
       }`}
     >
@@ -53,23 +59,35 @@ const ListCard = ({
       {renderFilters()}
 
       <ul className="space-y-1">
-        {items.map((item) => (
+        {visibleItems.map((item) => (
           <ListItem
             key={item.id}
             id={item.id}
             text={item.text}
             checked={item.checked}
             onToggle={onItemToggle}
+            type={type}
           />
         ))}
       </ul>
+
+      {items.length > 3 && (
+        <div className="flex justify-end mt-2">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-text hover:text-gray-600 transition-colors"
+          >
+            {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
+        </div>
+      )}
 
       {showAddItemInput && (
         <div className="mt-3 flex gap-2">
           <input
             type="text"
             placeholder="New List Item"
-            className="flex-1 p-2 rounded text-black"
+            className="flex-1 p-2 rounded text-text"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 onAddItem(e.target.value);
@@ -77,7 +95,7 @@ const ListCard = ({
               }
             }}
           />
-          <button className="bg-white text-black px-3 rounded">✓</button>
+          <button className="bg-primary text-text px-3 rounded">✓</button>
         </div>
       )}
     </div>

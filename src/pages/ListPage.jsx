@@ -2,6 +2,8 @@ import { useState } from "react";
 import ListCard from "../components/List/ListCard";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
+import IconBtn from "../components/IconBtn";
+import ListFilter from "../components/List/ListFilter";
 
 const ListPage = () => {
   const navigate = useNavigate();
@@ -93,15 +95,16 @@ const ListPage = () => {
         showBackButton={true}
         onBack={() => navigate(-1)}
         RightAction={
-          <button
+          <IconBtn
             onClick={handleAdd}
-            className="rounded-xl bg-neon p-2 text-xl"
-            aria-label="Add"
-          >
-            <i className="fi-rr-plus-small"></i>
-          </button>
+            color={"neon"}
+            icon={"fi-rr-plus-small"}
+          />
         }
       />
+      <div className="pb-4">
+        <ListFilter />
+      </div>
 
       {lists.map((list) => (
         <ListCard
