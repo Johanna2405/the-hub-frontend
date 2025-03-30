@@ -9,7 +9,7 @@ const PostModal = ({ children, onClose }) => {
         onClick={() => document.getElementById("app_modal").showModal()}
       />
       <dialog id="app_modal" className="modal">
-        <div className="modal-box bg-primary">
+        <div className="modal-box bg-neon">
           <h3 className="font-bold text-lg text-[#181B4D] mb-4">
             Create a new post
           </h3>
@@ -33,7 +33,15 @@ const PostModal = ({ children, onClose }) => {
               <label className="fieldset-label text-text">Upload a file</label>
               <input
                 type="file"
-                className="file-input file-input-ghost w-full"
+                className="file-input file-input-ghost w-full bg-base file:bg-ultramarine file:text-white file:border-none file:px-4 file:py-2 file:rounded-lg"
+              />
+            </div>
+            <div className="flex w-full justify-end">
+              <IconBtn
+                icon="fi-rr-disk"
+                text="Submit"
+                color="lilac"
+                onClick={() => document.getElementById("app_modal").close()}
               />
             </div>
           </div>
