@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 
 const NavBar = ({ isOpen, setIsOpen }) => {
   return (
