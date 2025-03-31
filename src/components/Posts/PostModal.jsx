@@ -1,6 +1,18 @@
+import { useState } from "react";
 import IconBtn from "../IconBtn";
 
 const PostModal = ({ children, onClose }) => {
+  const [file, setFile] = useState(null);
+  const [previewURL, setPreviewURL] = useState(null);
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    if (selected) {
+      setFile(selected);
+      setPreviewURL(URL.createObjectURL(selected));
+    }
+  };
+
   return (
     <div>
       <IconBtn
@@ -25,17 +37,35 @@ const PostModal = ({ children, onClose }) => {
             <div>
               <label className="fieldset-label text-text">Post Content</label>
               <textarea
-                className="textarea h-24 w-full"
+                className="textarea bg-base h-24 w-full"
                 placeholder="Enter the post content"
               ></textarea>
             </div>
+
+            {/* File Upload */}
             <div>
               <label className="fieldset-label text-text">Upload a file</label>
               <input
                 type="file"
+                accept="image/*"
+                onChange={handleFileChange}
                 className="file-input file-input-ghost w-full bg-base file:bg-ultramarine file:text-white file:border-none file:px-4 file:py-2 file:rounded-lg"
               />
             </div>
+
+            {/* Preview */}
+            {previewURL && (
+              <div className="mt-2">
+                <label className="fieldset-label text-text">Preview</label>
+                <img
+                  src={previewURL}
+                  alt="Preview"
+                  className="w-full max-h-64 object-cover rounded-lg"
+                />
+              </div>
+            )}
+
+            {/* Submit btn */}
             <div className="flex w-full justify-end">
               <IconBtn
                 icon="fi-rr-disk"
