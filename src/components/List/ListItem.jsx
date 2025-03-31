@@ -1,11 +1,13 @@
-import { Check } from "lucide-react";
+import IconBtn from "../IconBtn";
 
 const ListItem = ({ id, text, checked = false, type, onToggle = () => {} }) => {
   const ringColorClass = type === "grocery" ? "ring-primary" : "ring-text";
-  const focusRindColorClass = type === "grocery" ? "ring-primary" : "ring-text";
+  const focusRingColorClass = type === "grocery" ? "ring-primary" : "ring-text";
+  const colorClass = type == "grocery" ? "ultramarine" : "base";
+
   return (
     <li className="flex items-center gap-2">
-      <label className="relative flex items-center cursor-pointer">
+      <label className="relative inline-flex items-center cursor-pointer">
         <input
           type="checkbox"
           checked={checked}
@@ -23,19 +25,14 @@ const ListItem = ({ id, text, checked = false, type, onToggle = () => {} }) => {
             ease-in-out
             focus:outline-none 
             focus:ring-2 
-            ${focusRindColorClass} 
+            ${focusRingColorClass} 
           `}
         />
 
         {checked && (
-          <Check
-            className="absolute left-0 top-0 w-5 h-5 pointer-events-none"
-            style={{
-              stroke:
-                type === "grocery" ? "var(--color-base)" : "var(--color-text)",
-            }}
-            strokeWidth={3}
-          />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-2 mb-1">
+            <IconBtn color={colorClass} icon="fi-ss-check" transparent />
+          </div>
         )}
       </label>
 

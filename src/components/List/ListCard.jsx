@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ListItem from "./ListItem";
+import IconBtn from "../IconBtn";
 
 const ListCard = ({
   title = "",
@@ -15,6 +16,7 @@ const ListCard = ({
   showAddItemInput = true,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [newItemText, setNewItemText] = useState("");
 
   const renderFilters = () => {
     if (filters.length === 0) return null;
@@ -44,6 +46,12 @@ const ListCard = ({
   };
 
   const visibleItems = expanded ? items : items.slice(0, 3);
+
+  const handleAddItem = () => {
+    if (!newItemText.trim()) return;
+    onAddItem(newItemText.trim());
+    setNewItemText("");
+  };
 
   return (
     <div
@@ -83,19 +91,28 @@ const ListCard = ({
       )}
 
       {showAddItemInput && (
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex items-center gap-2">
+          <span
+            className="block
+            h-5 w-5
+            rounded-full
+            ring-1
+            ring-text
+            cursor-pointer
+            flex-shrink-0
+            "
+          />
           <input
             type="text"
             placeholder="New List Item"
             className="flex-1 p-2 rounded text-text"
+            value={newItemText}
+            onChange={(e) => setNewItemText(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                onAddItem(e.target.value);
-                e.target.value = "";
-              }
+              if (e.key === "Enter") handleAddItem();
             }}
           />
-          <button className="bg-primary text-text px-3 rounded">✓</button>
+          <IconBtn color={type} icon="fi-ss-check" />
         </div>
       )}
     </div>

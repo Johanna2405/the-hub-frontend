@@ -184,6 +184,10 @@ a {
   padding-top: 0.25rem;
 }
 
+.btn-no-noise {
+  --fx-noise: none;
+}
+
 /* Icon List 
 
 Lists 

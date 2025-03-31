@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import IconBtn from "../IconBtn";
 
 const NewListCard = ({
   onSave = () => {},
@@ -69,12 +70,7 @@ const NewListCard = ({
           >
             🗑 {defaultValues.title ? "Delete" : "Cancel"}
           </button>
-          <button
-            type="submit"
-            className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            💾 Save
-          </button>
+          <IconBtn text={"save"} color={"lilac"} icon={"fi-rr-heart"} />
         </div>
       </form>
     </div>
