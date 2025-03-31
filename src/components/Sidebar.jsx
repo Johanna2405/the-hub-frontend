@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import SidebarLink from "./SidebarLink";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
@@ -28,48 +28,57 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       >
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
-          <NavLink to={"/pinboard"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-text text-neon text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Posts</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/lists"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rs-list-check text-aquamarine text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Lists</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/messages"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-megaphone text-sage text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Messages</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/dailycalendar"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-calendar text-lilac text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Calendar</span>
-            </div>
-          </NavLink>
+          <SidebarLink
+            target={"/pinboard"}
+            icon={"fi-rr-text"}
+            iconColor={"neon"}
+            text={"Posts"}
+            setIsOpen={setIsOpen}
+          />
+          <SidebarLink
+            target={"/lists"}
+            icon={"fi-rs-list-check"}
+            iconColor={"aquamarine"}
+            text={"Lists"}
+            setIsOpen={setIsOpen}
+          />
+          <SidebarLink
+            target={"/messages"}
+            icon={"fi-rr-megaphone"}
+            iconColor={"sage"}
+            text={"Messages"}
+            setIsOpen={setIsOpen}
+          />
+          <SidebarLink
+            target={"/dailycalendar"}
+            icon={"fi-rr-calendar"}
+            iconColor={"lilac"}
+            text={"Calendar"}
+            setIsOpen={setIsOpen}
+          />
         </nav>
         <h3>Settings</h3>
         <div className="flex flex-col gap-4">
-          <NavLink to={"/settings"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-settings-sliders text-text text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Profile Settings</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/community-settings"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rs-settings text-text text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Community Settings</span>
-            </div>
-          </NavLink>
+          <SidebarLink
+            target={"/settings"}
+            icon={"fi-rr-settings-sliders"}
+            iconColor={"text"}
+            text={"Profile Settings"}
+            setIsOpen={setIsOpen}
+          />
+          <SidebarLink
+            target={"/community-settings"}
+            icon={"fi-rs-settings"}
+            iconColor={"text"}
+            text={"Community Settings"}
+            setIsOpen={setIsOpen}
+          />
         </div>
         {/* Add onClick to the button for sign out function */}
-        <button className="flex items-center gap-4">
+        <button
+          className="flex items-center gap-4"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
           <i className="fi fi-rr-exit text-text text-2xl bg-base rounded-xl px-3 pt-3 pb-1 "></i>
           <span className="font-bold text-lg">Sign out</span>
         </button>
