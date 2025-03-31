@@ -10,6 +10,12 @@ const MessageInput = ({ onSend }) => {
     setText("");
   };
 
+  const handleAddMessage = () => {
+    if (text.trim() === "") return;
+    onSend(text);
+    setText("");
+  };
+
   return (
     <div className="p-4 flex items-center gap-2">
       <label className="input w-full">
@@ -17,6 +23,9 @@ const MessageInput = ({ onSend }) => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleAddMessage();
+          }}
           placeholder="Type your message..."
         />
         <button className="btn btn-sm bg-sage btn-icon" onClick={handleSend}>

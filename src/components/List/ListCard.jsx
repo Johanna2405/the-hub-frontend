@@ -13,10 +13,10 @@ const ListCard = ({
   onFilterChange = () => {},
   onItemToggle = () => {},
   onAddItem = () => {},
-  showAddItemInput = true,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [newItemText, setNewItemText] = useState("");
+  const [showAddItemInput, setShowAddItemInput] = useState(false);
 
   const renderFilters = () => {
     if (filters.length === 0) return null;
@@ -78,17 +78,6 @@ const ListCard = ({
         ))}
       </ul>
 
-      {items.length > 3 && (
-        <div className="flex justify-end mt-2">
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="text-text hover:text-gray-600 transition-colors"
-          >
-            {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          </button>
-        </div>
-      )}
-
       {showAddItemInput && (
         <div className="mt-3 flex items-center gap-2">
           <input
@@ -101,9 +90,24 @@ const ListCard = ({
               if (e.key === "Enter") handleAddItem();
             }}
           />
-          <IconBtn color="base" icon="fi-ss-check" />
+          <IconBtn color="base" icon="fi-ss-check" onClick={handleAddItem} />
         </div>
       )}
+
+      <div className="flex justify-end mt-2">
+        <button
+          onClick={() => {
+            setExpanded(!expanded);
+            setShowAddItemInput(!expanded);
+          }}
+        >
+          {expanded ? (
+            <IconBtn color={type} icon={"fi-rr-angle-up"} transparent />
+          ) : (
+            <IconBtn color={type} icon={"fi-rr-angle-down"} transparent />
+          )}
+        </button>
+      </div>
     </div>
   );
 };
