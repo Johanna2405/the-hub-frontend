@@ -40,11 +40,10 @@ const SignUp = () => {
     <div className="min-h-screen flex flex-col items-center justify-between">
       {/* Main Content */}
       <div className="flex flex-col items-center w-full max-w-md px-4 py-8 sm:max-w-lg md:max-w-xl lg:max-w-2xl">
-        {/* Logo */}
-        <div className="text-5xl mb-2 sm:text-6xl">LOGO</div>
-
         {/* Welcome Text */}
-        <h1 className="m-7 mb-8 sm:text-4xl">Welcome to the hub.</h1>
+        <h1 className="m-7 mb-8 sm:text-4xl text-center">
+          Welcome to the hub.
+        </h1>
         <h2 className="text-neon mb-6 sm:text-2xl">Sign up</h2>
 
         {/* Form */}
@@ -54,14 +53,16 @@ const SignUp = () => {
           {/* Username Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium text-text">Username</span>
+              <span className="label-text font-medium text-text pb-2">
+                Username
+              </span>
             </label>
             <input
               type="text"
               placeholder="username"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="input input-bordered w-full bg-primary text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
+              className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
               required
             />
           </div>
@@ -69,14 +70,16 @@ const SignUp = () => {
           {/* Email Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-text font-medium">E-Mail</span>
+              <span className="label-text text-text font-medium pb-2">
+                E-Mail
+              </span>
             </label>
             <input
               type="email"
               placeholder="email@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input input-bordered w-full bg-primary text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
+              className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
               required
             />
           </div>
@@ -84,14 +87,16 @@ const SignUp = () => {
           {/* Password Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-text font-medium">Password</span>
+              <span className="label-text text-text font-medium pb-2">
+                Password
+              </span>
             </label>
             <input
               type="password"
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input input-bordered w-full bg-primary text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
+              className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
               required
             />
           </div>
@@ -99,7 +104,7 @@ const SignUp = () => {
           {/* Confirm Password Input */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-text font-medium">
+              <span className="label-text text-text font-medium pb-2">
                 Confirm Password
               </span>
             </label>
@@ -108,7 +113,7 @@ const SignUp = () => {
               placeholder="********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="input input-bordered w-full bg-primary text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
+              className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
               required
             />
           </div>
@@ -117,7 +122,7 @@ const SignUp = () => {
           <div className="mt-6 text-right">
             <button
               type="submit"
-              className="btn btn-secondary w-32 self-end mt-4 mb-8"
+              className="btn btn-secondary self-end mt-4 mb-8"
             >
               sign up
             </button>
@@ -129,17 +134,12 @@ const SignUp = () => {
           <h2 className=" mb-8">Already have an account?</h2>
           <button
             onClick={() => navigate("/signin")}
-            className="btn bg-ultramarine text-base w-32 hover:bg-[#4536FF] border-none"
+            className="btn bg-ultramarine text-base hover:bg-[#4536FF] border-none"
           >
             sign in
           </button>
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="w-full bg-info text-white text-center py-10">
-        <h2 className="text-white py-25">Placeholder Footer</h2>
-      </footer>
     </div>
   );
 };
