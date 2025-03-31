@@ -45,6 +45,7 @@ const ListPage = () => {
       type: "packing",
     },
   ]);
+
   const handleItemToggle = (listId, itemId) => {
     setLists((prev) =>
       prev.map((list) =>
@@ -70,6 +71,34 @@ const ListPage = () => {
                 ...list.items,
                 { id: Date.now().toString(), text, checked: false },
               ],
+            }
+          : list
+      )
+    );
+  };
+
+  const handleUpdateItem = (listId, itemId, newText) => {
+    setLists((prev) =>
+      prev.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              items: list.items.map((item) =>
+                item.id === itemId ? { ...item, text: newText } : item
+              ),
+            }
+          : list
+      )
+    );
+  };
+
+  const handleDeleteItem = (listId, itemId) => {
+    setLists((prev) =>
+      prev.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              items: list.items.filter((item) => item.id !== itemId),
             }
           : list
       )
@@ -105,7 +134,6 @@ const ListPage = () => {
       <div className="pb-4">
         <ListFilter />
       </div>
-
       {lists.map((list) => (
         <ListCard
           key={list.id}
@@ -118,6 +146,8 @@ const ListPage = () => {
           onFilterChange={(filter) => handleFilterChange(list.id, filter)}
           onItemToggle={(itemId) => handleItemToggle(list.id, itemId)}
           onAddItem={(text) => handleAddItem(list.id, text)}
+          onUpdate={(itemId, text) => handleUpdateItem(list.id, itemId, text)}
+          onDelete={(itemId) => handleDeleteItem(list.id, itemId)}
           showAddItemInput={true}
         />
       ))}

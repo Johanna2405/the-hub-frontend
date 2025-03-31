@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import ListItem from "./ListItem";
 import IconBtn from "../IconBtn";
 
@@ -13,10 +12,13 @@ const ListCard = ({
   onFilterChange = () => {},
   onItemToggle = () => {},
   onAddItem = () => {},
+  onUpdate = () => {},
+  onDelete = () => {},
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [newItemText, setNewItemText] = useState("");
   const [showAddItemInput, setShowAddItemInput] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   const renderFilters = () => {
     if (filters.length === 0) return null;
@@ -52,6 +54,11 @@ const ListCard = ({
     setNewItemText("");
   };
 
+  const toggleEditMode = () => {
+    console.log("Toogle edit here");
+    setEditMode(true);
+  };
+
   return (
     <div
       className={`rounded-xl p-4 mb-4 transition-all duration-300 ${
@@ -74,39 +81,59 @@ const ListCard = ({
             checked={item.checked}
             onToggle={onItemToggle}
             type={type}
+            editMode={editMode}
+            setEditMode={setEditMode}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
           />
         ))}
       </ul>
 
       {showAddItemInput && (
-        <div className="mt-3 flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="New List Item"
-            className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
-            value={newItemText}
-            onChange={(e) => setNewItemText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleAddItem();
-            }}
-          />
-          <IconBtn color="base" icon="fi-ss-check" onClick={handleAddItem} />
-        </div>
+        <>
+          <div className="mt-3 flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="New List Item"
+              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
+              value={newItemText}
+              onChange={(e) => setNewItemText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleAddItem();
+              }}
+            />
+            <IconBtn color="base" icon="fi-ss-check" onClick={handleAddItem} />
+            <IconBtn
+              color="base"
+              icon="fi-rr-pencil"
+              onClick={toggleEditMode}
+            />
+          </div>
+        </>
       )}
 
       <div className="flex justify-end mt-2">
-        <button
-          onClick={() => {
-            setExpanded(!expanded);
-            setShowAddItemInput(!expanded);
-          }}
-        >
-          {expanded ? (
-            <IconBtn color={type} icon={"fi-rr-angle-up"} transparent />
-          ) : (
-            <IconBtn color={type} icon={"fi-rr-angle-down"} transparent />
-          )}
-        </button>
+        {expanded ? (
+          <IconBtn
+            color={type}
+            onClick={() => {
+              setExpanded(!expanded);
+              setShowAddItemInput(!expanded);
+            }}
+            icon={"fi-rr-angle-up"}
+            transparent
+          />
+        ) : (
+          <IconBtn
+            color={type}
+            onClick={() => {
+              setExpanded(!expanded);
+              setShowAddItemInput(!expanded);
+            }}
+            icon={"fi-rr-angle-down"}
+            transparent
+          />
+        )}
       </div>
     </div>
   );
