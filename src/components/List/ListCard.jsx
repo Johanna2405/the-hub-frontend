@@ -26,9 +26,9 @@ const ListCard = ({
           <button
             key={filter}
             onClick={() => onFilterChange(filter)}
-            className={`px-2 py-1 rounded text-sm ${
+            className={`px-4 py-1 rounded-2xl text-sm ${
               selectedFilter === filter
-                ? "bg-white text-black"
+                ? "bg-base text-text"
                 : "bg-transparent border"
             }`}
           >
@@ -42,7 +42,6 @@ const ListCard = ({
   const cardStyles = {
     default: "bg-primary text-text",
     grocery: "bg-ultramarine text-primary",
-    packing: "bg-primary text-text",
   };
 
   const visibleItems = expanded ? items : items.slice(0, 3);
@@ -61,7 +60,7 @@ const ListCard = ({
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold">{title}</h3>
-        <span className="text-xs border px-2 py-1 rounded">{privacy}</span>
+        <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
       </div>
 
       {renderFilters()}
@@ -92,27 +91,17 @@ const ListCard = ({
 
       {showAddItemInput && (
         <div className="mt-3 flex items-center gap-2">
-          <span
-            className="block
-            h-5 w-5
-            rounded-full
-            ring-1
-            ring-text
-            cursor-pointer
-            flex-shrink-0
-            "
-          />
           <input
             type="text"
             placeholder="New List Item"
-            className="flex-1 p-2 rounded text-text"
+            className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") handleAddItem();
             }}
           />
-          <IconBtn color={type} icon="fi-ss-check" />
+          <IconBtn color="base" icon="fi-ss-check" />
         </div>
       )}
     </div>

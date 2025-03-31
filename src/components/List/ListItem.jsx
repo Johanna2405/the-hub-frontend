@@ -14,7 +14,7 @@ const ListItem = ({ id, text, checked = false, type, onToggle = () => {} }) => {
           onChange={() => onToggle(id)}
           className={`
             appearance-none 
-            h-5 w-5 
+            h-4 w-4
             rounded-full 
             ring-1 
             ${ringColorClass} 
@@ -24,13 +24,12 @@ const ListItem = ({ id, text, checked = false, type, onToggle = () => {} }) => {
             duration-150
             ease-in-out
             focus:outline-none 
-            focus:ring-2 
             ${focusRingColorClass} 
           `}
         />
 
         {checked && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-2 mb-1">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-1">
             <IconBtn color={colorClass} icon="fi-ss-check" transparent />
           </div>
         )}
