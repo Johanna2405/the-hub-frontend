@@ -55,8 +55,7 @@ const ListCard = ({
   };
 
   const toggleEditMode = () => {
-    console.log("Toogle edit here");
-    setEditMode(true);
+    setEditMode((prev) => !prev);
   };
 
   return (
@@ -82,14 +81,15 @@ const ListCard = ({
             onToggle={onItemToggle}
             type={type}
             editMode={editMode}
-            setEditMode={setEditMode}
+            // setEditMode={setEditMode}
             onUpdate={onUpdate}
             onDelete={onDelete}
+            expanded={expanded}
           />
         ))}
       </ul>
 
-      {showAddItemInput && (
+      {showAddItemInput && expanded && (
         <>
           <div className="mt-3 flex items-center gap-2">
             <input
@@ -107,12 +107,14 @@ const ListCard = ({
               icon="fi-ss-check"
               onClick={handleAddItem}
               className="text-sm"
+              title="Add Item"
             />
             <ListIconBtn
               color="base"
-              icon="fi-rr-pencil"
+              icon="fi-rr-tools"
               onClick={toggleEditMode}
               className="text-sm"
+              title="Manage Items"
             />
           </div>
         </>
@@ -125,6 +127,7 @@ const ListCard = ({
             onClick={() => {
               setExpanded(!expanded);
               setShowAddItemInput(!expanded);
+              setEditMode(false);
             }}
             icon={"fi-rr-angle-up"}
             transparent

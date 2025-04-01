@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import ListIconBtn from "./ListIconBtn";
 
 const ListItem = ({
@@ -10,36 +10,29 @@ const ListItem = ({
   onUpdate = () => {},
   onDelete = () => {},
   editMode = false,
-  setEditMode,
+  expanded = false,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
 
-  const isGrocery = type === "grocery";
-  const ringColorClass = isGrocery ? "ring-primary" : "ring-text";
-  const colorClass = isGrocery ? "ultramarine" : "base";
-
   useEffect(() => {
-    if (!editMode) setIsEditing(false);
-  }, [editMode]);
+    if (!expanded) setIsEditing(false);
+  }, [expanded]);
 
-  const handleEditClick = useCallback(() => {
+  const handleEditClick = () => {
     setIsEditing(true);
-    setEditMode(true);
-  }, [setEditMode]);
+  };
 
-  const handleSaveEdit = useCallback(() => {
+  const handleSaveEdit = () => {
     if (editText.trim()) {
-      onUpdate(id, editText);
+      onUpdate(id, editText.trim());
     }
     setIsEditing(false);
-    setEditMode(false);
-  }, [id, editText, onUpdate, setEditMode]);
+  };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditText(text);
-    setEditMode(false);
   };
 
   const handleKeyDown = (e) => {
@@ -47,9 +40,14 @@ const ListItem = ({
     if (e.key === "Escape") handleCancelEdit();
   };
 
+  const isGrocery = type === "grocery";
+  const ringColorClass = isGrocery ? "ring-primary" : "ring-text";
+  const colorClass = isGrocery ? "ultramarine" : "base";
+  const textClass = isGrocery ? "ultramarine" : "base";
+
   return (
     <>
-      {editMode && isEditing ? (
+      {editMode && isEditing && expanded ? (
         <li className="flex items-center gap-2">
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -67,7 +65,7 @@ const ListItem = ({
               duration-150
               ease-in-out
               focus:outline-none
-    `}
+            `}
             />
             {checked && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-1">
@@ -90,7 +88,7 @@ const ListItem = ({
               ${ringColorClass} 
               rounded-md
               focus:outline-none
-              text-text
+              ${textClass} 
             `}
             autoFocus
           />
@@ -144,7 +142,7 @@ const ListItem = ({
             {text}
           </span>
 
-          {editMode && (
+          {editMode && expanded && (
             <div className="ml-auto flex gap-1">
               <ListIconBtn
                 color={colorClass}
