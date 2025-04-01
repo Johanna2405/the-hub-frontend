@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import IconBtn from "../IconBtn";
 
 const EventCard = () => {
   const [expanded, setExpanded] = useState(false);
@@ -7,47 +7,47 @@ const EventCard = () => {
   const formattedDate = today.toLocaleDateString("de-DE");
 
   return (
-    <div className="flex flex-col bg-lilac gap-2 p-4 m-2 rounded-3xl max-w-64 transition-all duration-300 min-h-[250px]">
-      <i className="fi-rr-calendar"></i>
-      <h2>Upcoming Events</h2>
+    <div className="rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-lilac text-[#181B4D] flex flex-col justify-between">
+      <div>
+        <i className="fi-rr-calendar"></i>
+        <h2 className="font-bold text-lg mb-2">Upcoming Events</h2>
 
-      <div className="flex flex-col h-full justify-between">
-        {/* First static event */}
-        <div className="flex flex-col rounded-2xl bg-white/30 p-2">
-          <p>
-            <span className="text-base">{formattedDate}</span>
-          </p>
-          <p>Banana Gathering</p>
+        {/* Event 1 */}
+        <div className="flex flex-col rounded-2xl bg-white/30 p-2 mb-2">
+          <p className="text-sm">{formattedDate}</p>
+          <p className="font-medium">Banana Gathering</p>
         </div>
 
-        {/* Second static event, only visible if expanded */}
+        {/* Event 2 (nur bei expanded) */}
         {expanded && (
-          <div className="flex flex-col rounded-2xl mt-2 bg-white/30 p-2">
-            <p>
-              <span className="text-base">{formattedDate}</span>
-            </p>
-            <p>Pineapple Picnic</p>
+          <div className="flex flex-col rounded-2xl bg-white/30 p-2 mb-2">
+            <p className="text-sm">{formattedDate}</p>
+            <p className="font-medium">Pineapple Picnic</p>
           </div>
         )}
 
-        {/* Optionaler Link bei Expanded */}
+        {/* Optionaler Link */}
         {expanded && (
-          <h3 className="mt-2 hover:underline">
-            <a href="#" className="">
+          <div className="mt-2">
+            <a
+              href="#"
+              className="text-sm font-medium hover:underline text-[#181B4D]"
+            >
               View more
             </a>
-          </h3>
+          </div>
         )}
+      </div>
 
-        {/* Expand Button */}
-        <div className="flex justify-end">
-          <button
-            className="text-[#181B4D] btn btn-square btn-ghost hover:text-white"
-            onClick={() => setExpanded(!expanded)}
-          >
-            {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          </button>
-        </div>
+      {/* Toggle Button */}
+      <div className="flex justify-end mt-2">
+        <button onClick={() => setExpanded(!expanded)}>
+          <IconBtn
+            icon={expanded ? "fi-rr-angle-up" : "fi-rr-angle-down"}
+            color="lilac"
+            transparent
+          />
+        </button>
       </div>
     </div>
   );
