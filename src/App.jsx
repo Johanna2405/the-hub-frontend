@@ -6,14 +6,12 @@ import MessagePage from "./pages/MessagePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import PinBoard from "./pages/PinBoard.jsx";
 import SignIn from "./pages/SignIn.jsx";
-import DailyCalendar from "./components/Calendar/DailyCalendar.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
-import WeeklyCalendar from "./components/Calendar/WeeklyCalendar.jsx";
-import MonthlyCalendar from "./components/Calendar/MonthlyCalendar.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import ListPage from "./pages/ListPage.jsx";
 import NewListPage from "./pages/NewListPage.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
+import CalendarTabs from "./components/Calendar/CalendarTabs.jsx";
 
 function App() {
   return (
@@ -24,12 +22,10 @@ function App() {
             <Route index element={<Home />} />
             <Route path="messages" element={<MessagePage />} />
             <Route path="pinboard" element={<PinBoard />} />
-            <Route path="dailycalendar" element={<DailyCalendar />} />
-            <Route path="weeklycalendar" element={<WeeklyCalendar />} />
-            <Route path="monthlycalendar" element={<MonthlyCalendar />} />
             <Route path="posts" element={<PostPage />} />
             <Route path="lists" element={<ListPage />} />
             <Route path="add-list" element={<NewListPage />} />
+            <Route path="calendartabs" element={<CalendarTabs />} />
           </Route>
           <Route path="/" element={<SignedOutLayout />}>
             <Route path="signin" element={<SignIn />} />
