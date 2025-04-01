@@ -12,6 +12,7 @@ import ListPage from "./pages/ListPage.jsx";
 import NewListPage from "./pages/NewListPage.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 import CalendarTabs from "./components/Calendar/CalendarTabs.jsx";
+import ProfileSettings from "./pages/ProfileSettings.jsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="lists" element={<ListPage />} />
             <Route path="add-list" element={<NewListPage />} />
             <Route path="calendartabs" element={<CalendarTabs />} />
+            <Route path="profile-settings" element={<ProfileSettings />} />
           </Route>
           <Route path="/" element={<SignedOutLayout />}>
             <Route path="signin" element={<SignIn />} />
