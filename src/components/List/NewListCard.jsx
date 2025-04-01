@@ -43,9 +43,9 @@ const NewListCard = ({
             {...register("category")}
             className="w-full p-3 border-base text-text bg-base rounded-2xl font-extralight appearance-none pr-10 focus:outline-none"
           >
-            <option value="To Do">To Do</option>
-            <option value="Packing List">Packing List</option>
-            <option value="Grocery List">Grocery List</option>
+            <option value="To Do List">To Do List</option>
+            <option value="Travel List">Travel List</option>
+            <option value="Shopping List">Shopping List</option>
           </select>
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
             <ListIconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />

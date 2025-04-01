@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const ListFilter = () => {
-  const filters = ["All", "To Do", "Shopping", "Packing", "Private"];
+  const filters = ["All", "To Do", "Shopping", "Travel", "Private"];
   const [activeFilter, setActiveFilter] = useState("All");
 
   return (
