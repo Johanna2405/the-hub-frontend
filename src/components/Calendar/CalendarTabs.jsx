@@ -8,14 +8,22 @@ const CalendarTabs = () => {
 
     const tabStyle = (type) =>
         `px-4 py-2 rounded-full text-md font-semibold transition-all duration-200 
-    ${view === type
-            ? "bg-primary text-text"
-            : "bg-white text-text hover:bg-primary"
-        }`;
+    ${view === type ? "bg-primary text-text" : "bg-white text-text hover:bg-primary"}`;
+
+    const goToPrevView = () => {
+        const order = ["day", "week", "month"];
+        const index = order.indexOf(view);
+        setView(order[(index - 1 + order.length) % order.length]);
+    };
+
+    const goToNextView = () => {
+        const order = ["day", "week", "month"];
+        const index = order.indexOf(view);
+        setView(order[(index + 1) % order.length]);
+    };
 
     return (
         <div className="p-4 bg-base">
-
             {/* Tab Navigation */}
             <div className="flex justify-center gap-4 mb-8">
                 <button onClick={() => setView("day")} className={tabStyle("day")}>
@@ -29,10 +37,10 @@ const CalendarTabs = () => {
                 </button>
             </div>
 
-            {/* Dynamic TAB Calendar Content */}
-            {view === "day" && <DailyCalendar />}
-            {view === "week" && <WeeklyCalendar />}
-            {view === "month" && <MonthlyCalendar />}
+            {/* Inject Navigation Button Handlers */}
+            {view === "day" && <DailyCalendar onPrev={goToPrevView} onNext={goToNextView} />}
+            {view === "week" && <WeeklyCalendar onPrev={goToPrevView} onNext={goToNextView} />}
+            {view === "month" && <MonthlyCalendar onPrev={goToPrevView} onNext={goToNextView} />}
         </div>
     );
 };
