@@ -26,10 +26,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           isOpen ? "opacity-100" : "opacity-0"
         } transition-opacity duration-300`}
       >
+        <SidebarLink
+          target={"/pinboard"}
+          icon={"fi-rr-thumbtack"}
+          iconColor={"ultramarine"}
+          text={"Your Pinboard"}
+          setIsOpen={setIsOpen}
+          className={"bg-primary py-2"}
+        />
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
           <SidebarLink
-            target={"/pinboard"}
+            target={"/posts"}
             icon={"fi-rr-text"}
             iconColor={"neon"}
             text={"Posts"}
@@ -66,13 +74,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             text={"Profile Settings"}
             setIsOpen={setIsOpen}
           />
-          <SidebarLink
+          {/* <SidebarLink
             target={"/community-settings"}
             icon={"fi-rs-settings"}
             iconColor={"text"}
             text={"Community Settings"}
             setIsOpen={setIsOpen}
-          />
+          /> */}
         </div>
         {/* Add onClick to the button for sign out function */}
         <button

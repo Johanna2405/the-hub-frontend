@@ -1,11 +1,58 @@
 import IconBtn from "../components/IconBtn";
+import Header from "../components/Header";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const ProfileSettings = () => {
+  const [status, setStatus] = useState("");
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex gap-4 items-center">
-        <i className="fi-rr-settings-sliders text-3xl"></i>
-        <h1>Profile Settings</h1>
+      <Header
+        title="Profile Settings"
+        showBackButton={true}
+        onBack={() => navigate(-1)}
+      />
+      {/* change theme  */}
+      <div className="flex gap-4 justify-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-secondary">
+            Choose your theme
+            <svg
+              width="12px"
+              height="12px"
+              className="inline-block h-2 w-2 fill-current opacity-60"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 2048 2048"
+            >
+              <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+            </svg>
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content bg-base-300  rounded-2xl z-1 w-52 p-2 shadow-2xl"
+          >
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start hover:border-none"
+                aria-label="Default light"
+                value="thehub"
+              />
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="theme-dropdown"
+                className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start  hover:border-none"
+                aria-label="Default dark"
+                value="thedarkhub"
+              />
+            </li>
+          </ul>
+        </div>
       </div>
       {/* change user data  */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
@@ -76,7 +123,7 @@ const ProfileSettings = () => {
       </div>
       {/* change community */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
-        <input type="radio" name="my-accordion-2" defaultChecked />
+        <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
           Choose your community
         </div>
@@ -92,7 +139,7 @@ const ProfileSettings = () => {
       </div>
       {/* profile picture & status */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
-        <input type="radio" name="my-accordion-2" defaultChecked />
+        <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
           Edit profile picture & status
         </div>
@@ -102,16 +149,33 @@ const ProfileSettings = () => {
               <div className="w-44 rounded-full">
                 <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
               </div>
-              <input type="file" className="file-input file-input-secondary" />
+              <input
+                type="file"
+                className="file-input file-input-secondary h-full border-2"
+              />
               <IconBtn
                 text={"save"}
                 color={"ultramarine"}
                 icon={"fi-rr-disk"}
               />
             </div>
-            <div className="bg-primary rounded-3xl p-4">
+
+            <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4">
               <span className="font-semibold">Update your status</span>
-              {/* Add input from List item maybe */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="latest status"
+                  className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                />
+                <IconBtn
+                  text={"update"}
+                  color={"ultramarine"}
+                  icon={"fi-rr-disk"}
+                />
+              </div>
             </div>
           </div>
         </div>
