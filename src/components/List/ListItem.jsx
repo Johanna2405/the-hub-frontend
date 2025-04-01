@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import IconBtn from "../IconBtn";
+import ListIconBtn from "./ListIconBtn";
 
 const ListItem = ({
   id,
@@ -71,7 +71,11 @@ const ListItem = ({
             />
             {checked && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-1">
-                <IconBtn color={colorClass} icon="fi-ss-check" transparent />
+                <ListIconBtn
+                  color={colorClass}
+                  icon="fi-ss-check"
+                  transparent
+                />
               </div>
             )}
           </label>
@@ -91,13 +95,13 @@ const ListItem = ({
             autoFocus
           />
 
-          <IconBtn
+          <ListIconBtn
             color={colorClass}
             icon="fi-ss-check"
             onClick={handleSaveEdit}
             className="text-sm"
           />
-          <IconBtn
+          <ListIconBtn
             color={colorClass}
             icon="fi-rr-cross-small"
             onClick={handleCancelEdit}
@@ -127,7 +131,11 @@ const ListItem = ({
             />
             {checked && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-1">
-                <IconBtn color={colorClass} icon="fi-ss-check" transparent />
+                <ListIconBtn
+                  color={colorClass}
+                  icon="fi-ss-check"
+                  transparent
+                />
               </div>
             )}
           </label>
@@ -138,14 +146,14 @@ const ListItem = ({
 
           {editMode && (
             <div className="ml-auto flex gap-1">
-              <IconBtn
+              <ListIconBtn
                 color={colorClass}
                 icon="fi-rr-pencil"
                 onClick={handleEditClick}
                 transparent
                 className="text-sm"
               />
-              <IconBtn
+              <ListIconBtn
                 color={colorClass}
                 icon="fi-rr-trash"
                 onClick={() => onDelete(id)}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ListItem from "./ListItem";
-import IconBtn from "../IconBtn";
+import ListIconBtn from "./ListIconBtn";
 
 const ListCard = ({
   title = "",
@@ -102,13 +102,13 @@ const ListCard = ({
                 if (e.key === "Enter") handleAddItem();
               }}
             />
-            <IconBtn
+            <ListIconBtn
               color="base"
               icon="fi-ss-check"
               onClick={handleAddItem}
               className="text-sm"
             />
-            <IconBtn
+            <ListIconBtn
               color="base"
               icon="fi-rr-pencil"
               onClick={toggleEditMode}
@@ -120,7 +120,7 @@ const ListCard = ({
 
       <div className="flex justify-end mt-2">
         {expanded ? (
-          <IconBtn
+          <ListIconBtn
             color={type}
             onClick={() => {
               setExpanded(!expanded);
@@ -130,7 +130,7 @@ const ListCard = ({
             transparent
           />
         ) : (
-          <IconBtn
+          <ListIconBtn
             color={type}
             onClick={() => {
               setExpanded(!expanded);

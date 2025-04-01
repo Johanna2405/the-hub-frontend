@@ -1,28 +1,13 @@
-const IconBtn = ({
-  text,
-  icon,
-  color,
-  transparent,
-  onClick,
-  className = "",
-}) => {
-  const bgClasses = transparent
-    ? "!bg-transparent btn-no-noise"
-    : `bg-${color}`;
-
+const IconBtn = ({ text, icon, color, onClick }) => {
   return (
     <button
-      className={`btn border-none flex ${bgClasses} ${
+      className={`btn border-none flex bg-${color} ${
         color === "ultramarine" ? "text-base" : "text-text"
       } ${!text ? "gap-0" : "gap-2"}`}
       onClick={onClick}
     >
-      <i
-        className={`pt-1 text-lg ${icon} ${
-          color === "ultramarine" ? "text-base" : "text-text"
-        } ${className}`}
-      ></i>
-      {text && <span className="font-semibold">{text}</span>}
+      <i className={`pt-1 text-lg ${icon}`}></i>
+      <span className={`font-semibold`}>{text}</span>
     </button>
   );
 };
