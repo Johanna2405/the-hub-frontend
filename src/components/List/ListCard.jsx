@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import ListIconBtn from "./ListIconBtn";
 
@@ -19,6 +19,13 @@ const ListCard = ({
   const [newItemText, setNewItemText] = useState("");
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const [editMode, setEditMode] = useState(false);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      setExpanded(true);
+      setShowAddItemInput(true);
+    }
+  }, [items]);
 
   const renderFilters = () => {
     if (filters.length === 0) return null;
@@ -71,6 +78,12 @@ const ListCard = ({
 
       {renderFilters()}
 
+      {visibleItems.length === 0 && (
+        <div className="text-center py-4 font-semibold">
+          List is empty add some items...
+        </div>
+      )}
+
       <ul className="space-y-1">
         {visibleItems.map((item) => (
           <ListItem
@@ -81,7 +94,6 @@ const ListCard = ({
             onToggle={onItemToggle}
             type={type}
             editMode={editMode}
-            // setEditMode={setEditMode}
             onUpdate={onUpdate}
             onDelete={onDelete}
             expanded={expanded}
@@ -109,41 +121,45 @@ const ListCard = ({
               className="text-sm"
               title="Add Item"
             />
-            <ListIconBtn
-              color="base"
-              icon="fi-rr-tools"
-              onClick={toggleEditMode}
-              className="text-sm"
-              title="Manage Items"
-            />
+            {items.length > 0 && (
+              <ListIconBtn
+                color="base"
+                icon="fi-rr-tools"
+                onClick={toggleEditMode}
+                className="text-sm"
+                title="Manage Items"
+              />
+            )}
           </div>
         </>
       )}
 
-      <div className="flex justify-end mt-2">
-        {expanded ? (
-          <ListIconBtn
-            color={type}
-            onClick={() => {
-              setExpanded(!expanded);
-              setShowAddItemInput(!expanded);
-              setEditMode(false);
-            }}
-            icon={"fi-rr-angle-up"}
-            transparent
-          />
-        ) : (
-          <ListIconBtn
-            color={type}
-            onClick={() => {
-              setExpanded(!expanded);
-              setShowAddItemInput(!expanded);
-            }}
-            icon={"fi-rr-angle-down"}
-            transparent
-          />
-        )}
-      </div>
+      {items.length > 0 && (
+        <div className="flex justify-end mt-2">
+          {expanded ? (
+            <ListIconBtn
+              color={type}
+              onClick={() => {
+                setExpanded(false);
+                setShowAddItemInput(false);
+                setEditMode(false);
+              }}
+              icon={"fi-rr-angle-up"}
+              transparent
+            />
+          ) : (
+            <ListIconBtn
+              color={type}
+              onClick={() => {
+                setExpanded(true);
+                setShowAddItemInput(true);
+              }}
+              icon={"fi-rr-angle-down"}
+              transparent
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };
