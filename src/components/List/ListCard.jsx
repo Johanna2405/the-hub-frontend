@@ -35,7 +35,7 @@ const ListCard = ({
           <button
             key={filter}
             onClick={() => onFilterChange(filter)}
-            className={`px-4 py-1 rounded-2xl text-sm ${
+            className={`px-4 py-1 rounded-2xl text-sm cursor-pointer transition-all duration-300 hover:scale-105 ${
               selectedFilter === filter
                 ? "bg-base text-text"
                 : "bg-transparent border"
