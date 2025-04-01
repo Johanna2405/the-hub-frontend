@@ -1,6 +1,13 @@
 import { NavLink } from "react-router";
 
-const SidebarLink = ({ target, icon, iconColor, text, setIsOpen }) => {
+const SidebarLink = ({
+  target,
+  icon,
+  iconColor,
+  text,
+  className,
+  setIsOpen,
+}) => {
   const closeSidebar = () => {
     if (window.innerWidth <= 768) {
       setIsOpen((prev) => !prev);
@@ -10,7 +17,7 @@ const SidebarLink = ({ target, icon, iconColor, text, setIsOpen }) => {
   return (
     <NavLink to={target}>
       <div
-        className="flex gap-4 p-4 bg-base rounded-2xl items-center"
+        className={`flex gap-4 p-4 bg-base rounded-2xl items-center ${className}`}
         onClick={closeSidebar}
       >
         <i className={`${icon} text-${iconColor} text-2xl pt-1`}></i>
