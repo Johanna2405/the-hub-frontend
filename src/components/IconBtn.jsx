@@ -1,4 +1,11 @@
-const IconBtn = ({ text, icon, color, transparent, onClick }) => {
+const IconBtn = ({
+  text,
+  icon,
+  color,
+  transparent,
+  onClick,
+  className = "",
+}) => {
   const bgClasses = transparent
     ? "!bg-transparent btn-no-noise"
     : `bg-${color}`;
@@ -13,7 +20,7 @@ const IconBtn = ({ text, icon, color, transparent, onClick }) => {
       <i
         className={`pt-1 text-lg ${icon} ${
           color === "ultramarine" ? "text-base" : "text-text"
-        }`}
+        } ${className}`}
       ></i>
       {text && <span className="font-semibold">{text}</span>}
     </button>

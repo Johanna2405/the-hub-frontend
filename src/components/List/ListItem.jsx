@@ -50,24 +50,58 @@ const ListItem = ({
   return (
     <>
       {editMode && isEditing ? (
-        <li className="flex items-center">
+        <li className="flex items-center gap-2">
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={checked}
+              className={`
+              appearance-none 
+              h-4 w-4
+              rounded-full 
+              ring-1 
+              ${ringColorClass} 
+              cursor-pointer
+              flex-shrink-0
+              transition 
+              duration-150
+              ease-in-out
+              focus:outline-none
+    `}
+            />
+            {checked && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none ml-1">
+                <IconBtn color={colorClass} icon="fi-ss-check" transparent />
+              </div>
+            )}
+          </label>
+
           <input
             type="text"
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 px-1 py-1 rounded focus:outline-none bg-base text-text"
+            className={`
+              flex-1
+              ${ringColorClass} 
+              rounded-md
+              focus:outline-none
+              text-text
+            `}
             autoFocus
           />
+
           <IconBtn
             color={colorClass}
             icon="fi-ss-check"
             onClick={handleSaveEdit}
+            className="text-sm"
           />
           <IconBtn
             color={colorClass}
             icon="fi-rr-cross-small"
             onClick={handleCancelEdit}
+            className="text-sm"
           />
         </li>
       ) : (
@@ -109,12 +143,14 @@ const ListItem = ({
                 icon="fi-rr-pencil"
                 onClick={handleEditClick}
                 transparent
+                className="text-sm"
               />
               <IconBtn
                 color={colorClass}
                 icon="fi-rr-trash"
                 onClick={() => onDelete(id)}
                 transparent
+                className="text-sm"
               />
             </div>
           )}

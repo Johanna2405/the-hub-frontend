@@ -102,11 +102,17 @@ const ListCard = ({
                 if (e.key === "Enter") handleAddItem();
               }}
             />
-            <IconBtn color="base" icon="fi-ss-check" onClick={handleAddItem} />
+            <IconBtn
+              color="base"
+              icon="fi-ss-check"
+              onClick={handleAddItem}
+              className="text-sm"
+            />
             <IconBtn
               color="base"
               icon="fi-rr-pencil"
               onClick={toggleEditMode}
+              className="text-sm"
             />
           </div>
         </>
