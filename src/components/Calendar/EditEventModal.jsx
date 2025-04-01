@@ -24,7 +24,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-90 flex items-center justify-center">
             <div className="bg-base-100 rounded-2xl p-6 w-full max-w-lg shadow-lg">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold text-text">Edit Event</h2>
