@@ -8,40 +8,7 @@ import EmpyList from "../components/List/EmpyList";
 
 const ListPage = () => {
   const navigate = useNavigate();
-  const [lists, setLists] = useState([
-    {
-      id: "todo",
-      title: "To Do List",
-      items: [
-        { id: "1", text: "Buy milk", checked: false },
-        { id: "2", text: "Write blog post", checked: false },
-        { id: "3", text: "Call mom", checked: false },
-      ],
-      privacy: "community",
-      type: "default",
-    },
-    {
-      id: "grocery",
-      title: "Grocery List",
-      items: [
-        { id: "1", text: "Apples", checked: true },
-        { id: "2", text: "Bread", checked: true },
-        { id: "3", text: "Milk", checked: false },
-        { id: "4", text: "Eggs", checked: false },
-      ],
-      privacy: "community",
-      type: "grocery",
-      filters: ["All", "Checked", "To Do"],
-      selectedFilter: "All",
-    },
-    {
-      id: "packing",
-      title: "Packing List Thailand",
-      items: [],
-      privacy: "private",
-      type: "packing",
-    },
-  ]);
+  const [lists, setLists] = useState([]);
 
   const handleItemToggle = (listId, itemId) => {
     setLists((prev) =>
