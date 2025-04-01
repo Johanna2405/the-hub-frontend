@@ -5,13 +5,14 @@ import NewListCard from "../components/List/NewListCard";
 
 function NewListPage() {
   const navigate = useNavigate();
+
   const handleSave = (data) => {
     console.log("New list:", data);
-    navigate("/");
+    navigate("/lists");
   };
 
   const handleCancel = () => {
-    navigate("/");
+    navigate("/lists");
   };
 
   return (
@@ -21,7 +22,7 @@ function NewListPage() {
         showBackButton={true}
         onBack={() => navigate(-1)}
       />
-      <NewListCard nSave={handleSave} onDelete={handleCancel} />
+      <NewListCard onSave={handleSave} onDelete={handleCancel} />
     </div>
   );
 }

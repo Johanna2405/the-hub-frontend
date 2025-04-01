@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import IconBtn from "../IconBtn";
+import ListIconBtn from "./ListIconBtn";
 
 const NewListCard = ({
   onSave = () => {},
@@ -48,7 +48,7 @@ const NewListCard = ({
             <option value="Grocery List">Grocery List</option>
           </select>
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
-            <IconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
+            <ListIconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
           </div>
         </div>
 
@@ -64,18 +64,18 @@ const NewListCard = ({
             <option value="Community">Community</option>
           </select>
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
-            <IconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
+            <ListIconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
           </div>
         </div>
 
         <div className="flex justify-end mt-6 gap-3">
-          <IconBtn
+          <ListIconBtn
             text={"delete"}
             color={"base"}
             icon={"fi-rr-trash"}
             onClick={onDelete}
           />
-          <IconBtn
+          <ListIconBtn
             text={"save"}
             color={"ultramarine"}
             icon={"fi-rr-disk"}
