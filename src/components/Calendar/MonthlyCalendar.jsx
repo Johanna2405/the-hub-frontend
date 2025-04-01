@@ -133,67 +133,11 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
                     if (day !== selectedDay) return null;
 
                     const isToday = day === "25"; // Highlight today (for consistency with WeeklyCalendar)
-                    const bg = isToday ? "bg-secondary" : "bg-primary";
-
-                    // If only one event, display it without a date header
-                    if (dayEvents.length === 1) {
-                        const event = dayEvents[0];
-                        return (
-                            <div
-                                key={event.id}
-                                className={`rounded-2xl p-6 hover:border-2 hover:border-ultramarine ${bg}`}
-                            >
-                                <div className="flex justify-between gap-4">
-                                    {/* Left side */}
-                                    <div className="flex flex-col justify-between gap-2">
-                                        <p className="text-md text-text font-medium">{event.time}</p>
-                                        <h3 className="text-xl font-bold text-text">{event.title}</h3>
-                                        <p className="text-text text-sm">{event.description}</p>
-                                    </div>
-
-                                    {/* Right side */}
-                                    <div className="flex flex-col justify-between items-end gap-2">
-                                        <span
-                                            className={`rounded-full px-3 py-1 text-sm ${event.type === "Private"
-                                                ? "border border-secondary text-secondary"
-                                                : "border border-text text-text"
-                                                }`}
-                                        >
-                                            {event.type}
-                                        </span>
-                                        <div className="flex gap-2 items-center text-text">
-                                            <i className="fi-rr-home-location text-md"></i>
-                                            <span className="text-sm">Location</span>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <IconBtn
-                                                color="base"
-                                                icon="fi-rr-plus-small"
-                                                onClick={() => setShowAddEventModal(true)}
-                                            />
-                                            <IconBtn
-                                                color="base"
-                                                icon="fi-rr-pencil"
-                                                onClick={() => {
-                                                    setCurrentEvent(event);
-                                                    setShowEditEventModal(true);
-                                                }}
-                                            />
-                                            <IconBtn
-                                                color="error"
-                                                icon="fi-rr-trash"
-                                                onClick={() => handleDeleteEvent(event.id)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    }
+                    const bg = isToday ? "bg-primary" : "bg-seondary";
 
                     // If multiple events, group them under a date header
                     return (
-                        <div key={day} className={`rounded-3xl p-6 mb-4 ${bg}`}>
+                        <div key={day} className={`rounded-3xl p-6 mb-4 bg-primary`}>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="font-bold text-text">
                                     {new Date(2025, 2, parseInt(day)).toLocaleDateString("en-GB", {
