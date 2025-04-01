@@ -29,7 +29,7 @@ const CalendarTabs = () => {
                 </button>
             </div>
 
-            {/* Dynamic Calendar Content */}
+            {/* Dynamic TAB Calendar Content */}
             {view === "day" && <DailyCalendar />}
             {view === "week" && <WeeklyCalendar />}
             {view === "month" && <MonthlyCalendar />}
