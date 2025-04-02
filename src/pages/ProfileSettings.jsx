@@ -2,6 +2,8 @@ import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import AppCheckbox from "../components/Settings/AppCheckbox";
+import ThemeController from "../components/Settings/ThemeController";
 
 const ProfileSettings = () => {
   const [status, setStatus] = useState("");
@@ -14,6 +16,10 @@ const ProfileSettings = () => {
         showBackButton={true}
         onBack={() => navigate(-1)}
       />
+      {/* change theme  */}
+      <div className="flex gap-4 justify-start">
+        <ThemeController />
+      </div>
       {/* Pinboard settings */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
         <input type="radio" name="my-accordion-2" />
@@ -21,49 +27,31 @@ const ProfileSettings = () => {
           Pinboard settings
         </div>
         <div className="collapse-content ">
-          <div className="flex flex-col gap-4"></div>
-        </div>
-      </div>
-      {/* change theme  */}
-      <div className="flex gap-4 justify-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-secondary">
-            Choose your theme
-            <svg
-              width="12px"
-              height="12px"
-              className="inline-block h-2 w-2 fill-current opacity-60"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 2048 2048"
-            >
-              <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-            </svg>
+          <div className="flex flex-col gap-4">
+            <AppCheckbox
+              icon={"fi-rr-text"}
+              iconColor={"neon"}
+              appName={"Posts"}
+            />
+            <AppCheckbox
+              icon={"fi-rs-list-check"}
+              iconColor={"aquamarine"}
+              appName={"Lists"}
+            />
+            <AppCheckbox
+              icon={"fi-rr-megaphone"}
+              iconColor={"sage"}
+              appName={"Messages"}
+            />
+            <AppCheckbox
+              icon={"fi-rr-calendar"}
+              iconColor={"lilac"}
+              appName={"Calendar"}
+            />
           </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content bg-base-300  rounded-2xl z-1 w-52 p-2 shadow-2xl"
-          >
-            <li>
-              <input
-                type="radio"
-                name="theme-dropdown"
-                className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start hover:border-none"
-                aria-label="Default light"
-                value="thehub"
-              />
-            </li>
-            <li>
-              <input
-                type="radio"
-                name="theme-dropdown"
-                className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start  hover:border-none"
-                aria-label="Default dark"
-                value="thedarkhub"
-              />
-            </li>
-          </ul>
         </div>
       </div>
+
       {/* change user data  */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
         <input type="radio" name="my-accordion-2" defaultChecked />
