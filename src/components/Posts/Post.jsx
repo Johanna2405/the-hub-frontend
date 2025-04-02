@@ -43,7 +43,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="flex flex-col w-1/2 min-h-[400px] gap-4 bg-neon p-6 rounded-2xl">
+    <div className="flex flex-col min-h-[400px] gap-4 bg-neon p-6 rounded-2xl">
       {/* Author */}
       <div className="flex items-center gap-2">
         <div className="avatar">
@@ -55,7 +55,7 @@ const Post = ({ post }) => {
       </div>
 
       {/* Title + Image */}
-      <h2 className="text-xl font-bold text-[#181B4D]">{currentPost.title}</h2>
+      <h2 className="text-xl font-bold">{currentPost.title}</h2>
 
       {currentPost.imageUrl && (
         <img
@@ -65,7 +65,7 @@ const Post = ({ post }) => {
         />
       )}
 
-      <p className="text-[#181B4D]">{currentPost.content}</p>
+      <p className="">{currentPost.content}</p>
 
       {/* 🔁 Action Buttons */}
       <div className="flex justify-end gap-2">
@@ -87,16 +87,16 @@ const Post = ({ post }) => {
 
       {/* 💬 Comments */}
       <div className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold text-[#181B4D]">Comments</h3>
+        <h3 className="text-lg font-semibold ">Comments</h3>
 
         <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2">
           {comments.map((comment, idx) => (
             <div key={idx}>
-              <div className="chat-header text-sm text-[#181B4D] font-medium">
+              <div className="chat-header text-sm font-medium">
                 Obi-Wan Kenobi
                 <time className="text-xs opacity-50 ml-2">12:45</time>
               </div>
-              <div className="bg-white/60 rounded-xl px-4 py-2 text-sm text-[#181B4D]">
+              <div className="bg-white/60 rounded-xl px-4 py-2 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="avatar">
                     <div className="w-8 rounded-full">
@@ -119,7 +119,7 @@ const Post = ({ post }) => {
             placeholder="Add a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="input input-bordered flex-1 bg-white/90 text-[#181B4D]"
+            className="input input-bordered flex-1 bg-white/90 "
           />
           <IconBtn
             icon="fi fi-rr-arrow-small-up"
