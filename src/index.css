@@ -6,13 +6,13 @@
 @theme {
   --font-sora: "Sora", sans-serif;
 
-  --color-base: #f5f5f5;
-  --color-text: #181a4d;
-  --color-lightText: #f5f5f5;
-  --color-primary: #d4dee8;
-  --color-secondary: #d5b4fb;
-  --color-accent: #d9e73c;
-  --color-error: #fd5c32;
+  --color-base: var(--color-base);
+  --color-text: var(--color-text);
+  --color-lightText: var(--color-text);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-error: var(--color-error);
   /* Calendar */
   --color-lilac: #d5b4fb;
   /* Posts */
@@ -65,27 +65,34 @@
   prefersdark: false;
   /* color-scheme: dark; */
 
-  --color-base-100: #181a4d;
-  --color-base-200: #d4dee8;
-  --color-base-300: #d4dee8;
-  --color-base-content: #f5f5f5;
-  --color-primary: #d4dee8;
-  --color-primary-content: #181a4d;
-  --color-secondary: #d5b4fb;
-  --color-secondary-content: #181a4d;
-  --color-accent: #d9e73c;
-  --color-accent-content: #181a4d;
-  --color-neutral: #f5f5f5;
-  --color-neutral-content: #181a4d;
-  --color-info: #283287;
-  --color-info-content: #f5f5f5;
-  --color-success: #d5b4fb;
-  --color-success-content: #181a4d;
-  --color-warning: #d5b4fb;
-  --color-warning-content: #181a4d;
-  --color-error: #fd5c32;
-  --color-error-content: #f5f5f5;
+  --color-base-100: #22232b; /* Dark background */
+  --color-base-200: #2e2f38; /* Slightly lighter background */
+  --color-base-300: #3a3b46; /* Even lighter background for depth */
+  --color-base-content: #e3e4e8; /* Light text for contrast */
 
+  --color-primary: #3a3b46; /* Muted primary for dark mode */
+  --color-primary-content: #e3e4e8; /* Light text */
+
+  --color-secondary: #8a67d3; /* Soft purple */
+  --color-secondary-content: #e3e4e8; /* Light text */
+
+  --color-accent: #b5c924; /* Adjusted yellow-green for dark mode */
+  --color-accent-content: #22232b; /* Dark text for contrast */
+
+  --color-neutral: #e3e4e8; /* Light text */
+  --color-neutral-content: #22232b; /* Dark background for contrast */
+
+  --color-info: #4a5dc3; /* Deep blue for info */
+  --color-info-content: #e3e4e8; /* Light text */
+
+  --color-success: #8a67d3; /* Matching secondary */
+  --color-success-content: #e3e4e8; /* Light text */
+
+  --color-warning: #8a67d3; /* Matching secondary */
+  --color-warning-content: #e3e4e8; /* Light text */
+
+  --color-error: #fd5c32; /* Keeping the strong red */
+  --color-error-content: #e3e4e8; /* Light text */
   /* border radius */
   --radius-selector: 1rem;
   --radius-field: 1rem;
