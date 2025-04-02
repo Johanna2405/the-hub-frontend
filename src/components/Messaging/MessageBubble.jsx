@@ -1,7 +1,7 @@
 const MessageBubble = ({ message, currentUserId }) => {
-  const isOwn = message.userId === currentUserId;
-  const username = message.username || "Unknown";
-  const profilePicture = message.profilePicture;
+  const isOwn = message.user_id === currentUserId;
+  const username = message.User?.username || "Unknown";
+  const profilePicture = message.User?.profile_picture || null;
 
   return (
     <div className={`chat ${isOwn ? "chat-end" : "chat-start"} my-4`}>
@@ -31,7 +31,7 @@ const MessageBubble = ({ message, currentUserId }) => {
           isOwn ? "chat-bubble-lilac" : "chat-bubble-sage"
         } break-words whitespace-pre-wrap`}
       >
-        {message.text}
+        {message.content}
       </div>
     </div>
   );

@@ -4,14 +4,27 @@ import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
+import { fetchAllMessages } from "../data/messageApi";
 
 const MessagePage = () => {
-  const navigate = useNavigate();
-  //   const currentUserId = 101;
-
   const [messages, setMessages] = useState([]);
-
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
+  const currentUserId = 1; //mock user id since user state is not yet present
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        const data = await fetchAllMessages();
+        console.log("data here", data);
+        setMessages(data);
+      } catch (error) {
+        console.error("Could not load messages:", error);
+      }
+    };
+
+    loadMessages();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,12 +35,13 @@ const MessagePage = () => {
   }, [messages]);
 
   const handleSend = (text) => {
-    setMessages([
-      ...messages,
+    setMessages((prev) => [
+      ...prev,
       {
         id: Date.now(),
-        text,
-        // userId: currentUserId,
+        content: text,
+        user_id: 1, // mock current user
+        created_at: new Date().toISOString(),
       },
     ]);
   };
@@ -58,7 +72,7 @@ const MessagePage = () => {
               >
                 <MessageList
                   messages={messages}
-                  //   currentUserId={currentUserId}
+                  currentUserId={currentUserId}
                 />
                 <div ref={messagesEndRef} />
               </div>
