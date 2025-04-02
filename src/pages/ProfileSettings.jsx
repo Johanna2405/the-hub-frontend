@@ -2,10 +2,12 @@ import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useUser } from "../context/UserContext";
 
 const ProfileSettings = () => {
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const { user } = useUser();
 
   return (
     <div className="flex flex-col gap-8">
