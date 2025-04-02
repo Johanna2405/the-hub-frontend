@@ -6,7 +6,7 @@
 @theme {
   --font-sora: "Sora", sans-serif;
 
-  --color-base: var(--color-base);
+  --color-base: var(--color-base-100);
   --color-text: var(--color-text);
   --color-lightText: var(--color-text);
   --color-primary: var(--color-primary);
