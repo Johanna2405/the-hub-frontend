@@ -9,6 +9,12 @@ import AppModal from "../components/PinBoard/AppModal";
 
 const PinBoard = () => {
   const [pinnedApps, setPinnedApps] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
+    setPinnedApps(stored);
+  }, []);
 
   // Load pinned apps from local storage on first render
   useEffect(() => {
@@ -18,11 +24,35 @@ const PinBoard = () => {
 
   // Add new app type to pinned apps
   const handleAddApp = (type) => {
-    if (pinnedApps.includes(type)) return; // Prevent duplicates
-
-    const updated = [...pinnedApps, type];
+    const updated = [...pinnedApps, { type }];
     setPinnedApps(updated);
     localStorage.setItem("pinnedApps", JSON.stringify(updated));
+  };
+
+  // Filter cards
+  const filteredApps =
+    selectedFilter === "all"
+      ? pinnedApps
+      : pinnedApps.filter((app) => app.type === selectedFilter);
+
+  // Split filtered apps into two columns (A/B)
+  const columnA = filteredApps.filter((_, index) => index % 2 === 0);
+  const columnB = filteredApps.filter((_, index) => index % 2 !== 0);
+
+  // Dynamically render correct Card Component
+  const renderCard = (type) => {
+    switch (type) {
+      case "post":
+        return <PostCard />;
+      case "list":
+        return <ListCard />;
+      case "event":
+        return <EventCard />;
+      case "message":
+        return <MessageCard />;
+      default:
+        return null;
+    }
   };
 
   const getGreeting = () => {
@@ -41,40 +71,28 @@ const PinBoard = () => {
     <div className="container mx-auto flex flex-col items-center justify-center gap-4">
       <h2 className="text-neon">Hello username</h2>
       <h1>{getGreeting()}</h1>
-      <CardFilter />
 
-      {/* Always show the modal trigger */}
-      <AppModal onSelect={handleAddApp} />
+      <CardFilter
+        selected={selectedFilter}
+        onFilterChange={setSelectedFilter}
+      />
 
-      {/* Grid rendering (if apps exist) */}
+      {pinnedApps.length === 0 && <AppModal onSelect={handleAddApp} />}
+
       {pinnedApps.length > 0 && (
-        <div className="flex w-full px-4 gap-4 mt-4">
+        <div className="flex gap-4 w-full justify-center">
           {/* Column A */}
-          <div className="flex flex-col w-1/2 gap-4">
-            {pinnedApps
-              .filter((_, i) => i % 2 === 0)
-              .map((app, index) => (
-                <div key={`A-${index}`}>
-                  {app === "list" && <ListCard />}
-                  {app === "event" && <EventCard />}
-                  {app === "post" && <PostCard />}
-                  {app === "message" && <MessageCard />}
-                </div>
-              ))}
+          <div className="flex flex-col w-1/2">
+            {columnA.map((app, index) => (
+              <div key={index}>{renderCard(app.type)}</div>
+            ))}
           </div>
 
           {/* Column B */}
-          <div className="flex flex-col w-1/2 gap-4">
-            {pinnedApps
-              .filter((_, i) => i % 2 === 1)
-              .map((app, index) => (
-                <div key={`B-${index}`}>
-                  {app === "list" && <ListCard />}
-                  {app === "event" && <EventCard />}
-                  {app === "post" && <PostCard />}
-                  {app === "message" && <MessageCard />}
-                </div>
-              ))}
+          <div className="flex flex-col w-1/2">
+            {columnB.map((app, index) => (
+              <div key={index}>{renderCard(app.type)}</div>
+            ))}
           </div>
         </div>
       )}
