@@ -1,15 +1,41 @@
 import { useState } from "react";
+import { createPost } from "../../utils/postsAPI";
+import { useUser } from "../../context/userContext";
 import IconBtn from "../IconBtn";
 
-const PostModal = ({ children, onClose }) => {
-  const [file, setFile] = useState(null);
-  const [previewURL, setPreviewURL] = useState(null);
+const PostModal = ({ onPostCreated }) => {
+  const { user } = useUser();
 
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (selected) {
-      setFile(selected);
-      setPreviewURL(URL.createObjectURL(selected));
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!title || !content) return alert("Please fill in all fields");
+
+    setSubmitting(true);
+
+    try {
+      const newPost = await createPost({
+        userId: user.id,
+        title,
+        content,
+        imageUrl,
+      });
+
+      onPostCreated(newPost);
+      document.getElementById("app_modal").close();
+
+      // Reset form
+      setTitle("");
+      setContent("");
+      setImageUrl("");
+    } catch (err) {
+      console.error("❌ Error creating post", err);
+      alert("Failed to create post");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -20,9 +46,11 @@ const PostModal = ({ children, onClose }) => {
         color="neon"
         onClick={() => document.getElementById("app_modal").showModal()}
       />
+
       <dialog id="app_modal" className="modal">
         <div className="modal-box bg-neon">
           <h3 className="font-bold text-lg mb-4">Create a new post</h3>
+
           <div className="flex flex-col gap-4">
             <div>
               <label className="fieldset-label text-text">Title</label>
@@ -30,46 +58,50 @@ const PostModal = ({ children, onClose }) => {
                 type="text"
                 className="input w-full"
                 placeholder="Enter a post title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
+
             <div>
               <label className="fieldset-label text-text">Post Content</label>
               <textarea
-                className="textarea bg-base h-24 w-full"
+                className="textarea h-24 w-full"
                 placeholder="Enter the post content"
-              ></textarea>
-            </div>
-
-            {/* File Upload */}
-            <div>
-              <label className="fieldset-label text-text">Upload a file</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="file-input file-input-ghost w-full bg-base file:bg-ultramarine file:text-white file:border-none file:px-4 file:py-2 file:rounded-lg"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               />
             </div>
 
-            {/* Preview */}
-            {previewURL && (
+            <div>
+              <label className="fieldset-label text-text">Image URL</label>
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="Paste an image URL"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
+            </div>
+
+            {imageUrl && (
               <div className="mt-2">
                 <label className="fieldset-label text-text">Preview</label>
                 <img
-                  src={previewURL}
+                  src={imageUrl}
                   alt="Preview"
                   className="w-full max-h-64 object-cover rounded-lg"
                 />
               </div>
             )}
 
-            {/* Submit btn */}
             <div className="flex w-full justify-end">
               <IconBtn
                 icon="fi-rr-disk"
-                text="Submit"
+                text={submitting ? "Posting..." : "Submit"}
                 color="lilac"
-                onClick={() => document.getElementById("app_modal").close()}
+                onClick={handleSubmit}
+                disabled={submitting}
               />
             </div>
           </div>
