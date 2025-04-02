@@ -2,12 +2,10 @@ import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useUser } from "../context/UserContext";
 
 const ProfileSettings = () => {
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
-  const { user } = useUser();
 
   return (
     <div className="flex flex-col gap-8">
@@ -16,6 +14,16 @@ const ProfileSettings = () => {
         showBackButton={true}
         onBack={() => navigate(-1)}
       />
+      {/* Pinboard settings */}
+      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
+        <input type="radio" name="my-accordion-2" />
+        <div className="collapse-title font-semibold text-lg">
+          Pinboard settings
+        </div>
+        <div className="collapse-content ">
+          <div className="flex flex-col gap-4"></div>
+        </div>
+      </div>
       {/* change theme  */}
       <div className="flex gap-4 justify-start">
         <div className="dropdown">
