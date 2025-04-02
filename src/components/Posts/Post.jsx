@@ -65,7 +65,7 @@ const Post = ({ post }) => {
         />
       )}
 
-      <p className="text-[#181B4D]">{currentPost.content}</p>
+      <p className="">{currentPost.content}</p>
 
       {/* 🔁 Action Buttons */}
       <div className="flex justify-end gap-2">
