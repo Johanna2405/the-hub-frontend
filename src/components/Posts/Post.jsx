@@ -16,7 +16,7 @@ const Post = () => {
   };
 
   return (
-    <div className="flex flex-col w-1/2 min-h-[400px] max-h-[auto] gap-4 bg-neon p-6 rounded-lg shadow-lg">
+    <div className="flex flex-col min-h-[400px] max-h-[auto] gap-4 bg-neon p-6 rounded-lg shadow-lg">
       {/* Post Author */}
       <div className="flex items-center justify-start gap-2">
         <div className="chat-image avatar">
@@ -31,7 +31,7 @@ const Post = () => {
       </div>
 
       {/* Post Content */}
-      <h2 className="text-xl font-bold text-[#181B4D]">Post Title</h2>
+      <h2 className="text-xl font-bold ">Post Title</h2>
 
       <img
         src="https://i.pinimg.com/736x/5f/a9/94/5fa994c242c42e89ff89a866871123d9.jpg"
@@ -39,7 +39,7 @@ const Post = () => {
         className="object-cover w-full rounded-lg overflow-hidden max-h-72"
       />
 
-      <p className="text-[#181B4D]">
+      <p className="">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, at sit
         nulla eveniet quasi ratione aperiam corrupti tenetur eos voluptatum
         nostrum ullam omnis dignissimos asperiores, rerum dolore cupiditate quas
@@ -48,7 +48,7 @@ const Post = () => {
       <div className="divider"></div>
       {/* 💬 Comment Section */}
       <div className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold text-[#181B4D]">Comments</h3>
+        <h3 className="text-lg font-semibold ">Comments</h3>
 
         {/* Existing Comments */}
         <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2">
@@ -60,7 +60,7 @@ const Post = () => {
               </div>
               <div
                 key={idx}
-                className="bg-white/60 rounded-xl px-4 py-2 text-sm text-[#181B4D]"
+                className="bg-white/60 rounded-xl px-4 py-2 text-sm"
               >
                 <div className="flex items-center gap-2">
                   <div className="chat-image avatar">
@@ -85,7 +85,7 @@ const Post = () => {
             placeholder="Add a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="input input-bordered flex-1 bg-white/90 text-[#181B4D]"
+            className="input input-bordered flex-1 bg-white/90 "
           />
           <IconBtn
             icon="fi fi-rr-arrow-small-up"

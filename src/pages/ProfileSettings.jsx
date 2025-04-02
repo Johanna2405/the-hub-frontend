@@ -20,6 +20,20 @@ const ProfileSettings = () => {
       <div className="flex gap-4 justify-start">
         <ThemeController />
       </div>
+      {/* update status */}
+      <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4">
+        <span className="font-semibold">Update your status</span>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="latest status"
+            className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          />
+          <IconBtn text={"update"} color={"ultramarine"} icon={"fi-rr-disk"} />
+        </div>
+      </div>
       {/* Pinboard settings */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
         <input type="radio" name="my-accordion-2" />
@@ -139,7 +153,7 @@ const ProfileSettings = () => {
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
-          Edit profile picture & status
+          Edit profile picture
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-8 py-4">
@@ -156,24 +170,6 @@ const ProfileSettings = () => {
                 color={"ultramarine"}
                 icon={"fi-rr-disk"}
               />
-            </div>
-
-            <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4">
-              <span className="font-semibold">Update your status</span>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder="latest status"
-                  className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                />
-                <IconBtn
-                  text={"update"}
-                  color={"ultramarine"}
-                  icon={"fi-rr-disk"}
-                />
-              </div>
             </div>
           </div>
         </div>

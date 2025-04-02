@@ -62,8 +62,8 @@
 
 @plugin "daisyui/theme" {
   name: "thedarkhub";
-  prefersdark: false;
-  /* color-scheme: dark; */
+  /* prefersdark: true;
+  color-scheme: dark; */
 
   --color-base-100: #22232b; /* Dark background */
   --color-base-200: #2e2f38; /* Slightly lighter background */
