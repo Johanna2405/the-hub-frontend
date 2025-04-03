@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createPost } from "../../utils/postsAPI";
-import { useUser } from "../../context/userContext";
+import { useUser } from "../../context/UserContext";
 import IconBtn from "../IconBtn";
 
 const PostModal = ({ onPostCreated }) => {
