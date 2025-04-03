@@ -49,9 +49,7 @@ const PostModal = ({ onPostCreated }) => {
 
       <dialog id="app_modal" className="modal">
         <div className="modal-box bg-neon">
-          <h3 className="font-bold text-lg text-[#181B4D] mb-4">
-            Create a new post
-          </h3>
+          <h3 className="font-bold text-lg mb-4">Create a new post</h3>
 
           <div className="flex flex-col gap-4">
             <div>

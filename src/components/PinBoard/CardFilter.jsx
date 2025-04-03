@@ -17,7 +17,7 @@ const CardFilter = ({ selected, onFilterChange }) => {
             backgroundColor:
               selected === filter.value ? filter.color : "transparent",
             border: selected === filter.value ? "none" : "1px solid #ccc",
-            color: selected === filter.value ? "#181B4D" : "#333",
+            color: selected === filter.value ? "#181B4D" : "var(--color-text)",
           }}
           className="px-4 py-1 rounded-2xl text-sm transition"
         >
