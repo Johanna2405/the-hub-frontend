@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
     const initializeUser = async () => {
       try {
         const userData = await fetchUser();
-        console.log("👤 Loaded user:", userData);
+        console.log("Loaded user:", userData);
         setUser(userData);
       } catch (err) {
         console.warn("No valid token or user session found.");

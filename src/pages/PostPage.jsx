@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { fetchUserPosts } from "../utils/postsAPI";
 import Header from "../components/Header";
 import PostModal from "../components/Posts/PostModal";
@@ -14,7 +14,7 @@ const PostPage = () => {
 
   // Fetch Posts
   useEffect(() => {
-    console.log("👤 user:", user);
+    console.log("user:", user);
 
     if (user?.id) {
       const loadPosts = async () => {
