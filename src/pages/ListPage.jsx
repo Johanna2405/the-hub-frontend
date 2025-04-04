@@ -1,72 +1,146 @@
-import { useState } from "react";
-import ListCard from "../components/List/ListCard";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import ListCard from "../components/List/ListCard";
 import Header from "../components/Header";
 import IconBtn from "../components/IconBtn";
 import ListFilter from "../components/List/ListFilter";
 import EmpyList from "../components/List/EmpyList";
+import {
+  fetchLists,
+  createListItem,
+  updateListItem,
+  deleteListItem,
+} from "../utils/listsAPI";
 
 const ListPage = () => {
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
 
-  const handleItemToggle = (listId, itemId) => {
-    setLists((prev) =>
-      prev.map((list) =>
-        list.id === listId
-          ? {
-              ...list,
-              items: list.items.map((item) =>
-                item.id === itemId ? { ...item, checked: !item.checked } : item
-              ),
-            }
-          : list
-      )
-    );
+  useEffect(() => {
+    const loadLists = async () => {
+      try {
+        const data = await fetchLists();
+        console.log("Fetched lists:", data);
+        const formatted = data.map((list) => ({
+          ...list,
+          items: Array.isArray(list.list_items)
+            ? list.list_items.map((item) => ({
+                id: item.id,
+                text: item.name,
+                checked: item.is_completed,
+              }))
+            : [],
+          selectedFilter: "all",
+        }));
+        setLists(formatted);
+      } catch (err) {
+        console.error("Error loading lists:", err);
+      }
+    };
+
+    loadLists();
+  }, []);
+
+  const handleItemToggle = async (listId, itemId) => {
+    const targetList = lists.find((list) => list.id === listId);
+    const item = targetList.items.find((i) => i.id === itemId);
+
+    try {
+      await updateListItem(listId, itemId, {
+        name: item.text,
+        is_completed: !item.checked,
+      });
+
+      setLists((prev) =>
+        prev.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: list.items.map((i) =>
+                  i.id === itemId ? { ...i, checked: !i.checked } : i
+                ),
+              }
+            : list
+        )
+      );
+    } catch (err) {
+      console.error("Failed to toggle item:", err);
+    }
   };
 
-  const handleAddItem = (listId, text) => {
-    setLists((prev) =>
-      prev.map((list) =>
-        list.id === listId
-          ? {
-              ...list,
-              items: [
-                ...list.items,
-                { id: Date.now().toString(), text, checked: false },
-              ],
-            }
-          : list
-      )
-    );
+  const handleAddItem = async (listId, text) => {
+    try {
+      const newItem = await createListItem(listId, {
+        name: text,
+        is_completed: false,
+      });
+
+      setLists((prev) =>
+        prev.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: [
+                  ...list.items,
+                  {
+                    id: newItem.id,
+                    text: newItem.name,
+                    checked: newItem.is_completed,
+                  },
+                ],
+              }
+            : list
+        )
+      );
+    } catch (err) {
+      console.error("Failed to add item:", err);
+    }
   };
 
-  const handleUpdateItem = (listId, itemId, newText) => {
-    setLists((prev) =>
-      prev.map((list) =>
-        list.id === listId
-          ? {
-              ...list,
-              items: list.items.map((item) =>
-                item.id === itemId ? { ...item, text: newText } : item
-              ),
-            }
-          : list
-      )
-    );
+  const handleUpdateItem = async (listId, itemId, newText) => {
+    const targetList = lists.find((list) => list.id === listId);
+    const item = targetList.items.find((i) => i.id === itemId);
+
+    try {
+      await updateListItem(listId, itemId, {
+        name: newText,
+        is_completed: item.checked,
+      });
+
+      setLists((prev) =>
+        prev.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: list.items.map((i) =>
+                  i.id === itemId ? { ...i, text: newText } : i
+                ),
+              }
+            : list
+        )
+      );
+    } catch (err) {
+      console.error("Failed to update item:", err);
+    }
   };
 
-  const handleDeleteItem = (listId, itemId) => {
-    setLists((prev) =>
-      prev.map((list) =>
-        list.id === listId
-          ? {
-              ...list,
-              items: list.items.filter((item) => item.id !== itemId),
-            }
-          : list
-      )
-    );
+  const handleDeleteItem = async (listId, itemId) => {
+    try {
+      await deleteListItem(listId, itemId);
+
+      setLists((prev) =>
+        prev.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: list.items.filter((i) => i.id !== itemId),
+              }
+            : list
+        )
+      );
+    } catch (err) {
+      console.error("Failed to delete item:", err);
+    }
   };
 
   const handleFilterChange = (listId, newFilter) => {
