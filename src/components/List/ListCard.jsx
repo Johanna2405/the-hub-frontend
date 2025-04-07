@@ -54,6 +54,7 @@ const ListCard = ({
 
   const normalizedTitle = title.toLowerCase();
   const isGrocery = normalizedTitle === "groceries";
+  const colorClass = isGrocery ? "ultramarine" : "base";
 
   const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
 
@@ -109,7 +110,7 @@ const ListCard = ({
             <input
               type="text"
               placeholder="New List Item"
-              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
+              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base !text-[#181a4d]"
               value={newItemText}
               onChange={(e) => setNewItemText(e.target.value)}
               onKeyDown={(e) => {
@@ -117,7 +118,7 @@ const ListCard = ({
               }}
             />
             <ListIconBtn
-              color="base"
+              color={colorClass}
               icon="fi-ss-check"
               onClick={handleAddItem}
               className="text-sm"
@@ -125,7 +126,7 @@ const ListCard = ({
             />
             {items.length > 0 && (
               <ListIconBtn
-                color="base"
+                color={colorClass}
                 icon="fi-rr-tools"
                 onClick={toggleEditMode}
                 className="text-sm"
