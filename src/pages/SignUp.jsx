@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { createUser } from "../utils/user";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SignUp = () => {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -11,28 +14,46 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    // Basic validation for password confirmation
+    // Basic validation
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
+    console.log("📤 Sending signup payload:", {
+      username,
+      email,
+      password,
+      community_id: 1,
+      profile_picture: null,
+    });
+
     try {
-      const response = await fetch("http://localhost:3001/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+      // API call to create the user
+      await createUser({
+        username: username,
+        email,
+        password,
+        community_id: 1, // Assuming a default community ID
+        profile_picture: null,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to sign up. Please try again.");
-      }
-
       alert("Sign up successful!");
-      navigate("/signin"); // Redirect to Sign In after successful signup
+      navigate("/signin"); // Redirect to Sign In after success
     } catch (error) {
-      setError(error.message);
+      console.error("Signup error:", error);
+
+      // Show either single Joi error or the general text
+      const backendErrors = error?.response?.data?.errors;
+      const message =
+        backendErrors?.length > 0
+          ? backendErrors[0] // Show first joi error
+          : error?.response?.data?.message ||
+            "Signup failed. Please try again.";
+
+      setError(message);
     }
   };
 
@@ -60,8 +81,8 @@ const SignUp = () => {
             <input
               type="text"
               placeholder="username"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
               required
             />
