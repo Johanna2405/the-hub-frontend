@@ -1,29 +1,36 @@
+import { useUser } from "../../context/userContext";
+
 const CardFilter = ({ selected, onFilterChange }) => {
+  const { pinboardSettings } = useUser();
+
   const filters = [
-    { label: "All", value: "all", color: "#D4DEE8" }, // neutral
-    { label: "Posts", value: "post", color: "#d9e73c" }, // neon
-    { label: "Lists", value: "list", color: "#5b4efe" }, // ultramarine
-    { label: "Messages", value: "message", color: "#e2f5a6" }, // sage
-    { label: "Events", value: "event", color: "#d5b4fb" }, // lilac
+    { label: "All", value: "all", color: "primary" }, // neutral
+    { label: "Posts", value: "post", color: "neon" }, // neon
+    { label: "Lists", value: "list", color: "ultramarine" }, // ultramarine
+    { label: "Messages", value: "message", color: "sage" }, // sage
+    { label: "Events", value: "event", color: "lilac" }, // lilac
   ];
 
   return (
     <div className="flex gap-2 flex-wrap justify-center mb-4">
-      {filters.map((filter) => (
-        <button
-          key={filter.value}
-          onClick={() => onFilterChange(filter.value)}
-          style={{
-            backgroundColor:
-              selected === filter.value ? filter.color : "transparent",
-            border: selected === filter.value ? "none" : "1px solid #ccc",
-            color: selected === filter.value ? "#181B4D" : "var(--color-text)",
-          }}
-          className="px-4 py-1 rounded-2xl text-sm transition"
-        >
-          {filter.label}
-        </button>
-      ))}
+      {filters.map(
+        (filter) =>
+          pinboardSettings[filter.value] && (
+            <button
+              key={filter.value}
+              onClick={() => onFilterChange(filter.value)}
+              className={`px-4 py-1 rounded-2xl text-sm transition bg-${
+                selected === filter.value ? filter.color : "transparent"
+              } border ${
+                selected === filter.value ? "border-none" : "border-primary"
+              } text-${
+                selected === filter.value ? "text" : "var(--color-text)"
+              } `}
+            >
+              {filter.label}
+            </button>
+          )
+      )}
     </div>
   );
 };

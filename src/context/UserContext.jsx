@@ -8,6 +8,22 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pinboardSettings, setPinboardSettings] = useState(() => {
+    const stored = localStorage.getItem("pinboardSettings");
+    return stored
+      ? JSON.parse(stored)
+      : {
+          all: true,
+          post: true,
+          list: true,
+          event: true,
+          message: true,
+        };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("pinboardSettings", JSON.stringify(pinboardSettings));
+  }, [pinboardSettings]);
 
   // Fetch user on initial load
   useEffect(() => {
@@ -46,7 +62,17 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, login, logout, setUser }}>
+    <UserContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        logout,
+        setUser,
+        pinboardSettings,
+        setPinboardSettings,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
