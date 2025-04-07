@@ -79,7 +79,7 @@ const PinBoard = () => {
 
       {pinnedApps.length === 0 && <AppModal onSelect={handleAddApp} />}
 
-      {pinnedApps.length > 0 && (
+      {filteredApps.length > 0 && (
         <div className="flex gap-4 w-full justify-center">
           {/* Column A */}
           <div className="flex flex-col w-1/2">

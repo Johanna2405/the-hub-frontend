@@ -4,7 +4,7 @@ import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
-import { fetchAllMessages } from "../data/messageApi";
+import { fetchAllMessages } from "../utils/messageApi";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);

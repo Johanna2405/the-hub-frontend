@@ -1,3 +1,4 @@
+// src/components/Calendar/EditEventModal.jsx
 import { useState, useEffect } from "react";
 
 const EditEventModal = ({ show, onClose, onSave, event }) => {
@@ -5,6 +6,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
     const [time, setTime] = useState("");
     const [description, setDescription] = useState("");
     const [type, setType] = useState("Private");
+    const [location, setLocation] = useState(""); // Added location field
 
     useEffect(() => {
         if (event) {
@@ -12,6 +14,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
             setTime(event.time || "");
             setDescription(event.description || "");
             setType(event.type || "Private");
+            setLocation(event.location || ""); // Set location
         }
     }, [event]);
 
@@ -19,7 +22,15 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave({ ...event, title, time, description, type });
+        onSave({
+            id: event.id,
+            day: event.day,
+            title,
+            time,
+            description,
+            type,
+            location, // Include location
+        });
         onClose();
     };
 
@@ -33,6 +44,15 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
                     </button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-text font-medium">Day</label>
+                        <input
+                            type="text"
+                            value={event.day ? `${event.day}/03/2025` : ""}
+                            className="input input-bordered w-full bg-primary text-text"
+                            disabled
+                        />
+                    </div>
                     <div>
                         <label className="block text-text font-medium">Title</label>
                         <input
@@ -62,6 +82,16 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
                             onChange={(e) => setDescription(e.target.value)}
                             className="textarea textarea-bordered w-full bg-primary text-text"
                             placeholder="Enter details"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-text font-medium">Location</label>
+                        <input
+                            type="text"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                            className="input input-bordered w-full bg-primary text-text"
+                            placeholder="e.g., Conference Room A"
                         />
                     </div>
                     <div>

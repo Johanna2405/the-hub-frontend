@@ -1,7 +1,39 @@
-import { useUser } from "../context/UserContext";
 import SidebarLink from "./SidebarLink";
+import { useUser } from "../context/userContext";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
+  const { pinboardSettings } = useUser();
+
+  const sidebarLinks = [
+    {
+      target: "/posts",
+      icon: "fi-rr-text",
+      iconColor: "neon",
+      text: "Posts",
+      settingKey: "post",
+    },
+    {
+      target: "/lists",
+      icon: "fi-rs-list-check",
+      iconColor: "aquamarine",
+      text: "Lists",
+      settingKey: "list",
+    },
+    {
+      target: "/messages",
+      icon: "fi-rr-megaphone",
+      iconColor: "sage",
+      text: "Messages",
+      settingKey: "message",
+    },
+    {
+      target: "/calendartabs",
+      icon: "fi-rr-calendar",
+      iconColor: "lilac",
+      text: "Calendar",
+      settingKey: "calendar",
+    },
+  ];
   const { logout } = useUser();
 
   const handleLogout = () => {
@@ -44,34 +76,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         />
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
-          <SidebarLink
-            target={"/posts"}
-            icon={"fi-rr-text"}
-            iconColor={"neon"}
-            text={"Posts"}
-            setIsOpen={setIsOpen}
-          />
-          <SidebarLink
-            target={"/lists"}
-            icon={"fi-rs-list-check"}
-            iconColor={"aquamarine"}
-            text={"Lists"}
-            setIsOpen={setIsOpen}
-          />
-          <SidebarLink
-            target={"/messages"}
-            icon={"fi-rr-megaphone"}
-            iconColor={"sage"}
-            text={"Messages"}
-            setIsOpen={setIsOpen}
-          />
-          <SidebarLink
-            target={"/calendartabs"}
-            icon={"fi-rr-calendar"}
-            iconColor={"lilac"}
-            text={"Calendar"}
-            setIsOpen={setIsOpen}
-          />
+          {/* Render sidebar links dynamically based on pinboardSettings */}
+          {sidebarLinks.map(
+            (link) =>
+              pinboardSettings[link.settingKey] && (
+                <SidebarLink
+                  key={link.target}
+                  target={link.target}
+                  icon={link.icon}
+                  iconColor={link.iconColor}
+                  text={link.text}
+                  setIsOpen={setIsOpen}
+                />
+              )
+          )}
         </nav>
         <h3>Settings</h3>
         <div className="flex flex-col gap-4">
