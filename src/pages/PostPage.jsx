@@ -14,7 +14,7 @@ const PostPage = () => {
 
   // Fetch Posts
   useEffect(() => {
-    console.log("👤 user:", user);
+    console.log("user:", user);
 
     if (user?.id) {
       const loadPosts = async () => {
