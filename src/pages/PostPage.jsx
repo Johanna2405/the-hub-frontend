@@ -67,9 +67,9 @@ const PostPage = () => {
             <Post /> {/* Fake fallback post */}
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-center items-center gap-4">
             {posts.map((post) => (
-              <Post key={post.id} post={post} />
+              <Post key={post.id} post={post} setPosts={setPosts} />
             ))}
           </div>
         )}
