@@ -5,21 +5,25 @@ import Header from "../components/Header";
 import IconBtn from "../components/IconBtn";
 import ListFilter from "../components/List/ListFilter";
 import EmpyList from "../components/List/EmpyList";
+import { useUser } from "../context/UserContext";
 import {
-  fetchLists,
+  fetchListsPerUserId,
   createListItem,
   updateListItem,
   deleteListItem,
 } from "../utils/listsAPI";
 
 const ListPage = () => {
+  const { user } = useUser();
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
+
+  const user_id = user.id;
 
   useEffect(() => {
     const loadLists = async () => {
       try {
-        const data = await fetchLists();
+        const data = await fetchListsPerUserId(user_id);
         console.log("Fetched lists:", data);
         const formatted = data.map((list) => ({
           ...list,

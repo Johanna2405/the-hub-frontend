@@ -5,9 +5,9 @@ const LISTS_API = `${BACKEND_URL}/api/lists`;
 
 // ------- LISTS -------
 
-// GET all lists
-export const fetchLists = async () => {
-  const response = await axios.get(LISTS_API);
+// GET all lists per id
+export const fetchListsPerUserId = async (userId) => {
+  const response = await axios.get(`${LISTS_API}/${userId}`);
   return response.data;
 };
 
