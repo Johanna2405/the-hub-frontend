@@ -2,6 +2,7 @@ import { useState } from "react";
 import { deletePost } from "../../utils/postsAPI";
 import IconBtn from "../IconBtn";
 import PostModal from "./PostModal";
+import Comments from "./Comments";
 
 const Post = ({ post, setPosts }) => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -12,20 +13,7 @@ const Post = ({ post, setPosts }) => {
   const modalId = `edit_modal_${currentPost.id}`;
 
   // Debugging
-  console.log("📦 Post Author:", currentPost.author);
-
-  const [comments, setComments] = useState([
-    "Nice post!",
-    "Love the design 🧡",
-    "How did you build this?",
-  ]);
-  const [newComment, setNewComment] = useState("");
-
-  const handleAddComment = () => {
-    if (newComment.trim() === "") return;
-    setComments([...comments, newComment]);
-    setNewComment("");
-  };
+  console.log("Post Author:", currentPost.author);
 
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this post?")) {
@@ -104,51 +92,8 @@ const Post = ({ post, setPosts }) => {
       )}
 
       <div className="divider"></div>
-
       {/* Comments */}
-      <div className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold">Comments</h3>
-
-        <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2">
-          {comments.map((comment, idx) => (
-            <div key={idx}>
-              <div className="chat-header text-sm font-medium">
-                Obi-Wan Kenobi
-                <time className="text-xs opacity-50 ml-2">12:45</time>
-              </div>
-              <div className="bg-white/60 rounded-xl px-4 py-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="avatar">
-                    <div className="w-8 rounded-full">
-                      <img
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        alt="avatar"
-                      />
-                    </div>
-                  </div>
-                  {comment}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2 mt-2">
-          <input
-            type="text"
-            placeholder="Add a comment..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="input input-bordered flex-1 bg-white/90"
-          />
-          <IconBtn
-            icon="fi fi-rr-arrow-small-up"
-            text="Comment"
-            color="lilac"
-            onClick={handleAddComment}
-          />
-        </div>
-      </div>
+      <Comments postId={currentPost.id} />
     </div>
   );
 };
