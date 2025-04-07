@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import ListIconBtn from "./ListIconBtn";
+import ListItemFilter from "./ListItemFilter";
 
 const ListCard = ({
   title = "",
   items = [],
   privacy = "private",
-  filters = [],
-  selectedFilter = "",
-  onFilterChange = () => {},
   onItemToggle = () => {},
   onAddItem = () => {},
   onUpdate = () => {},
@@ -18,6 +16,7 @@ const ListCard = ({
   const [newItemText, setNewItemText] = useState("");
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState("All");
 
   useEffect(() => {
     if (items.length === 0) {
@@ -26,39 +25,26 @@ const ListCard = ({
     }
   }, [items]);
 
-  const renderFilters = () => {
-    if (filters.length === 0) return null;
-    return (
-      <div className="flex gap-2 mb-2 flex-wrap">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => onFilterChange(filter)}
-            className={`px-4 py-1 rounded-2xl text-sm cursor-pointer transition-all duration-300 hover:scale-105 ${
-              selectedFilter === filter
-                ? "bg-base text-text"
-                : "bg-transparent border"
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
-    );
-  };
-
   const cardStyles = {
     default: "bg-primary text-text",
     grocery: "bg-ultramarine text-primary",
   };
 
   const normalizedTitle = title.toLowerCase();
-  const isGrocery = normalizedTitle === "groceries";
+  const isGrocery =
+    normalizedTitle.includes("grocery") ||
+    normalizedTitle.includes("groceries");
   const colorClass = isGrocery ? "ultramarine" : "base";
 
   const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
 
-  const visibleItems = expanded ? items : items.slice(0, 4);
+  const filteredItems = items.filter((item) => {
+    if (globalFilter === "Checked") return item.is_completed;
+    if (globalFilter === "To Do") return !item.is_completed;
+    return true;
+  });
+
+  const visibleItems = expanded ? filteredItems : filteredItems.slice(0, 4);
 
   const handleAddItem = () => {
     if (!newItemText.trim()) return;
@@ -79,11 +65,18 @@ const ListCard = ({
         <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
       </div>
 
-      {renderFilters()}
+      {visibleItems.length > 0 && (
+        <ListItemFilter
+          activeFilter={globalFilter}
+          setActiveFilter={setGlobalFilter}
+        />
+      )}
 
       {visibleItems.length === 0 && (
         <div className="text-center py-4 font-semibold">
-          List is empty add some items...
+          {items.length === 0
+            ? "List is empty, add some items..."
+            : "No items match this filter."}
         </div>
       )}
 

@@ -17,8 +17,9 @@ const ListPage = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("All");
 
-  const user_id = user.id;
+  const user_id = user?.id;
 
   useEffect(() => {
     const loadLists = async () => {
@@ -27,7 +28,6 @@ const ListPage = () => {
         console.log("Fetched lists:", data);
         const formatted = data.map((list) => ({
           ...list,
-          selectedFilter: "all",
         }));
         setLists(formatted);
       } catch (err) {
@@ -36,7 +36,7 @@ const ListPage = () => {
     };
 
     loadLists();
-  }, []);
+  }, [user_id]);
 
   const handleItemToggle = async (listId, itemId) => {
     const targetList = lists.find((list) => list.id === listId);
@@ -151,17 +151,16 @@ const ListPage = () => {
     }
   };
 
-  const handleFilterChange = (listId, newFilter) => {
-    setLists((prev) =>
-      prev.map((list) =>
-        list.id === listId ? { ...list, selectedFilter: newFilter } : list
-      )
-    );
-  };
-
   const handleAdd = () => {
     navigate("/add-list");
   };
+
+  const filteredLists =
+    globalFilter === "All"
+      ? lists
+      : lists.filter((list) =>
+          list.category?.toLowerCase().includes(globalFilter.toLowerCase())
+        );
 
   return (
     <div className="p-4">
@@ -178,22 +177,24 @@ const ListPage = () => {
         }
       />
 
-      <div className="pb-4">
-        <ListFilter />
-      </div>
+      {filteredLists.length > 0 && (
+        <div className="pb-4">
+          <ListFilter
+            activeFilter={globalFilter}
+            setActiveFilter={setGlobalFilter}
+          />
+        </div>
+      )}
 
-      {lists.length === 0 ? (
+      {filteredLists.length === 0 ? (
         <EmpyList />
       ) : (
-        lists.map((list) => (
+        filteredLists.map((list) => (
           <ListCard
             key={list.id}
             title={list.title}
             items={list.ListItems}
             privacy={list.privacy}
-            filters={list.filters || []}
-            selectedFilter={list.selectedFilter}
-            onFilterChange={(filter) => handleFilterChange(list.id, filter)}
             onItemToggle={(itemId) => handleItemToggle(list.id, itemId)}
             onAddItem={(name) => handleAddItem(list.id, name)}
             onUpdate={(itemId, name) => handleUpdateItem(list.id, itemId, name)}
