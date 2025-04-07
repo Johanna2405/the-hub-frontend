@@ -40,8 +40,13 @@ export const fetchEventById = async (id) => {
 
 // POST create event
 export const createEvent = async (eventData) => {
-    const response = await API.post("/events", eventData);
-    return response.data;
+    try {
+        const response = await API.post("/events", eventData);
+        return response.data;
+    } catch (error) {
+        console.error("Error creating event:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Failed to create event";
+    }
 };
 
 // PUT update event

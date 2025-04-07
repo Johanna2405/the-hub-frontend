@@ -10,7 +10,7 @@ import { useUser } from "../../context/UserContext";
 
 const DailyCalendar = ({ onPrev, onNext }) => {
     const navigate = useNavigate();
-    const { user } = useUser(); // Get the current user
+    const { user } = useUser(); // Get the current user (may be null)
     const [selectedDay, setSelectedDay] = useState("25");
     const [showNewEventModal, setShowNewEventModal] = useState(false);
     const [showEditEventModal, setShowEditEventModal] = useState(false);
@@ -22,10 +22,9 @@ const DailyCalendar = ({ onPrev, onNext }) => {
     useEffect(() => {
         const loadEvents = async () => {
             try {
-                if (user?.id) {
-                    const allEvents = await fetchEvents({ user_id: user.id });
-                    setEvents(allEvents);
-                }
+                // Fetch events without requiring user_id (backend should handle this)
+                const allEvents = await fetchEvents();
+                setEvents(allEvents);
             } catch (err) {
                 console.error("Error fetching events:", err);
             } finally {
@@ -33,19 +32,38 @@ const DailyCalendar = ({ onPrev, onNext }) => {
             }
         };
         loadEvents();
-    }, [user]);
+    }, []);
+
+    const validateTimeFormat = (time) => {
+        // Regular expression to match "HH:mm - HH:mm" format (e.g., "12:00 - 14:00")
+        const timeRegex = /^\d{2}:\d{2}\s*-\s*\d{2}:\d{2}$/;
+        return timeRegex.test(time);
+    };
 
     const handleAddEvent = async (newEvent) => {
         try {
+            // Validate the time format
+            if (!validateTimeFormat(newEvent.time)) {
+                throw new Error("Invalid time format. Please use 'HH:mm - HH:mm' (e.g., '12:00 - 14:00').");
+            }
+
             const [start, end] = newEvent.time.split("-").map((t) => t.trim());
+            const startTime = `2025-03-${newEvent.day}T${start}:00`;
+            const endTime = `2025-03-${newEvent.day}T${end}:00`;
+
+            // Validate that startTime and endTime are valid ISO 8601 strings
+            if (isNaN(Date.parse(startTime)) || isNaN(Date.parse(endTime))) {
+                throw new Error("Invalid time values. Please ensure the time is valid (e.g., '12:00 - 14:00').");
+            }
+
             const payload = {
-                user_id: user.id, // Required by backend
+                user_id: user?.id || null, // user_id is optional; backend should handle null
                 title: newEvent.title,
                 description: newEvent.description,
                 type: newEvent.type,
                 date: `2025-03-${newEvent.day}`, // Format: YYYY-MM-DD
-                start_time: `2025-03-${newEvent.day}T${start}:00`, // Format: YYYY-MM-DDTHH:mm:ss
-                end_time: `2025-03-${newEvent.day}T${end}:00`, // Format: YYYY-MM-DDTHH:mm:ss
+                start_time: startTime, // Format: YYYY-MM-DDTHH:mm:ss
+                end_time: endTime, // Format: YYYY-MM-DDTHH:mm:ss
                 location: newEvent.location || "Not specified", // Optional, provide a default
             };
             const saved = await createEvent(payload);
@@ -53,28 +71,40 @@ const DailyCalendar = ({ onPrev, onNext }) => {
             setSelectedDay(newEvent.day); // Update selected day
         } catch (err) {
             console.error("Error saving new event:", err);
-            alert("Failed to add event");
+            alert(err.message || "Failed to add event");
         }
     };
 
     const handleEditEvent = async (updatedEvent) => {
         try {
+            // Validate the time format
+            if (!validateTimeFormat(updatedEvent.time)) {
+                throw new Error("Invalid time format. Please use 'HH:mm - HH:mm' (e.g., '12:00 - 14:00').");
+            }
+
             const [start, end] = updatedEvent.time.split("-").map((t) => t.trim());
+            const startTime = `2025-03-${updatedEvent.day}T${start}:00`;
+            const endTime = `2025-03-${updatedEvent.day}T${end}:00`;
+
+            if (isNaN(Date.parse(startTime)) || isNaN(Date.parse(endTime))) {
+                throw new Error("Invalid time values. Please ensure the time is valid (e.g., '12:00 - 14:00').");
+            }
+
             const payload = {
-                user_id: user.id,
+                user_id: user?.id || null, // user_id is optional
                 title: updatedEvent.title,
                 description: updatedEvent.description,
                 type: updatedEvent.type,
                 date: `2025-03-${updatedEvent.day}`,
-                start_time: `2025-03-${updatedEvent.day}T${start}:00`,
-                end_time: `2025-03-${updatedEvent.day}T${end}:00`,
+                start_time: startTime,
+                end_time: endTime,
                 location: updatedEvent.location || "Not specified",
             };
             const result = await updateEvent(updatedEvent.id, payload);
             setEvents(events.map((e) => (e.id === updatedEvent.id ? result : e)));
         } catch (err) {
             console.error("Error updating event:", err);
-            alert("Failed to update event");
+            alert(err.message || "Failed to update event");
         }
     };
 
@@ -166,8 +196,8 @@ const DailyCalendar = ({ onPrev, onNext }) => {
                                     <div className="flex items-center gap-2">
                                         <span
                                             className={`rounded-full px-3 py-1 text-sm ${event.type === "Private"
-                                                ? "border border-secondary text-secondary"
-                                                : "border border-text text-text"
+                                                    ? "border border-secondary text-secondary"
+                                                    : "border border-text text-text"
                                                 }`}
                                         >
                                             {event.type}
