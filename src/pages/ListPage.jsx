@@ -17,6 +17,7 @@ const ListPage = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("All");
 
   const user_id = user.id;
 
@@ -36,7 +37,7 @@ const ListPage = () => {
     };
 
     loadLists();
-  }, []);
+  }, [user_id]);
 
   const handleItemToggle = async (listId, itemId) => {
     const targetList = lists.find((list) => list.id === listId);
@@ -163,6 +164,13 @@ const ListPage = () => {
     navigate("/add-list");
   };
 
+  const filteredLists =
+    globalFilter === "All"
+      ? lists
+      : lists.filter((list) =>
+          list.category?.toLowerCase().includes(globalFilter.toLowerCase())
+        );
+
   return (
     <div className="p-4">
       <Header
@@ -179,13 +187,16 @@ const ListPage = () => {
       />
 
       <div className="pb-4">
-        <ListFilter />
+        <ListFilter
+          activeFilter={globalFilter}
+          setActiveFilter={setGlobalFilter}
+        />
       </div>
 
-      {lists.length === 0 ? (
+      {filteredLists.length === 0 ? (
         <EmpyList />
       ) : (
-        lists.map((list) => (
+        filteredLists.map((list) => (
           <ListCard
             key={list.id}
             title={list.title}

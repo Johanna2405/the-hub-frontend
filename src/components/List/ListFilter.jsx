@@ -1,8 +1,5 @@
-import { useState } from "react";
-
-const ListFilter = () => {
-  const filters = ["All", "To Do", "Shopping", "Travel", "Private"];
-  const [activeFilter, setActiveFilter] = useState("All");
+const ListFilter = ({ activeFilter, setActiveFilter }) => {
+  const filters = ["All", "To Do", "Shopping", "Travel"];
 
   return (
     <div className="flex flex-wrap gap-2 w-full">
