@@ -1,23 +1,18 @@
 import { useState } from "react";
+import { deletePost } from "../../utils/postsAPI";
 import IconBtn from "../IconBtn";
+import PostModal from "./PostModal";
 
-const Post = ({ post }) => {
-  // Fallback wenn kein post via prop übergeben wurde
-  const fallbackPost = {
-    id: 1,
-    title: "Fake Post For Testing",
-    content:
-      "If you see this post, you are part of the development team. Please ignore this post. It is only here to test the layout of the posts.",
-    imageUrl:
-      "https://i.pinimg.com/736x/5f/a9/94/5fa994c242c42e89ff89a866871123d9.jpg",
-    author: {
-      name: "Obi-Wan Kenobi",
-      avatar:
-        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp",
-    },
-  };
+const Post = ({ post, setPosts }) => {
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const currentPost = post || fallbackPost;
+  if (!post) return null;
+
+  const currentPost = post;
+  const modalId = `edit_modal_${currentPost.id}`;
+
+  // Debugging
+  console.log("📦 Post Author:", currentPost.author);
 
   const [comments, setComments] = useState([
     "Nice post!",
@@ -32,26 +27,35 @@ const Post = ({ post }) => {
     setNewComment("");
   };
 
-  const handleUpdate = () => {
-    alert("Update logic goes here!");
-  };
-
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this post?")) {
-      alert("Delete logic goes here!");
+      try {
+        await deletePost(currentPost.id);
+        setPosts((prev) => prev.filter((p) => p.id !== currentPost.id));
+      } catch (err) {
+        console.error("Failed to delete post", err);
+        alert("Error deleting post.");
+      }
     }
   };
 
   return (
-    <div className="flex flex-col min-h-[400px] gap-4 bg-neon p-6 rounded-2xl">
+    <div className="flex flex-col min-h-[400px] w-1/2 gap-4 bg-neon p-6 rounded-2xl">
       {/* Author */}
       <div className="flex items-center gap-2">
         <div className="avatar">
           <div className="w-10 rounded-full">
-            <img src={currentPost.author?.avatar} alt="Author" />
+            <img
+              src={
+                currentPost.author?.profile_picture
+                  ? currentPost.author.profile_picture
+                  : "https://www.gravatar.com/avatar/?d=mp&f=y"
+              }
+              alt="Author"
+            />
           </div>
         </div>
-        <p className="text-[#181B4D]">{currentPost.author?.name}</p>
+        <p className="text-[#181B4D]">{currentPost.author?.username}</p>
       </div>
 
       {/* Title + Image */}
@@ -65,16 +69,17 @@ const Post = ({ post }) => {
         />
       )}
 
-      <p className="">{currentPost.content}</p>
+      <p>{currentPost.content}</p>
 
-      {/* 🔁 Action Buttons */}
+      {/* Action Buttons */}
       <div className="flex justify-end gap-2">
         <IconBtn
           icon="fi fi-rr-pencil"
           text="Update"
           color="ultramarine"
-          onClick={handleUpdate}
+          onClick={() => setShowEditModal(true)}
         />
+
         <IconBtn
           icon="fi fi-rr-trash"
           text="Delete"
@@ -83,11 +88,26 @@ const Post = ({ post }) => {
         />
       </div>
 
+      {/* Edit Modal */}
+      {showEditModal && (
+        <PostModal
+          mode="edit"
+          modalId={modalId}
+          existingPost={currentPost}
+          onPostUpdated={(updated) => {
+            setPosts((prev) =>
+              prev.map((p) => (p.id === updated.id ? updated : p))
+            );
+            setShowEditModal(false);
+          }}
+        />
+      )}
+
       <div className="divider"></div>
 
-      {/* 💬 Comments */}
+      {/* Comments */}
       <div className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold ">Comments</h3>
+        <h3 className="text-lg font-semibold">Comments</h3>
 
         <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2">
           {comments.map((comment, idx) => (
@@ -119,7 +139,7 @@ const Post = ({ post }) => {
             placeholder="Add a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="input input-bordered flex-1 bg-white/90 "
+            className="input input-bordered flex-1 bg-white/90"
           />
           <IconBtn
             icon="fi fi-rr-arrow-small-up"
