@@ -34,6 +34,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       settingKey: "calendar",
     },
   ];
+  const { logout } = useUser();
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = "/get-started"; // Redirect to the landing page after logout, closing sidebar is not required this way
+  };
 
   return (
     <div
@@ -105,7 +111,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {/* Add onClick to the button for sign out function */}
         <button
           className="flex items-center gap-4"
-          onClick={() => setIsOpen((prev) => !prev)}
+          // onClick={() => setIsOpen((prev) => !prev)}
+          onClick={handleLogout}
         >
           <i className="fi fi-rr-exit text-text text-2xl bg-base rounded-xl px-3 pt-3 pb-1 "></i>
           <span className="font-bold text-lg">Sign out</span>

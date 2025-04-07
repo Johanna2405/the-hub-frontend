@@ -1,39 +1,55 @@
-import { useState } from "react";
-import { createPost } from "../../utils/postsAPI";
+import { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
+import { createPost, updatePost } from "../../utils/postsAPI";
 import IconBtn from "../IconBtn";
 
-const PostModal = ({ onPostCreated }) => {
+const PostModal = ({
+  mode = "create",
+  existingPost = {},
+  onPostCreated,
+  onPostUpdated,
+  modalId = "app_modal",
+}) => {
   const { user } = useUser();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [title, setTitle] = useState(existingPost.title || "");
+  const [content, setContent] = useState(existingPost.content || "");
+  const [imageUrl, setImageUrl] = useState(existingPost.imageUrl || "");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (mode === "edit") {
+      document.getElementById(modalId)?.showModal();
+    }
+  }, [mode, modalId]);
 
   const handleSubmit = async () => {
     if (!title || !content) return alert("Please fill in all fields");
-
     setSubmitting(true);
 
+    const payload = {
+      title,
+      content,
+      imageUrl,
+      userId: existingPost.userId ?? user.id,
+    };
+
     try {
-      const newPost = await createPost({
-        userId: user.id,
-        title,
-        content,
-        imageUrl,
-      });
+      if (mode === "edit") {
+        const updated = await updatePost(existingPost.id, payload);
+        onPostUpdated?.(updated);
+      } else {
+        const created = await createPost(payload);
+        onPostCreated?.(created);
+      }
 
-      onPostCreated(newPost);
-      document.getElementById("app_modal").close();
-
-      // Reset form
+      document.getElementById(modalId).close();
       setTitle("");
       setContent("");
       setImageUrl("");
     } catch (err) {
-      console.error("❌ Error creating post", err);
-      alert("Failed to create post");
+      console.error("❌ Error submitting post", err);
+      alert("Something went wrong");
     } finally {
       setSubmitting(false);
     }
@@ -41,15 +57,20 @@ const PostModal = ({ onPostCreated }) => {
 
   return (
     <div>
-      <IconBtn
-        icon="fi fi-rr-plus"
-        color="neon"
-        onClick={() => document.getElementById("app_modal").showModal()}
-      />
+      {/* Nur im Create-Modus anzeigen */}
+      {mode === "create" && (
+        <IconBtn
+          icon="fi fi-rr-plus"
+          color="neon"
+          onClick={() => document.getElementById(modalId).showModal()}
+        />
+      )}
 
-      <dialog id="app_modal" className="modal">
+      <dialog id={modalId} className="modal">
         <div className="modal-box bg-neon">
-          <h3 className="font-bold text-lg mb-4">Create a new post</h3>
+          <h3 className="font-bold text-lg mb-4">
+            {mode === "edit" ? "Edit your post" : "Create a new post"}
+          </h3>
 
           <div className="flex flex-col gap-4">
             <div>
@@ -98,7 +119,15 @@ const PostModal = ({ onPostCreated }) => {
             <div className="flex w-full justify-end">
               <IconBtn
                 icon="fi-rr-disk"
-                text={submitting ? "Posting..." : "Submit"}
+                text={
+                  submitting
+                    ? mode === "edit"
+                      ? "Updating..."
+                      : "Posting..."
+                    : mode === "edit"
+                    ? "Update"
+                    : "Submit"
+                }
                 color="lilac"
                 onClick={handleSubmit}
                 disabled={submitting}

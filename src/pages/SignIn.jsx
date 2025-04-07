@@ -24,36 +24,6 @@ const SignIn = () => {
     }
   };
 
-  // Function to handle login
-  // const handleSignIn = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("http://localhost:8080/api/login", {
-  //       email,
-  //       password,
-  //     });
-
-  //     // Save auth token and username in localStorage
-  //     console.log("Login Response:", response.data);
-
-  //     // Save auth token and username in localStorage
-  //     localStorage.setItem("token", response.data.token);
-
-  //     // Fix: Adjust this based on the API response structure
-  //     const username =
-  //       response.data.user?.username ||
-  //       response.data.user?.name ||
-  //       response.data.user?.email;
-  //     localStorage.setItem("username", username);
-
-  //     navigate("/");
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Login failed:", err);
-  //     setError("Invalid credentials. Please try again.");
-  //   }
-  // };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-between">
       {/* Main Content */}

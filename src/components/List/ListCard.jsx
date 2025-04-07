@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import ListIconBtn from "./ListIconBtn";
+import ListItemFilter from "./ListItemFilter";
 
 const ListCard = ({
   title = "",
   items = [],
   privacy = "private",
-  type = "default",
-  filters = [],
-  selectedFilter = "",
-  onFilterChange = () => {},
   onItemToggle = () => {},
   onAddItem = () => {},
   onUpdate = () => {},
@@ -19,6 +16,7 @@ const ListCard = ({
   const [newItemText, setNewItemText] = useState("");
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState("All");
 
   useEffect(() => {
     if (items.length === 0) {
@@ -27,33 +25,26 @@ const ListCard = ({
     }
   }, [items]);
 
-  const renderFilters = () => {
-    if (filters.length === 0) return null;
-    return (
-      <div className="flex gap-2 mb-2 flex-wrap">
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => onFilterChange(filter)}
-            className={`px-4 py-1 rounded-2xl text-sm cursor-pointer transition-all duration-300 hover:scale-105 ${
-              selectedFilter === filter
-                ? "bg-base text-text"
-                : "bg-transparent border"
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
-    );
-  };
-
   const cardStyles = {
     default: "bg-primary text-text",
     grocery: "bg-ultramarine text-primary",
   };
 
-  const visibleItems = expanded ? items : items.slice(0, 3);
+  const normalizedTitle = title.toLowerCase();
+  const isGrocery =
+    normalizedTitle.includes("grocery") ||
+    normalizedTitle.includes("groceries");
+  const colorClass = isGrocery ? "ultramarine" : "base";
+
+  const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
+
+  const filteredItems = items.filter((item) => {
+    if (globalFilter === "Checked") return item.is_completed;
+    if (globalFilter === "To Do") return !item.is_completed;
+    return true;
+  });
+
+  const visibleItems = expanded ? filteredItems : filteredItems.slice(0, 4);
 
   const handleAddItem = () => {
     if (!newItemText.trim()) return;
@@ -67,20 +58,25 @@ const ListCard = ({
 
   return (
     <div
-      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${
-        cardStyles[type] || cardStyles.default
-      }`}
+      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${cardStyleClass}`}
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold">{title}</h3>
         <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
       </div>
 
-      {renderFilters()}
+      {visibleItems.length > 0 && (
+        <ListItemFilter
+          activeFilter={globalFilter}
+          setActiveFilter={setGlobalFilter}
+        />
+      )}
 
       {visibleItems.length === 0 && (
         <div className="text-center py-4 font-semibold">
-          List is empty add some items...
+          {items.length === 0
+            ? "List is empty, add some items..."
+            : "No items match this filter."}
         </div>
       )}
 
@@ -89,10 +85,10 @@ const ListCard = ({
           <ListItem
             key={item.id}
             id={item.id}
-            text={item.text}
-            checked={item.checked}
+            text={item.name}
+            title={title}
+            checked={item.is_completed}
             onToggle={onItemToggle}
-            type={type}
             editMode={editMode}
             onUpdate={onUpdate}
             onDelete={onDelete}
@@ -107,7 +103,7 @@ const ListCard = ({
             <input
               type="text"
               placeholder="New List Item"
-              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
+              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base !text-[#181a4d]"
               value={newItemText}
               onChange={(e) => setNewItemText(e.target.value)}
               onKeyDown={(e) => {
@@ -115,7 +111,7 @@ const ListCard = ({
               }}
             />
             <ListIconBtn
-              color="base"
+              color={colorClass}
               icon="fi-ss-check"
               onClick={handleAddItem}
               className="text-sm"
@@ -123,7 +119,7 @@ const ListCard = ({
             />
             {items.length > 0 && (
               <ListIconBtn
-                color="base"
+                color={colorClass}
                 icon="fi-rr-tools"
                 onClick={toggleEditMode}
                 className="text-sm"
@@ -138,7 +134,7 @@ const ListCard = ({
         <div className="flex justify-end mt-2">
           {expanded ? (
             <ListIconBtn
-              color={type}
+              color={cardStyleClass}
               onClick={() => {
                 setExpanded(false);
                 setShowAddItemInput(false);
@@ -149,7 +145,7 @@ const ListCard = ({
             />
           ) : (
             <ListIconBtn
-              color={type}
+              color={cardStyleClass}
               onClick={() => {
                 setExpanded(true);
                 setShowAddItemInput(true);
