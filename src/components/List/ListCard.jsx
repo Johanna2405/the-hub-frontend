@@ -53,7 +53,9 @@ const ListCard = ({
   };
 
   const normalizedTitle = title.toLowerCase();
-  const isGrocery = normalizedTitle === "groceries";
+  const isGrocery =
+    normalizedTitle.includes("grocery") ||
+    normalizedTitle.includes("groceries");
   const colorClass = isGrocery ? "ultramarine" : "base";
 
   const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;

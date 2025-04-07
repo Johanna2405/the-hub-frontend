@@ -19,7 +19,7 @@ const ListPage = () => {
   const [lists, setLists] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("All");
 
-  const user_id = user.id;
+  const user_id = user?.id;
 
   useEffect(() => {
     const loadLists = async () => {
