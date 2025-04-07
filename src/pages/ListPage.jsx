@@ -23,13 +23,6 @@ const ListPage = () => {
         console.log("Fetched lists:", data);
         const formatted = data.map((list) => ({
           ...list,
-          items: Array.isArray(list.list_items)
-            ? list.list_items.map((item) => ({
-                id: item.id,
-                text: item.name,
-                checked: item.is_completed,
-              }))
-            : [],
           selectedFilter: "all",
         }));
         setLists(formatted);
@@ -43,12 +36,23 @@ const ListPage = () => {
 
   const handleItemToggle = async (listId, itemId) => {
     const targetList = lists.find((list) => list.id === listId);
-    const item = targetList.items.find((i) => i.id === itemId);
+    if (!targetList) {
+      console.error("List not found:", listId);
+      return;
+    }
+
+    const item = targetList.ListItems.find(
+      (i) => String(i.id) === String(itemId)
+    );
+    if (!item) {
+      console.error("Item not found:", itemId);
+      return;
+    }
 
     try {
       await updateListItem(listId, itemId, {
-        name: item.text,
-        is_completed: !item.checked,
+        name: item.name,
+        is_completed: !item.is_completed,
       });
 
       setLists((prev) =>
@@ -56,8 +60,8 @@ const ListPage = () => {
           list.id === listId
             ? {
                 ...list,
-                items: list.items.map((i) =>
-                  i.id === itemId ? { ...i, checked: !i.checked } : i
+                ListItems: list.ListItems.map((i) =>
+                  i.id === itemId ? { ...i, is_completed: !i.is_completed } : i
                 ),
               }
             : list
@@ -80,12 +84,12 @@ const ListPage = () => {
           list.id === listId
             ? {
                 ...list,
-                items: [
-                  ...list.items,
+                ListItems: [
+                  ...list.ListItems,
                   {
                     id: newItem.id,
-                    text: newItem.name,
-                    checked: newItem.is_completed,
+                    name: newItem.name,
+                    is_completed: newItem.is_completed,
                   },
                 ],
               }
@@ -99,12 +103,12 @@ const ListPage = () => {
 
   const handleUpdateItem = async (listId, itemId, newText) => {
     const targetList = lists.find((list) => list.id === listId);
-    const item = targetList.items.find((i) => i.id === itemId);
+    const item = targetList.ListItems.find((i) => i.id === itemId);
 
     try {
       await updateListItem(listId, itemId, {
         name: newText,
-        is_completed: item.checked,
+        is_completed: item.is_completed,
       });
 
       setLists((prev) =>
@@ -112,8 +116,8 @@ const ListPage = () => {
           list.id === listId
             ? {
                 ...list,
-                items: list.items.map((i) =>
-                  i.id === itemId ? { ...i, text: newText } : i
+                ListItems: list.ListItems.map((i) =>
+                  i.id === itemId ? { ...i, name: newText } : i
                 ),
               }
             : list
@@ -133,7 +137,7 @@ const ListPage = () => {
           list.id === listId
             ? {
                 ...list,
-                items: list.items.filter((i) => i.id !== itemId),
+                ListItems: list.ListItems.filter((i) => i.id !== itemId),
               }
             : list
         )
@@ -181,15 +185,14 @@ const ListPage = () => {
           <ListCard
             key={list.id}
             title={list.title}
-            items={list.items}
+            items={list.ListItems}
             privacy={list.privacy}
-            type={list.type}
             filters={list.filters || []}
             selectedFilter={list.selectedFilter}
             onFilterChange={(filter) => handleFilterChange(list.id, filter)}
             onItemToggle={(itemId) => handleItemToggle(list.id, itemId)}
-            onAddItem={(text) => handleAddItem(list.id, text)}
-            onUpdate={(itemId, text) => handleUpdateItem(list.id, itemId, text)}
+            onAddItem={(name) => handleAddItem(list.id, name)}
+            onUpdate={(itemId, name) => handleUpdateItem(list.id, itemId, name)}
             onDelete={(itemId) => handleDeleteItem(list.id, itemId)}
             showAddItemInput={true}
           />

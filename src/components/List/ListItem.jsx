@@ -4,8 +4,8 @@ import ListIconBtn from "./ListIconBtn";
 const ListItem = ({
   id,
   text,
+  title,
   checked,
-  type,
   onToggle,
   onUpdate,
   onDelete,
@@ -15,7 +15,7 @@ const ListItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
 
-  const isGrocery = type === "grocery";
+  const isGrocery = title.toLowerCase() === "groceries";
   const ringColorClass = isGrocery ? "ring-primary" : "ring-text";
   const colorClass = isGrocery ? "ultramarine" : "base";
   const textClass = isGrocery ? "ultramarine" : "base";

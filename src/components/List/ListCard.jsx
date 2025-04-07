@@ -6,7 +6,6 @@ const ListCard = ({
   title = "",
   items = [],
   privacy = "private",
-  type = "default",
   filters = [],
   selectedFilter = "",
   onFilterChange = () => {},
@@ -53,7 +52,12 @@ const ListCard = ({
     grocery: "bg-ultramarine text-primary",
   };
 
-  const visibleItems = expanded ? items : items.slice(0, 3);
+  const normalizedTitle = title.toLowerCase();
+  const isGrocery = normalizedTitle === "groceries";
+
+  const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
+
+  const visibleItems = expanded ? items : items.slice(0, 4);
 
   const handleAddItem = () => {
     if (!newItemText.trim()) return;
@@ -67,9 +71,7 @@ const ListCard = ({
 
   return (
     <div
-      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${
-        cardStyles[type] || cardStyles.default
-      }`}
+      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${cardStyleClass}`}
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold">{title}</h3>
@@ -89,10 +91,10 @@ const ListCard = ({
           <ListItem
             key={item.id}
             id={item.id}
-            text={item.text}
-            checked={item.checked}
+            text={item.name}
+            title={title}
+            checked={item.is_completed}
             onToggle={onItemToggle}
-            type={type}
             editMode={editMode}
             onUpdate={onUpdate}
             onDelete={onDelete}
@@ -138,7 +140,7 @@ const ListCard = ({
         <div className="flex justify-end mt-2">
           {expanded ? (
             <ListIconBtn
-              color={type}
+              color={cardStyleClass}
               onClick={() => {
                 setExpanded(false);
                 setShowAddItemInput(false);
@@ -149,7 +151,7 @@ const ListCard = ({
             />
           ) : (
             <ListIconBtn
-              color={type}
+              color={cardStyleClass}
               onClick={() => {
                 setExpanded(true);
                 setShowAddItemInput(true);
