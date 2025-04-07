@@ -38,6 +38,23 @@ export const userLogout = () => {
   localStorage.removeItem("token");
 };
 
+// Create a new user (Sign Up)
+export const createUser = async ({ username, email, password }) => {
+  try {
+    const response = await API.post("/users", {
+      username,
+      email,
+      password,
+      profile_picture: null, // Assuming no profile picture for now
+      community_id: 1, // Assuming a default community ID
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Signup failed:", error);
+    throw error.response?.data?.message || "Signup failed";
+  }
+};
+
 // Fetch the current user: GET /login/me
 export const fetchUser = async () => {
   try {
