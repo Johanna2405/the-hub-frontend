@@ -28,7 +28,6 @@ const ListPage = () => {
         console.log("Fetched lists:", data);
         const formatted = data.map((list) => ({
           ...list,
-          selectedFilter: "all",
         }));
         setLists(formatted);
       } catch (err) {
@@ -152,14 +151,6 @@ const ListPage = () => {
     }
   };
 
-  const handleFilterChange = (listId, newFilter) => {
-    setLists((prev) =>
-      prev.map((list) =>
-        list.id === listId ? { ...list, selectedFilter: newFilter } : list
-      )
-    );
-  };
-
   const handleAdd = () => {
     navigate("/add-list");
   };
@@ -186,12 +177,14 @@ const ListPage = () => {
         }
       />
 
-      <div className="pb-4">
-        <ListFilter
-          activeFilter={globalFilter}
-          setActiveFilter={setGlobalFilter}
-        />
-      </div>
+      {filteredLists.length > 0 && (
+        <div className="pb-4">
+          <ListFilter
+            activeFilter={globalFilter}
+            setActiveFilter={setGlobalFilter}
+          />
+        </div>
+      )}
 
       {filteredLists.length === 0 ? (
         <EmpyList />
@@ -202,9 +195,6 @@ const ListPage = () => {
             title={list.title}
             items={list.ListItems}
             privacy={list.privacy}
-            filters={list.filters || []}
-            selectedFilter={list.selectedFilter}
-            onFilterChange={(filter) => handleFilterChange(list.id, filter)}
             onItemToggle={(itemId) => handleItemToggle(list.id, itemId)}
             onAddItem={(name) => handleAddItem(list.id, name)}
             onUpdate={(itemId, name) => handleUpdateItem(list.id, itemId, name)}
