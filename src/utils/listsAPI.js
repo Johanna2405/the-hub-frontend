@@ -19,7 +19,11 @@ export const fetchListById = async (id) => {
 
 // POST new list
 export const createList = async (listData) => {
-  const response = await axios.post(LISTS_API, listData);
+  const response = await axios.post(LISTS_API, listData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };
 

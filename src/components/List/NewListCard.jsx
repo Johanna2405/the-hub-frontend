@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import ListIconBtn from "./ListIconBtn";
+import { createList } from "../../utils/listsAPI";
+import { useNavigate } from "react-router";
+import { useUser } from "../../context/UserContext";
 
 const NewListCard = ({
-  onSave = () => {},
-  onDelete = () => {},
   defaultValues = {
     title: "",
     category: "To Do",
@@ -16,8 +17,30 @@ const NewListCard = ({
     formState: { errors },
   } = useForm({ defaultValues });
 
-  const onSubmit = (data) => {
-    onSave(data);
+  const navigate = useNavigate();
+  const { user } = useUser();
+
+  const onSubmit = async (data) => {
+    try {
+      const user_id = user.id;
+
+      const listPayload = {
+        ...data,
+        user_id,
+      };
+
+      // console.log("Sending payload:", listPayload);
+      await createList(listPayload);
+
+      // console.log("List created:", createdList);
+      navigate(`/lists`);
+    } catch (error) {
+      console.error("Error creating list:", error);
+    }
+  };
+
+  const onCancel = () => {
+    navigate(`/lists`);
   };
 
   return (
@@ -73,13 +96,13 @@ const NewListCard = ({
             text={"delete"}
             color={"base"}
             icon={"fi-rr-trash"}
-            onClick={onDelete}
+            onClick={onCancel}
           />
           <ListIconBtn
             text={"save"}
             color={"ultramarine"}
             icon={"fi-rr-disk"}
-            onClick={onSave}
+            type="submit"
           />
         </div>
       </form>

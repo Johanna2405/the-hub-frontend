@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
         console.log("Loaded user:", userData);
         setUser(userData);
       } catch (err) {
-        console.warn("No valid token or user session found.");
+        console.warn("No valid token or user session found.", err);
         setUser(null);
       } finally {
         setLoading(false);
