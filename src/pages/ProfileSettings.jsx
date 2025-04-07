@@ -1,13 +1,80 @@
 import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUser } from "../context/userContext";
 import { useNavigate } from "react-router";
 import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
+import { changeUsername, changePassword, updateStatus } from "../utils/user";
 
 const ProfileSettings = () => {
-  const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const [status, setStatus] = useState("");
+  const { user, setUser } = useUser();
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const { pinboardSettings, setPinboardSettings } = useUser();
+
+  const handleChangeUsername = async (e) => {
+    {
+      e.preventDefault();
+      try {
+        await changeUsername(user.id, newUsername);
+        setUser((prev) => ({ ...prev, username: newUsername }));
+        alert("Username updated!");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to update username");
+      }
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    {
+      e.preventDefault();
+      if (newPassword !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      try {
+        await changePassword(user.id, newPassword);
+        alert("Password changed!");
+        setNewPassword("");
+        setConfirmPassword("");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to change password");
+      }
+    }
+  };
+
+  const handlePictureUpload = async () => {
+    try {
+      const updatedUser = await updateProfilePicture(user.id, selectedFile);
+      setUser((prev) => ({
+        ...prev,
+        profile_picture: updatedUser.profile_picture,
+      }));
+      alert("Profile picture updated!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload picture");
+    }
+  };
+
+  // const handleStatusUpdate = async () => {
+  //   try {
+  //     const updated = await updateStatus(user.id, status);
+  //     setUser((prev) => ({ ...prev, status }));
+  //     alert("Status updated!");
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Failed to update status");
+  //   }
+  // };
 
   return (
     <div className="flex flex-col gap-8">
@@ -21,7 +88,7 @@ const ProfileSettings = () => {
         <ThemeController />
       </div>
       {/* update status */}
-      <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4">
+      <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4 md:w-3/4">
         <span className="font-semibold">Update your status</span>
         <div className="flex items-center gap-2">
           <input
@@ -31,12 +98,17 @@ const ProfileSettings = () => {
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           />
-          <IconBtn text={"update"} color={"ultramarine"} icon={"fi-rr-disk"} />
+          <IconBtn
+            text={"update"}
+            color={"ultramarine"}
+            icon={"fi-rr-disk"}
+            // onClick={handleStatusUpdate}
+          />
         </div>
       </div>
       {/* Pinboard settings */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
-        <input type="radio" name="my-accordion-2" />
+      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+        <input type="radio" name="my-accordion-2" defaultChecked />
         <div className="collapse-title font-semibold text-lg">
           Pinboard settings
         </div>
@@ -46,36 +118,64 @@ const ProfileSettings = () => {
               icon={"fi-rr-text"}
               iconColor={"neon"}
               appName={"Posts"}
+              checked={pinboardSettings.post}
+              onChange={() =>
+                setPinboardSettings((prev) => ({
+                  ...prev,
+                  post: !prev.post,
+                }))
+              }
             />
             <AppCheckbox
               icon={"fi-rs-list-check"}
               iconColor={"aquamarine"}
               appName={"Lists"}
+              checked={pinboardSettings.list}
+              onChange={() =>
+                setPinboardSettings((prev) => ({
+                  ...prev,
+                  list: !prev.list,
+                }))
+              }
             />
             <AppCheckbox
               icon={"fi-rr-megaphone"}
               iconColor={"sage"}
               appName={"Messages"}
+              checked={pinboardSettings.message}
+              onChange={() =>
+                setPinboardSettings((prev) => ({
+                  ...prev,
+                  message: !prev.message,
+                }))
+              }
             />
             <AppCheckbox
               icon={"fi-rr-calendar"}
               iconColor={"lilac"}
               appName={"Calendar"}
+              checked={pinboardSettings.calendar}
+              onChange={() =>
+                setPinboardSettings((prev) => ({
+                  ...prev,
+                  calendar: !prev.calendar,
+                }))
+              }
             />
           </div>
         </div>
       </div>
 
       {/* change user data  */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
-        <input type="radio" name="my-accordion-2" defaultChecked />
+      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+        <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
           Change username & password
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
             {/* Form */}
-            <form className="w-full space-y-4">
+            <form className="w-full space-y-4" onSubmit={handleChangeUsername}>
               {/* Username Input */}
               <div className="form-control flex flex-col items-start  gap-4 md:flex-row md:items-center ">
                 <label className="label">
@@ -85,8 +185,10 @@ const ProfileSettings = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="new username"
+                  placeholder={user.username}
                   className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
                   required
                 />
                 <button type="submit" className="btn btn-secondary">
@@ -94,7 +196,7 @@ const ProfileSettings = () => {
                 </button>
               </div>
             </form>
-            <form className="w-full space-y-4">
+            <form className="w-full space-y-4" onSubmit={handleChangePassword}>
               {/* Password Input */}
               <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
                 <label className="label">
@@ -106,6 +208,8 @@ const ProfileSettings = () => {
                   type="password"
                   placeholder="********"
                   className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
               </div>
@@ -121,10 +225,12 @@ const ProfileSettings = () => {
                   type="password"
                   placeholder="********"
                   className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
               </div>
-              <div className="flex justify-start md:w-2/3 md:justify-end">
+              <div className="flex md:justify-end justify-start">
                 <button type="submit" className="btn btn-secondary">
                   change password
                 </button>
@@ -134,7 +240,7 @@ const ProfileSettings = () => {
         </div>
       </div>
       {/* change community */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
+      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
           Choose your community
@@ -149,8 +255,8 @@ const ProfileSettings = () => {
           </div>
         </div>
       </div>
-      {/* profile picture & status */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-2/3">
+      {/* profile picture  */}
+      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
           Edit profile picture
@@ -159,16 +265,22 @@ const ProfileSettings = () => {
           <div className="flex flex-col gap-8 py-4">
             <div className="avatar flex flex-col gap-4 items-center">
               <div className="w-44 rounded-full">
-                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                <img
+                  src={user?.profile_picture || "/default-profile.png"}
+                  alt="Profile"
+                  className="object-cover w-full h-full"
+                />
               </div>
               <input
                 type="file"
                 className="file-input file-input-secondary h-full border-2"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
               />
               <IconBtn
                 text={"save"}
                 color={"ultramarine"}
                 icon={"fi-rr-disk"}
+                onClick={handlePictureUpload}
               />
             </div>
           </div>

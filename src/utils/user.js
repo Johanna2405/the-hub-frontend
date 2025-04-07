@@ -77,3 +77,32 @@ export const updateUser = async (userId, updateData) => {
     throw error;
   }
 };
+
+// Update username
+export const changeUsername = async (userId, username) => {
+  return await updateUser(userId, { username });
+};
+
+// Update password
+export const changePassword = async (userId, password) => {
+  return await updateUser(userId, { password });
+};
+
+// Update status
+export const updateStatus = async (userId, status) => {
+  return await updateUser(userId, { status });
+};
+
+// Update profile picture
+export const updateProfilePicture = async (userId, file) => {
+  const formData = new FormData();
+  formData.append("profile_picture", file);
+
+  const response = await API.put(`/users/${userId}/profile-picture`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
