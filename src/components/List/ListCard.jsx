@@ -6,7 +6,6 @@ const ListCard = ({
   title = "",
   items = [],
   privacy = "private",
-  type = "default",
   filters = [],
   selectedFilter = "",
   onFilterChange = () => {},
@@ -53,7 +52,13 @@ const ListCard = ({
     grocery: "bg-ultramarine text-primary",
   };
 
-  const visibleItems = expanded ? items : items.slice(0, 3);
+  const normalizedTitle = title.toLowerCase();
+  const isGrocery = normalizedTitle === "groceries";
+  const colorClass = isGrocery ? "ultramarine" : "base";
+
+  const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
+
+  const visibleItems = expanded ? items : items.slice(0, 4);
 
   const handleAddItem = () => {
     if (!newItemText.trim()) return;
@@ -67,9 +72,7 @@ const ListCard = ({
 
   return (
     <div
-      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${
-        cardStyles[type] || cardStyles.default
-      }`}
+      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${cardStyleClass}`}
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-bold">{title}</h3>
@@ -89,10 +92,10 @@ const ListCard = ({
           <ListItem
             key={item.id}
             id={item.id}
-            text={item.text}
-            checked={item.checked}
+            text={item.name}
+            title={title}
+            checked={item.is_completed}
             onToggle={onItemToggle}
-            type={type}
             editMode={editMode}
             onUpdate={onUpdate}
             onDelete={onDelete}
@@ -107,7 +110,7 @@ const ListCard = ({
             <input
               type="text"
               placeholder="New List Item"
-              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
+              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base !text-[#181a4d]"
               value={newItemText}
               onChange={(e) => setNewItemText(e.target.value)}
               onKeyDown={(e) => {
@@ -115,7 +118,7 @@ const ListCard = ({
               }}
             />
             <ListIconBtn
-              color="base"
+              color={colorClass}
               icon="fi-ss-check"
               onClick={handleAddItem}
               className="text-sm"
@@ -123,7 +126,7 @@ const ListCard = ({
             />
             {items.length > 0 && (
               <ListIconBtn
-                color="base"
+                color={colorClass}
                 icon="fi-rr-tools"
                 onClick={toggleEditMode}
                 className="text-sm"
@@ -138,7 +141,7 @@ const ListCard = ({
         <div className="flex justify-end mt-2">
           {expanded ? (
             <ListIconBtn
-              color={type}
+              color={cardStyleClass}
               onClick={() => {
                 setExpanded(false);
                 setShowAddItemInput(false);
@@ -149,7 +152,7 @@ const ListCard = ({
             />
           ) : (
             <ListIconBtn
-              color={type}
+              color={cardStyleClass}
               onClick={() => {
                 setExpanded(true);
                 setShowAddItemInput(true);
