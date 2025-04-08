@@ -13,6 +13,7 @@ import { useUser } from "../context/UserContext";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);
+  const [typingUser, setTypingUser] = useState(null);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   const { user } = useUser();
@@ -33,7 +34,7 @@ const MessagePage = () => {
         console.error("Failed to fetch messages", err);
       }
 
-      cleanup = setupChatListener(setMessages);
+      cleanup = setupChatListener(setMessages, setTypingUser);
     };
 
     initializeChat();
@@ -53,7 +54,6 @@ const MessagePage = () => {
     scrollToBottom();
   }, [messages]);
 
-  console.log("User context:", user);
   const handleSend = (text) => {
     const messageData = {
       user_id: user_id,
@@ -61,11 +61,8 @@ const MessagePage = () => {
       content: text,
     };
 
-    console.log("Sending message data:", messageData);
     sendMessage(messageData);
   };
-
-  console.log("Messages:", messages);
 
   return (
     <>
@@ -81,6 +78,7 @@ const MessagePage = () => {
               Start your community chat here...
             </div>
           </div>
+          <div>{typingUser && <p>{typingUser} is typing...</p>}</div>
           <MessageInput onSend={handleSend} />
         </div>
       ) : (
@@ -95,6 +93,7 @@ const MessagePage = () => {
                 <div ref={messagesEndRef} />
               </div>
             </div>
+            <div>{typingUser && <p>{typingUser} is typing...</p>}</div>
             <MessageInput onSend={handleSend} />
           </div>
         </div>

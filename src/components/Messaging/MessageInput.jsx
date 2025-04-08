@@ -1,13 +1,21 @@
 import React from "react";
 import { useState } from "react";
+import { useUser } from "../../context/UserContext";
+import { emitTyping } from "../../utils/messageApi";
 
 const MessageInput = ({ onSend }) => {
   const [text, setText] = useState("");
+  const { user } = useUser();
 
   const handleAddMessage = () => {
     if (text.trim() === "") return;
     onSend(text);
     setText("");
+  };
+
+  const handleChange = (e) => {
+    setText(e.target.value);
+    emitTyping(user);
   };
 
   return (
@@ -16,7 +24,7 @@ const MessageInput = ({ onSend }) => {
         <input
           type="text"
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => handleChange(e)}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleAddMessage();
           }}
