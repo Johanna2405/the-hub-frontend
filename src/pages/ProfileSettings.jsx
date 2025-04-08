@@ -2,10 +2,12 @@ import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
 import { useState, useEffect } from "react";
 import { useUser } from "../context/userContext";
+import { useCommunity } from "../context/CommunityContext";
 import { useNavigate } from "react-router";
+import { changeUsername, changePassword, updateStatus } from "../utils/user";
 import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
-import { changeUsername, changePassword, updateStatus } from "../utils/user";
+import CommunitySelector from "../components/CommunitySelector";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -15,8 +17,12 @@ const ProfileSettings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { pinboardSettings, setPinboardSettings } = useUser();
+
+  const { joinedCommunities, currentCommunity, setCurrentCommunity } =
+    useCommunity();
 
   const handleChangeUsername = async (e) => {
     {
@@ -165,7 +171,6 @@ const ProfileSettings = () => {
           </div>
         </div>
       </div>
-
       {/* change user data  */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
@@ -247,15 +252,33 @@ const ProfileSettings = () => {
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
-            <form>
-              <select className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac">
-                <option value="CommunityName">Community name</option>
-              </select>
-            </form>
+            <CommunitySelector />
+            {/* <form> */}
+            {/* <select
+                className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
+                value={currentCommunity?.id || ""}
+                onChange={(e) => {
+                  const selected = joinedCommunities.find(
+                    (c) => c.id === e.target.value
+                  );
+                  if (selected) {
+                    setCurrentCommunity(selected);
+                  }
+                }}
+              >
+                {joinedCommunities.map((community) => (
+                  <option key={community.id} value={community.id}>
+                    {community.name}
+                  </option>
+                ))}
+              </select> */}
+
+            {/* </div> */}
+            {/* </form> */}
           </div>
         </div>
       </div>
-      {/* profile picture  */}
+      {/* // profile picture */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
