@@ -26,3 +26,7 @@ export const setupChatListener = (setChat) => {
     socket.off("receive_message");
   };
 };
+
+export const sendMessage = (messageData) => {
+  socket.emit("send_message", messageData);
+};

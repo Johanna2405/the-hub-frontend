@@ -4,7 +4,11 @@ import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
-import { fetchAllMessages, setupChatListener } from "../utils/messageApi";
+import {
+  fetchAllMessages,
+  setupChatListener,
+  sendMessage,
+} from "../utils/messageApi";
 import { useUser } from "../context/UserContext";
 
 const MessagePage = () => {
@@ -27,7 +31,6 @@ const MessagePage = () => {
         console.error("Failed to fetch messages", err);
       }
 
-      // Setup socket listener
       cleanup = setupChatListener(setMessages);
     };
 
@@ -49,15 +52,12 @@ const MessagePage = () => {
   }, [messages]);
 
   const handleSend = (text) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        content: text,
-        user_id: user_id,
-        created_at: new Date().toISOString(),
-      },
-    ]);
+    const messageData = {
+      user_id: user_id,
+      content: text,
+    };
+
+    sendMessage(messageData);
   };
 
   return (
