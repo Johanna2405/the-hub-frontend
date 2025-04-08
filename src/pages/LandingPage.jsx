@@ -12,7 +12,7 @@ const LandingPage = () => {
         <div className="flex gap-8 items-center">
           <span className="font-semibold">About</span>
           <span className="font-semibold">Features</span>
-          <Link to={"/signup"}>
+          <Link to={"/signin"}>
             <IconBtn
               text={"get started"}
               color={"lilac"}

@@ -36,7 +36,7 @@ const SignUp = () => {
         username: username,
         email,
         password,
-        community_id: 1, // Assuming a default community ID
+        community_id: null, // Assuming a default community ID
         profile_picture: null,
       });
 
