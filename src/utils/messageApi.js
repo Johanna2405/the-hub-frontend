@@ -17,7 +17,7 @@ export const fetchAllMessages = async () => {
   }
 };
 
-export const setupChatListener = (setChat, setTypingUser) => {
+export const setupChatListener = (setChat, setTypingUser, setOnlineUserIds) => {
   socket.on("receive_message", (msg) => {
     console.log("Received message:", msg);
     setChat((prev) => [...prev, msg]);
@@ -33,9 +33,15 @@ export const setupChatListener = (setChat, setTypingUser) => {
     }, 2000);
   });
 
+  socket.on("update_online_users", (onlineUserIds) => {
+    console.log("Online user IDs from server:", onlineUserIds);
+    setOnlineUserIds(onlineUserIds);
+  });
+
   return () => {
     socket.off("receive_message");
     socket.off("display_typing");
+    socket.off("update_online_users");
   };
 };
 
@@ -49,4 +55,18 @@ export const emitTyping = (user) => {
     user_id: user.id,
     username: user.username,
   });
+};
+
+export const connectUser = (user) => {
+  if (!user?.id) return;
+
+  if (socket.connected) {
+    console.log("Socket is already connected, emitting user_connected");
+    socket.emit("user_connected", user);
+  } else {
+    socket.on("connect", () => {
+      console.log("Socket just connected, emitting user_connected");
+      socket.emit("user_connected", user);
+    });
+  }
 };

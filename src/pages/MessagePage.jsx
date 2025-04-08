@@ -8,18 +8,25 @@ import {
   fetchAllMessages,
   setupChatListener,
   sendMessage,
+  connectUser,
 } from "../utils/messageApi";
 import { useUser } from "../context/UserContext";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);
   const [typingUser, setTypingUser] = useState(null);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   const { user } = useUser();
   const user_id = user?.id;
 
-  console.log("User ID:", user);
+  useEffect(() => {
+    if (user?.id) {
+      connectUser(user);
+    }
+  }, [user]);
+
   useEffect(() => {
     if (!user_id) return;
 
@@ -34,7 +41,7 @@ const MessagePage = () => {
         console.error("Failed to fetch messages", err);
       }
 
-      cleanup = setupChatListener(setMessages, setTypingUser);
+      cleanup = setupChatListener(setMessages, setTypingUser, setOnlineUserIds);
     };
 
     initializeChat();
@@ -89,7 +96,10 @@ const MessagePage = () => {
                 className="flex-grow overflow-y-auto mb-4 pt-2"
                 style={{ maxHeight: "calc(75vh - 100px)" }}
               >
-                <MessageList messages={messages} />
+                <MessageList
+                  messages={messages}
+                  onlineUserIds={onlineUserIds}
+                />
                 <div ref={messagesEndRef} />
               </div>
             </div>
