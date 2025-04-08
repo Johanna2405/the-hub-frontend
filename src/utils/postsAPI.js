@@ -1,11 +1,9 @@
 import axios from "axios";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const POSTS_API = `${BACKEND_URL}/api/posts`;
 
-// Axios instance with auth headers
 const API = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: `${BACKEND_URL}/api`,
 });
 
 // Automatically attach token to every request
@@ -23,7 +21,7 @@ export const fetchPosts = async () => {
   return response.data;
 };
 
-// GET: Fetch posts by ID
+// GET: Fetch post by ID
 export const fetchPostById = async (id) => {
   const response = await API.get(`/posts/${id}`);
   return response.data;

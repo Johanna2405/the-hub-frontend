@@ -1,8 +1,9 @@
 import axios from "axios";
 
-// Define the base URL for API requests
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const API = axios.create({
-  baseURL: "/api", // Adjust based on backend
+  baseURL: `${BACKEND_URL}/api`,
 });
 
 // Add a request interceptor to include the token in headers
@@ -14,9 +15,7 @@ API.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Login function: POST /login
@@ -45,8 +44,8 @@ export const createUser = async ({ username, email, password }) => {
       username,
       email,
       password,
-      profile_picture: null, // Assuming no profile picture for now
-      community_id: 1, // Assuming a default community ID
+      profile_picture: null,
+      community_id: 1, // Default community ID for now
     });
     return response.data;
   } catch (error) {
@@ -55,7 +54,7 @@ export const createUser = async ({ username, email, password }) => {
   }
 };
 
-// Fetch the current user: GET /login/me
+// Fetch the current user
 export const fetchUser = async () => {
   try {
     const response = await API.get("/login/me");
