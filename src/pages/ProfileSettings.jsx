@@ -1,13 +1,14 @@
 import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
 import { useState, useEffect } from "react";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
 import { useNavigate } from "react-router";
 import { changeUsername, changePassword, updateStatus } from "../utils/user";
 import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
 import CommunitySelector from "../components/CommunitySelector";
+import { showToast } from "../utils/toast";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -24,16 +25,17 @@ const ProfileSettings = () => {
   const { joinedCommunities, currentCommunity, setCurrentCommunity } =
     useCommunity();
 
+  // Add check if username is different!
   const handleChangeUsername = async (e) => {
     {
       e.preventDefault();
       try {
         await changeUsername(user.id, newUsername);
         setUser((prev) => ({ ...prev, username: newUsername }));
-        alert("Username updated!");
+        showToast("Username updated.", "success");
       } catch (err) {
         console.error(err);
-        alert("Failed to update username");
+        showToast("Failed to update username.", "error");
       }
     }
   };
@@ -42,17 +44,17 @@ const ProfileSettings = () => {
     {
       e.preventDefault();
       if (newPassword !== confirmPassword) {
-        alert("Passwords do not match!");
+        showToast("Passwords do not match.", "error");
         return;
       }
       try {
         await changePassword(user.id, newPassword);
-        alert("Password changed!");
+        showToast("Password changed.", "success");
         setNewPassword("");
         setConfirmPassword("");
       } catch (err) {
         console.error(err);
-        alert("Failed to change password");
+        showToast("Failed to change password.", "error");
       }
     }
   };
@@ -64,10 +66,10 @@ const ProfileSettings = () => {
         ...prev,
         profile_picture: updatedUser.profile_picture,
       }));
-      alert("Profile picture updated!");
+      showToast("Profile picture updated!", "success");
     } catch (err) {
       console.error(err);
-      alert("Failed to upload picture");
+      showToast("Failed to upload picture.", "error");
     }
   };
 

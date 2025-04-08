@@ -1,0 +1,33 @@
+/* toast.css */
+.react-toastify__toast {
+  border-radius: 1rem !important;
+  padding: 1rem !important;
+}
+
+.react-toastify__toast--success {
+  background-color: var(--color-primary) !important;
+  color: var(--color-base-content) !important;
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.react-toastify__toast--error {
+  background-color: #f44336 !important;
+  color: white !important;
+  border: 1px solid #d32f2f !important;
+}
+
+.react-toastify__toast--info {
+  background-color: var(--color-primary) !important;
+  color: var(--color-base-content) !important;
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.react-toastify__toast--warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+  border: 1px solid #f57c00 !important;
+}

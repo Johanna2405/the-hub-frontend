@@ -15,6 +15,8 @@ import NewListPage from "./pages/NewListPage.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 import CalendarTabs from "./components/Calendar/CalendarTabs.jsx";
 import ProfileSettings from "./pages/ProfileSettings.jsx";
+import { ToastContainer } from "react-toastify";
+import "./toast.css";
 
 function App() {
   return (
@@ -22,6 +24,14 @@ function App() {
       <UserProvider>
         <CommunityProvider>
           <BrowserRouter>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              pauseOnHover
+            />
             <Routes>
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
