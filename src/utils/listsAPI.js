@@ -9,6 +9,9 @@ const API = axios.create({
 
 // GET all lists per user ID
 export const fetchListsPerUserId = async (userId) => {
+  if (!userId) {
+    throw new Error("userId is required to fetch lists");
+  }
   const response = await API.get(`/lists/${userId}`);
   return response.data;
 };
