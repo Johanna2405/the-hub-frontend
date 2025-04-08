@@ -4,27 +4,54 @@ import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
-import { fetchAllMessages } from "../utils/messageApi";
+import {
+  fetchAllMessages,
+  setupChatListener,
+  sendMessage,
+  connectUser,
+} from "../utils/messageApi";
+import { useUser } from "../context/UserContext";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);
+  const [typingUser, setTypingUser] = useState(null);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
-  const currentUserId = 1; //mock user id since user state is not yet present
+  const { user } = useUser();
+  const user_id = user?.id;
 
   useEffect(() => {
-    const loadMessages = async () => {
+    if (user?.id) {
+      connectUser(user);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!user_id) return;
+
+    let cleanup;
+
+    const initializeChat = async () => {
       try {
         const data = await fetchAllMessages();
-        console.log("data here", data);
+        console.log("Fetched messages:", data);
         setMessages(data);
-      } catch (error) {
-        console.error("Could not load messages:", error);
+      } catch (err) {
+        console.error("Failed to fetch messages", err);
       }
+
+      cleanup = setupChatListener(setMessages, setTypingUser, setOnlineUserIds);
     };
 
-    loadMessages();
-  }, []);
+    initializeChat();
+
+    return () => {
+      if (typeof cleanup === "function") {
+        cleanup();
+      }
+    };
+  }, [user_id]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -35,15 +62,13 @@ const MessagePage = () => {
   }, [messages]);
 
   const handleSend = (text) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        content: text,
-        user_id: 1, // mock current user
-        created_at: new Date().toISOString(),
-      },
-    ]);
+    const messageData = {
+      user_id: user_id,
+      user: user,
+      content: text,
+    };
+
+    sendMessage(messageData);
   };
 
   return (
@@ -60,6 +85,7 @@ const MessagePage = () => {
               Start your community chat here...
             </div>
           </div>
+          <div>{typingUser && <p>{typingUser} is typing...</p>}</div>
           <MessageInput onSend={handleSend} />
         </div>
       ) : (
@@ -72,11 +98,12 @@ const MessagePage = () => {
               >
                 <MessageList
                   messages={messages}
-                  currentUserId={currentUserId}
+                  onlineUserIds={onlineUserIds}
                 />
                 <div ref={messagesEndRef} />
               </div>
             </div>
+            <div>{typingUser && <p>{typingUser} is typing...</p>}</div>
             <MessageInput onSend={handleSend} />
           </div>
         </div>
