@@ -1,6 +1,12 @@
-const MessageBubble = ({ message, currentUserId }) => {
-  const isOwn = message.user_id === currentUserId;
-  const username = message.User?.username || "Unknown";
+import { useUser } from "../../context/UserContext";
+
+const MessageBubble = ({ message }) => {
+  const { user } = useUser();
+  const user_id = user?.id;
+  const user_name = user?.name;
+
+  const isOwn = message.user_id === user_id;
+  const username = message.User?.username || user_name || "Unknown User";
   const profilePicture = message.User?.profile_picture || null;
 
   return (

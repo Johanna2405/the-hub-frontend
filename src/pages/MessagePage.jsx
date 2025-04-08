@@ -18,6 +18,7 @@ const MessagePage = () => {
   const { user } = useUser();
   const user_id = user?.id;
 
+  console.log("User ID:", user);
   useEffect(() => {
     if (!user_id) return;
 
@@ -26,6 +27,7 @@ const MessagePage = () => {
     const initializeChat = async () => {
       try {
         const data = await fetchAllMessages();
+        console.log("Fetched messages:", data);
         setMessages(data);
       } catch (err) {
         console.error("Failed to fetch messages", err);
@@ -51,14 +53,19 @@ const MessagePage = () => {
     scrollToBottom();
   }, [messages]);
 
+  console.log("User context:", user);
   const handleSend = (text) => {
     const messageData = {
       user_id: user_id,
+      user: user,
       content: text,
     };
 
+    console.log("Sending message data:", messageData);
     sendMessage(messageData);
   };
+
+  console.log("Messages:", messages);
 
   return (
     <>
@@ -84,7 +91,7 @@ const MessagePage = () => {
                 className="flex-grow overflow-y-auto mb-4 pt-2"
                 style={{ maxHeight: "calc(75vh - 100px)" }}
               >
-                <MessageList messages={messages} currentUserId={user_id} />
+                <MessageList messages={messages} />
                 <div ref={messagesEndRef} />
               </div>
             </div>

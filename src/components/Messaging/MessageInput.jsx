@@ -4,12 +4,6 @@ import { useState } from "react";
 const MessageInput = ({ onSend }) => {
   const [text, setText] = useState("");
 
-  const handleSend = () => {
-    if (text.trim() === "") return;
-    onSend(text);
-    setText("");
-  };
-
   const handleAddMessage = () => {
     if (text.trim() === "") return;
     onSend(text);
@@ -28,7 +22,10 @@ const MessageInput = ({ onSend }) => {
           }}
           placeholder="Type your message..."
         />
-        <button className="btn btn-sm bg-sage btn-icon" onClick={handleSend}>
+        <button
+          className="btn btn-sm bg-sage btn-icon"
+          onClick={handleAddMessage}
+        >
           <i className="fi-bs-arrow-small-up text-text text-lg"></i>
         </button>
       </label>

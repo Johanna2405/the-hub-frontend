@@ -19,6 +19,7 @@ export const fetchAllMessages = async () => {
 
 export const setupChatListener = (setChat) => {
   socket.on("receive_message", (msg) => {
+    console.log("Received message:", msg);
     setChat((prev) => [...prev, msg]);
   });
 
@@ -28,5 +29,6 @@ export const setupChatListener = (setChat) => {
 };
 
 export const sendMessage = (messageData) => {
+  console.log("Sending message:", messageData);
   socket.emit("send_message", messageData);
 };
