@@ -4,27 +4,41 @@ import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
-import { fetchAllMessages } from "../utils/messageApi";
+import { fetchAllMessages, setupChatListener } from "../utils/messageApi";
+import { useUser } from "../context/UserContext";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
-  const currentUserId = 1; //mock user id since user state is not yet present
+  const { user } = useUser();
+  const user_id = user?.id;
 
   useEffect(() => {
-    const loadMessages = async () => {
+    if (!user_id) return;
+
+    let cleanup;
+
+    const initializeChat = async () => {
       try {
         const data = await fetchAllMessages();
-        console.log("data here", data);
         setMessages(data);
-      } catch (error) {
-        console.error("Could not load messages:", error);
+      } catch (err) {
+        console.error("Failed to fetch messages", err);
       }
+
+      // Setup socket listener
+      cleanup = setupChatListener(setMessages);
     };
 
-    loadMessages();
-  }, []);
+    initializeChat();
+
+    return () => {
+      if (typeof cleanup === "function") {
+        cleanup();
+      }
+    };
+  }, [user_id]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -40,7 +54,7 @@ const MessagePage = () => {
       {
         id: Date.now(),
         content: text,
-        user_id: 1, // mock current user
+        user_id: user_id,
         created_at: new Date().toISOString(),
       },
     ]);
@@ -70,10 +84,7 @@ const MessagePage = () => {
                 className="flex-grow overflow-y-auto mb-4 pt-2"
                 style={{ maxHeight: "calc(75vh - 100px)" }}
               >
-                <MessageList
-                  messages={messages}
-                  currentUserId={currentUserId}
-                />
+                <MessageList messages={messages} currentUserId={user_id} />
                 <div ref={messagesEndRef} />
               </div>
             </div>
