@@ -19,9 +19,10 @@ const ListPage = () => {
   const [lists, setLists] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("All");
 
-  const user_id = user?.id;
-
   useEffect(() => {
+    const user_id = user?.id;
+    if (!user_id) return;
+
     const loadLists = async () => {
       try {
         const data = await fetchListsPerUserId(user_id);
@@ -36,7 +37,7 @@ const ListPage = () => {
     };
 
     loadLists();
-  }, [user_id]);
+  }, [user]);
 
   const handleItemToggle = async (listId, itemId) => {
     const targetList = lists.find((list) => list.id === listId);
