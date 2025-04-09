@@ -10,7 +10,7 @@ import ThemeController from "../components/Settings/ThemeController";
 import CommunitySelector from "../components/CommunitySelector";
 import { showToast } from "../utils/toast";
 
-const ProfileSettings = () => {
+const Settings = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState("");
   const { user, setUser } = useUser();
@@ -24,6 +24,10 @@ const ProfileSettings = () => {
 
   const { joinedCommunities, currentCommunity, setCurrentCommunity } =
     useCommunity();
+
+  if (!user) {
+    return <div className="p-8 text-center">Loading user data...</div>;
+  }
 
   const handleChangeUsername = async (e) => {
     {
@@ -261,11 +265,20 @@ const ProfileSettings = () => {
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
-          Choose your community
+          Community Settings
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
-            <CommunitySelector />
+            <h4>Choose your community</h4>
+            <CommunitySelector
+              communities={joinedCommunities}
+              onSelect={(slug) => {
+                const selected = joinedCommunities.find((c) => c.slug === slug);
+                if (selected) {
+                  setCurrentCommunity(selected); // set it globally in your context
+                }
+              }}
+            />
           </div>
         </div>
       </div>
@@ -304,4 +317,4 @@ const ProfileSettings = () => {
   );
 };
 
-export default ProfileSettings;
+export default Settings;

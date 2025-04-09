@@ -5,7 +5,8 @@ import CommunitySelector from "./CommunitySelector";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { pinboardSettings } = useUser();
-  const { currentCommunity } = useCommunity();
+  const { joinedCommunities, currentCommunity, setCurrentCommunity } =
+    useCommunity();
 
   const sidebarLinks = [
     {
@@ -56,7 +57,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       `}
     >
       <div className="flex justify-between p-4">
-        <img src="./logoipsum-329.svg" alt="Logo" />
+        <img src="/logoipsum-329.svg" alt="Logo" />
         <button
           className="btn bg-base border-none pt-1"
           onClick={() => setIsOpen(false)}
@@ -79,14 +80,22 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             className={"bg-primary py-2"}
           />
           <SidebarLink
-            target={"/"}
+            target={`/community/${currentCommunity.id}/pinboard`}
             icon={"fi-rr-thumbtack"}
             iconColor={"ultramarine"}
             text={"Community Pinboard"}
             setIsOpen={setIsOpen}
             className={"bg-primary py-2"}
           />
-          <CommunitySelector />
+          <CommunitySelector
+            communities={joinedCommunities}
+            onSelect={(slug) => {
+              const selected = joinedCommunities.find((c) => c.slug === slug);
+              if (selected) {
+                setCurrentCommunity(selected); // set it globally in your context
+              }
+            }}
+          />
         </div>
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
@@ -116,7 +125,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           />
         </div>
         <button
-          className="flex items-center gap-4"
+          className="flex items-center gap-4 cursor-pointer"
           // onClick={() => setIsOpen((prev) => !prev)}
           onClick={handleLogout}
         >
