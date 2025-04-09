@@ -15,24 +15,64 @@ const MessageBubble = ({ message, onlineUserIds }) => {
       {!isOwn && (
         <div className="flex flex-row items-center gap-2 pb-2 pl-14">
           {profilePicture ? (
-            <div className="relative w-8 h-8">
+            <div className="relative w-8 h-8 group">
               <img
                 src={profilePicture}
                 alt="Profile"
                 className="w-8 h-8 rounded-full object-cover"
               />
-              {isOnline && (
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
-              )}
+              <span
+                className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white 
+                  ${isOnline ? "bg-green-500 animate-ping-once" : "bg-gray-400"}
+                `}
+              >
+                <span
+                  className={`
+                    absolute top-[40%] left-2 
+                    px-2 py-0.5 text-xs text-white rounded shadow-lg z-10
+                    opacity-0 group-hover:opacity-100 
+                    transition-opacity duration-200
+                    after:content-[''] after:absolute after:-top-1 after:left-2
+                    after:border-4 after:border-transparent
+                    ${
+                      isOnline
+                        ? "bg-green-500 after:border-b-green-500"
+                        : "bg-slate-500 after:border-b-slate-500"
+                    }
+                  `}
+                >
+                  {isOnline ? "Active" : "Offline"}
+                </span>
+              </span>
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-full bg-base flex items-center justify-center relative">
+            <div className="w-8 h-8 rounded-full bg-base flex items-center justify-center relative group">
               <p>
                 <i className="fi fi-rr-user text"></i>
               </p>
-              {isOnline && (
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
-              )}
+              <span
+                className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white 
+                ${isOnline ? "bg-green-500 animate-ping-once" : "bg-gray-400"}
+              `}
+              >
+                <span
+                  className={`
+                    absolute top-[40%] left-2 
+                    px-2 py-0.5 text-xs text-white rounded shadow-lg z-10
+                    opacity-0 group-hover:opacity-100 
+                    transition-opacity duration-200
+                    after:content-[''] after:absolute after:-top-1 after:left-2
+                    after:border-4 after:border-transparent
+                    ${
+                      isOnline
+                        ? "bg-green-500 after:border-b-green-500"
+                        : "bg-slate-500 after:border-b-slate-500"
+                    }
+                  `}
+                >
+                  {isOnline ? "Active" : "Offline"}
+                </span>
+              </span>
             </div>
           )}
 

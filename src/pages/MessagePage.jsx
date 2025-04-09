@@ -85,7 +85,16 @@ const MessagePage = () => {
               Start your community chat here...
             </div>
           </div>
-          <div>{typingUser && <p>{typingUser} is typing...</p>}</div>
+          {typingUser && (
+            <div className="flex items-center gap-2 mt-2 ml-1 px-3 py-1 bg-slate-100 rounded-full text-sm text-slate-700 shadow-sm w-fit animate-fade-in">
+              <span className="font-medium">{typingUser}</span>
+              <span className="flex space-x-1">
+                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce"></span>
+              </span>
+            </div>
+          )}
           <MessageInput onSend={handleSend} />
         </div>
       ) : (
@@ -103,7 +112,16 @@ const MessagePage = () => {
                 <div ref={messagesEndRef} />
               </div>
             </div>
-            <div>{typingUser && <p>{typingUser} is typing...</p>}</div>
+            {typingUser && (
+              <div className="flex items-center gap-2 mt-2 ml-1 px-3 py-1 bg-slate-100 rounded-full text-sm text-slate-700 shadow-sm w-fit animate-fade-in">
+                <span className="font-medium">{typingUser}</span>
+                <span className="flex space-x-1">
+                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce"></span>
+                </span>
+              </div>
+            )}
             <MessageInput onSend={handleSend} />
           </div>
         </div>
