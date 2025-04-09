@@ -1,8 +1,10 @@
 import SidebarLink from "./SidebarLink";
 import { useUser } from "../context/userContext";
+import { useCommunity } from "../context/CommunityContext";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { pinboardSettings } = useUser();
+  const { currentCommunity } = useCommunity();
 
   const sidebarLinks = [
     {
@@ -100,13 +102,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             text={"Profile Settings"}
             setIsOpen={setIsOpen}
           />
-          {/* <SidebarLink
-            target={"/community-settings"}
-            icon={"fi-rs-settings"}
-            iconColor={"text"}
-            text={"Community Settings"}
-            setIsOpen={setIsOpen}
-          /> */}
+          {currentCommunity?.role === "admin" && (
+            <SidebarLink
+              target={"/community-settings"}
+              icon={"fi-rs-settings"}
+              iconColor={"text"}
+              text={"Community Settings"}
+              setIsOpen={setIsOpen}
+            />
+          )}
         </div>
         {/* Add onClick to the button for sign out function */}
         <button
