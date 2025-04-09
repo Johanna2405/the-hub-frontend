@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
           all: true,
           post: true,
           list: true,
-          event: true,
+          calendar: true,
           message: true,
         };
   });

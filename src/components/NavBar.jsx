@@ -45,7 +45,7 @@ const NavBar = ({ isOpen, setIsOpen }) => {
           </svg>
         </label>
 
-        <Link to={"/profile-settings"}>
+        <Link to={"/settings"}>
           <button className="btn btn-primary btn-icon text-xl">
             <i className="fi fi-rr-user"></i>
           </button>

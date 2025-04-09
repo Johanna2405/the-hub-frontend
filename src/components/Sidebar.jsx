@@ -1,6 +1,7 @@
 import SidebarLink from "./SidebarLink";
-import { useUser } from "../context/userContext";
+import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
+import CommunitySelector from "./CommunitySelector";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { pinboardSettings } = useUser();
@@ -64,18 +65,29 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </button>
       </div>
       <div
-        className={`p-4 flex flex-col gap-8 ${
+        className={`p-4 flex flex-col gap-8  ${
           isOpen ? "opacity-100" : "opacity-0"
         } transition-opacity duration-300`}
       >
-        <SidebarLink
-          target={"/pinboard"}
-          icon={"fi-rr-thumbtack"}
-          iconColor={"ultramarine"}
-          text={"Your Pinboard"}
-          setIsOpen={setIsOpen}
-          className={"bg-primary py-2"}
-        />
+        <div className="flex flex-col gap-4">
+          <SidebarLink
+            target={"/"}
+            icon={"fi-rr-thumbtack"}
+            iconColor={"ultramarine"}
+            text={"Your Pinboard"}
+            setIsOpen={setIsOpen}
+            className={"bg-primary py-2"}
+          />
+          <SidebarLink
+            target={"/"}
+            icon={"fi-rr-thumbtack"}
+            iconColor={"ultramarine"}
+            text={"Community Pinboard"}
+            setIsOpen={setIsOpen}
+            className={"bg-primary py-2"}
+          />
+          <CommunitySelector />
+        </div>
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
           {/* Render sidebar links dynamically based on pinboardSettings */}
@@ -96,23 +108,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <h3>Settings</h3>
         <div className="flex flex-col gap-4">
           <SidebarLink
-            target={"/profile-settings"}
+            target={"/settings"}
             icon={"fi-rr-settings-sliders"}
             iconColor={"text"}
-            text={"Profile Settings"}
+            text={"Settings"}
             setIsOpen={setIsOpen}
           />
-          {currentCommunity?.role === "admin" && (
-            <SidebarLink
-              target={"/community-settings"}
-              icon={"fi-rs-settings"}
-              iconColor={"text"}
-              text={"Community Settings"}
-              setIsOpen={setIsOpen}
-            />
-          )}
         </div>
-        {/* Add onClick to the button for sign out function */}
         <button
           className="flex items-center gap-4"
           // onClick={() => setIsOpen((prev) => !prev)}

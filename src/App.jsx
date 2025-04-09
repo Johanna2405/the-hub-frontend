@@ -3,7 +3,6 @@ import { UserProvider } from "./context/UserContext.jsx";
 import { CommunityProvider } from "./context/CommunityContext.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import SignedOutLayout from "./layouts/SignedOutLayout.jsx";
-import Home from "./pages/Home.jsx";
 import MessagePage from "./pages/MessagePage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import PinBoard from "./pages/PinBoard.jsx";
@@ -14,7 +13,7 @@ import ListPage from "./pages/ListPage.jsx";
 import NewListPage from "./pages/NewListPage.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 import CalendarTabs from "./components/Calendar/CalendarTabs.jsx";
-import ProfileSettings from "./pages/ProfileSettings.jsx";
+import Settings from "./pages/Settings.jsx";
 import { ToastContainer } from "react-toastify";
 import "./toast.css";
 
@@ -34,14 +33,21 @@ function App() {
             />
             <Routes>
               <Route path="/" element={<MainLayout />}>
-                <Route index element={<Home />} />
+                <Route index element={<PinBoard />} />
                 <Route path="messages" element={<MessagePage />} />
-                <Route path="pinboard" element={<PinBoard />} />
                 <Route path="posts" element={<PostPage />} />
                 <Route path="lists" element={<ListPage />} />
                 <Route path="add-list" element={<NewListPage />} />
                 <Route path="calendartabs" element={<CalendarTabs />} />
-                <Route path="profile-settings" element={<ProfileSettings />} />
+                <Route path="settings" element={<Settings />} />
+                {/* Community Routes */}
+                <Route path="community/:communityId">
+                  <Route path="posts" element={<PostPage />} />
+                  <Route path="messages" element={<MessagePage />} />
+                  <Route path="lists" element={<ListPage />} />
+                  <Route path="add-list" element={<NewListPage />} />
+                  <Route path="calendar" element={<CalendarTabs />} />
+                </Route>
               </Route>
               <Route path="/" element={<SignedOutLayout />}>
                 <Route path="signin" element={<SignIn />} />
