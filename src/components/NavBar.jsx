@@ -1,6 +1,9 @@
 import { Link } from "react-router";
+import { useCommunity } from "../context/CommunityContext";
 
 const NavBar = ({ isOpen, setIsOpen }) => {
+  const { currentCommunity } = useCommunity();
+
   return (
     <div className="flex items-center justify-between p-4 gap-4 w-full">
       <button
@@ -11,14 +14,17 @@ const NavBar = ({ isOpen, setIsOpen }) => {
       </button>
       <Link to={"/"}>
         <img
-          src="./logoipsum-329.svg"
+          src="/logoipsum-329.svg"
           alt="Logo"
           className={` ${isOpen ? "hidden" : "flex"}`}
         />
       </Link>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         {/* Maybe add notifications bell later */}
         {/* <i className="fi-rs-bell"></i> */}
+        <span className={`rounded-full border border-lilac px-4 py-1 text-xs`}>
+          {currentCommunity.name}
+        </span>
         <label className="swap swap-rotate">
           {/* this hidden checkbox controls the state */}
           <input

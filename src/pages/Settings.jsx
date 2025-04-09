@@ -265,10 +265,11 @@ const Settings = () => {
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
-          Choose your community
+          Community Settings
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
+            <h4>Choose your community</h4>
             <CommunitySelector
               communities={joinedCommunities}
               onSelect={(slug) => {
