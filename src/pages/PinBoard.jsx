@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
 
 import PostCard from "../components/PinBoard/PostCard";
 import EventCard from "../components/PinBoard/EventCard";
@@ -8,6 +9,7 @@ import MessageCard from "../components/PinBoard/MessageCard";
 import AppModal from "../components/PinBoard/AppModal";
 
 const PinBoard = () => {
+  const { user } = useUser();
   const [pinnedApps, setPinnedApps] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("all");
 
@@ -69,7 +71,7 @@ const PinBoard = () => {
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center gap-4">
-      <h2 className="text-neon">Hello username</h2>
+      <h2 className="text-neon">Hello {user?.username}</h2>
       <h1>{getGreeting()}</h1>
 
       <CardFilter
