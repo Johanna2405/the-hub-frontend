@@ -79,14 +79,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             setIsOpen={setIsOpen}
             className={"bg-primary py-2"}
           />
-          <SidebarLink
-            target={`/community/${currentCommunity.id}/pinboard`}
-            icon={"fi-rr-thumbtack"}
-            iconColor={"ultramarine"}
-            text={"Community Pinboard"}
-            setIsOpen={setIsOpen}
-            className={"bg-primary py-2"}
-          />
+          {currentCommunity && (
+            <SidebarLink
+              target={`/community/${currentCommunity.id}/pinboard`}
+              icon={"fi-rr-thumbtack"}
+              iconColor={"ultramarine"}
+              text={"Community Pinboard"}
+              setIsOpen={setIsOpen}
+              className={"bg-primary py-2"}
+            />
+          )}
           <CommunitySelector
             communities={joinedCommunities}
             onSelect={(slug) => {
