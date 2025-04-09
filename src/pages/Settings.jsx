@@ -25,10 +25,13 @@ const ProfileSettings = () => {
   const { joinedCommunities, currentCommunity, setCurrentCommunity } =
     useCommunity();
 
-  // Add check if username is different!
   const handleChangeUsername = async (e) => {
     {
       e.preventDefault();
+      if (newUsername === user.username) {
+        showToast("Please choose a new username.", "error");
+        return;
+      }
       try {
         await changeUsername(user.id, newUsername);
         setUser((prev) => ({ ...prev, username: newUsername }));
@@ -85,9 +88,12 @@ const ProfileSettings = () => {
   // };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-12">
+      {/* {currentCommunity?.role === "admin" && (
+      //  Here some admin content
+      )} */}
       <Header
-        title="Profile Settings"
+        title="Settings"
         showBackButton={true}
         onBack={() => navigate(-1)}
       />
@@ -98,6 +104,7 @@ const ProfileSettings = () => {
       {/* update status */}
       <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4 md:w-3/4">
         <span className="font-semibold">Update your status</span>
+        <h2>{user.username}</h2>
         <div className="flex items-center gap-2">
           <input
             type="text"
@@ -181,6 +188,10 @@ const ProfileSettings = () => {
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
+            <span className="label-text font-medium text-text">
+              Current Username: {user.username} | E-Mail: {user.email}
+            </span>
+
             {/* Form */}
             <form className="w-full space-y-4" onSubmit={handleChangeUsername}>
               {/* Username Input */}
@@ -255,28 +266,6 @@ const ProfileSettings = () => {
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
             <CommunitySelector />
-            {/* <form> */}
-            {/* <select
-                className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
-                value={currentCommunity?.id || ""}
-                onChange={(e) => {
-                  const selected = joinedCommunities.find(
-                    (c) => c.id === e.target.value
-                  );
-                  if (selected) {
-                    setCurrentCommunity(selected);
-                  }
-                }}
-              >
-                {joinedCommunities.map((community) => (
-                  <option key={community.id} value={community.id}>
-                    {community.name}
-                  </option>
-                ))}
-              </select> */}
-
-            {/* </div> */}
-            {/* </form> */}
           </div>
         </div>
       </div>

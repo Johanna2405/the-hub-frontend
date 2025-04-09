@@ -17,7 +17,6 @@ const CommunitySelector = () => {
 
   return (
     <div className="relative w-full">
-      {/* Trigger */}
       <button
         onClick={() => setDropdownOpen((prev) => !prev)}
         className="w-full flex justify-between items-center bg-primary p-3 rounded-2xl border border-base text-text"
@@ -25,7 +24,6 @@ const CommunitySelector = () => {
         <span>{currentCommunity?.name || "Select community"}</span>
         <span className="fi fi-rr-angle-small-down text-xl" />
       </button>
-
       {/* Dropdown */}
       {dropdownOpen && (
         <ul className="absolute z-10 mt-2 w-full bg-primary border border-base rounded-xl shadow-lg max-h-60 overflow-y-auto">
@@ -49,6 +47,27 @@ const CommunitySelector = () => {
           ))}
         </ul>
       )}
+      {/* <form> */}
+      {/* <select
+                className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
+                value={currentCommunity?.id || ""}
+                onChange={(e) => {
+                  const selected = joinedCommunities.find(
+                    (c) => c.id === e.target.value
+                  );
+                  if (selected) {
+                    setCurrentCommunity(selected);
+                  }
+                }}
+              >
+                {joinedCommunities.map((community) => (
+                  <option key={community.id} value={community.id}>
+                    {community.name}
+                  </option>
+                ))}
+              </select> */}
+      {/* </div> */}
+      {/* </form> */}
     </div>
   );
 };
