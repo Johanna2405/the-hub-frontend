@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import {
   fetchJoinedCommunities,
   fetchAllCommunities,
+  fetchCommunitySettings,
+  fetchCommunityPinBoard,
 } from "../utils/community";
 import { useNavigate } from "react-router";
 
@@ -16,6 +18,9 @@ export const CommunityProvider = ({ children }) => {
     return stored ? JSON.parse(stored) : null;
   });
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState({});
+  const [pinBoard, setPinBoard] = useState([]);
+
   //   const navigate = useNavigate();
 
   // Load communities
@@ -54,6 +59,23 @@ export const CommunityProvider = ({ children }) => {
     }
   }, [currentCommunity]);
 
+  useEffect(() => {
+    const loadExtras = async () => {
+      if (currentCommunity) {
+        try {
+          const settings = await fetchCommunitySettings(currentCommunity.id);
+          const pin = await fetchCommunityPinBoard(currentCommunity.id);
+          setSettings(settings);
+          setPinBoard(pin.pin_board || []);
+        } catch (err) {
+          console.error("Failed to load community details:", err);
+        }
+      }
+    };
+
+    loadExtras();
+  }, [currentCommunity]);
+
   return (
     <CommunityContext.Provider
       value={{
@@ -61,6 +83,9 @@ export const CommunityProvider = ({ children }) => {
         currentCommunity,
         setCurrentCommunity,
         loading,
+        settings,
+        pinBoard,
+        setPinBoard,
       }}
     >
       {children}

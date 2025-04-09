@@ -6,6 +6,15 @@ const API = axios.create({
   baseURL: `${BACKEND_URL}/api`,
 });
 
+// Add token to all requests
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 const handleError = (error) => {
   throw new Error(error.response?.data?.message || "Something went wrong");
 };
@@ -387,6 +396,26 @@ export const removeCommunityEventAttendee = async (
     const res = await API.delete(
       `/communities/${communityId}/events/${eventId}/attendees/${userId}`
     );
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+// Pinboard (admin only)
+export const fetchCommunityPinBoard = async (id) => {
+  try {
+    const res = await API.get(`/communities/${id}/pinboard`);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+// Update community pin board (admin only)
+export const updateCommunityPinBoard = async (id, pin_board) => {
+  try {
+    const res = await API.put(`/communities/${id}/pinboard`, { pin_board });
     return res.data;
   } catch (error) {
     handleError(error);
