@@ -1,73 +1,49 @@
-import { useState } from "react";
-import { useCommunity } from "../context/CommunityContext";
 import { useNavigate } from "react-router";
 
-const CommunitySelector = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { joinedCommunities, currentCommunity, setCurrentCommunity } =
-    useCommunity();
-
+const CommunitySelector = ({ communities = [], onSelect }) => {
   const navigate = useNavigate();
 
   const handleSelect = (community) => {
-    setCurrentCommunity(community);
-    // navigate(`/c/${community.slug}`); check routing
-    setDropdownOpen(false);
+    if (onSelect) {
+      onSelect(community.slug); // update global state
+    }
+    navigate(`/community/${community.id}/pinboard`);
   };
 
+  // Prevent render if communities is empty or still loading
+  if (!communities || communities.length === 0) {
+    return (
+      <div className="text-sm text-gray-400 italic">
+        You haven’t joined any communities yet.
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full">
-      <button
-        onClick={() => setDropdownOpen((prev) => !prev)}
-        className="w-full flex justify-between items-center bg-primary p-3 rounded-2xl border border-base text-text"
+    <div className="space-y-2">
+      <label className="block font-medium mb-2 text-text">
+        Select a community:
+      </label>
+      <select
+        onChange={(e) => {
+          const selectedId = e.target.value;
+          const selected = communities.find((c) => c.id === selectedId);
+          if (selected) {
+            handleSelect(selected);
+          }
+        }}
+        className="select select-bordered w-full max-w-xs bg-primary text-text"
+        defaultValue=""
       >
-        <span>{currentCommunity?.name || "Select community"}</span>
-        <span className="fi fi-rr-angle-small-down text-xl" />
-      </button>
-      {/* Dropdown */}
-      {dropdownOpen && (
-        <ul className="absolute z-10 mt-2 w-full bg-primary border border-base rounded-xl shadow-lg max-h-60 overflow-y-auto">
-          {joinedCommunities.map((community) => (
-            <li
-              key={community.id}
-              className="flex justify-between items-center px-4 py-2 hover:bg-ultramarine hover:text-white cursor-pointer rounded-xl transition"
-              onClick={() => handleSelect(community)}
-            >
-              <span>{community.name}</span>
-              <span
-                className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                  community.role === "admin"
-                    ? "bg-lilac text-white"
-                    : "bg-slate-200 text-slate-700"
-                }`}
-              >
-                {community.role}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {/* <form> */}
-      {/* <select
-                className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
-                value={currentCommunity?.id || ""}
-                onChange={(e) => {
-                  const selected = joinedCommunities.find(
-                    (c) => c.id === e.target.value
-                  );
-                  if (selected) {
-                    setCurrentCommunity(selected);
-                  }
-                }}
-              >
-                {joinedCommunities.map((community) => (
-                  <option key={community.id} value={community.id}>
-                    {community.name}
-                  </option>
-                ))}
-              </select> */}
-      {/* </div> */}
-      {/* </form> */}
+        <option value="" disabled>
+          Choose...
+        </option>
+        {communities.map((community) => (
+          <option key={community.id} value={community.id}>
+            {community.name}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

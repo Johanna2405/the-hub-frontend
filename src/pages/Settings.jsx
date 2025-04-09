@@ -10,7 +10,7 @@ import ThemeController from "../components/Settings/ThemeController";
 import CommunitySelector from "../components/CommunitySelector";
 import { showToast } from "../utils/toast";
 
-const ProfileSettings = () => {
+const Settings = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState("");
   const { user, setUser } = useUser();
@@ -24,6 +24,10 @@ const ProfileSettings = () => {
 
   const { joinedCommunities, currentCommunity, setCurrentCommunity } =
     useCommunity();
+
+  if (!user) {
+    return <div className="p-8 text-center">Loading user data...</div>;
+  }
 
   const handleChangeUsername = async (e) => {
     {
@@ -265,7 +269,15 @@ const ProfileSettings = () => {
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
-            <CommunitySelector />
+            <CommunitySelector
+              communities={joinedCommunities}
+              onSelect={(slug) => {
+                const selected = joinedCommunities.find((c) => c.slug === slug);
+                if (selected) {
+                  setCurrentCommunity(selected); // set it globally in your context
+                }
+              }}
+            />
           </div>
         </div>
       </div>
@@ -304,4 +316,4 @@ const ProfileSettings = () => {
   );
 };
 
-export default ProfileSettings;
+export default Settings;

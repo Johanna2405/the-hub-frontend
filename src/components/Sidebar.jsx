@@ -116,7 +116,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           />
         </div>
         <button
-          className="flex items-center gap-4"
+          className="flex items-center gap-4 cursor-pointer"
           // onClick={() => setIsOpen((prev) => !prev)}
           onClick={handleLogout}
         >

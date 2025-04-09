@@ -1,5 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { fetchJoinedCommunities } from "../utils/community";
+import {
+  fetchJoinedCommunities,
+  fetchAllCommunities,
+} from "../utils/community";
 import { useNavigate } from "react-router";
 
 const CommunityContext = createContext();
