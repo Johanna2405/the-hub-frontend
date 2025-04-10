@@ -47,7 +47,7 @@ function App() {
                   <Route path="messages" element={<MessagePage />} />
                   <Route path="lists" element={<ListPage />} />
                   <Route path="add-list" element={<NewListPage />} />
-                  <Route path="calendar" element={<CalendarTabs />} />
+                  <Route path="events" element={<CalendarTabs />} />
                 </Route>
               </Route>
               <Route path="/" element={<SignedOutLayout />}>

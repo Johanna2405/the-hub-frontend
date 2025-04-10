@@ -9,6 +9,12 @@ import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
 import CommunitySelector from "../components/CommunitySelector";
 import { showToast } from "../utils/toast";
+import {
+  fetchAllCommunities,
+  joinCommunity,
+  updateCommunitySettings,
+  deleteCommunity,
+} from "../utils/community";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -18,16 +24,52 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [communities, setCommunities] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
 
   const { pinboardSettings, setPinboardSettings } = useUser();
 
-  const { joinedCommunities, currentCommunity, setCurrentCommunity } =
-    useCommunity();
+  const {
+    joinedCommunities,
+    currentCommunity,
+    setCurrentCommunity,
+    settings,
+    setSettings,
+  } = useCommunity();
+
+  // Load existing communities
+  useEffect(() => {
+    const loadCommunities = async () => {
+      try {
+        const data = await fetchAllCommunities();
+        setCommunities(data);
+      } catch (err) {
+        showToast("Failed to load communities", "error");
+      }
+    };
+
+    loadCommunities();
+  }, []);
 
   if (!user) {
     return <div className="p-8 text-center">Loading user data...</div>;
   }
+
+  // Join selected community
+  const handleJoin = async (e) => {
+    e.preventDefault();
+    if (!selectedId) return;
+
+    try {
+      await joinCommunity(selectedId);
+      const joined = communities.find((c) => c.id === parseInt(selectedId));
+      setCurrentCommunity(joined);
+      showToast(`Joined "${joined.name}"!`, "success");
+      navigate("/");
+    } catch (err) {
+      showToast(err.message, "error");
+    }
+  };
 
   const handleChangeUsername = async (e) => {
     {
@@ -91,11 +133,48 @@ const Settings = () => {
   //   }
   // };
 
+  const toggleSetting = async (key) => {
+    try {
+      const updated = {
+        ...settings,
+        [key]: !settings[key],
+      };
+
+      setSettings(updated);
+      await updateCommunitySettings(currentCommunity.id, updated);
+      showToast("Community settings updated!", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to update settings", "error");
+    }
+  };
+
+  const removeCommunityFromState = (id) => {
+    setCommunities((prevCommunities) =>
+      prevCommunities.filter((community) => community.id !== id)
+    );
+  };
+
+  const handleDelete = async () => {
+    const confirm = window.confirm(
+      `Are you sure you want to delete "${currentCommunity.name}"? This cannot be undone.`
+    );
+    if (!confirm) return;
+
+    try {
+      removeCommunityFromState(currentCommunity.id);
+      await deleteCommunity(currentCommunity.id);
+      setCurrentCommunity(null);
+      showToast("Community deleted.", "success");
+      navigate(0);
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to delete community", "error");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8 pb-12">
-      {/* {currentCommunity?.role === "admin" && (
-      //  Here some admin content
-      )} */}
       <Header
         title="Settings"
         showBackButton={true}
@@ -265,12 +344,13 @@ const Settings = () => {
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
-          Community Settings
+          Join a new community
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
-            <h4>Choose your community</h4>
-            <CommunitySelector
+            {/* Removed the selector bc sidebar alone works fine  */}
+            {/* <h4>Choose your community</h4> */}
+            {/* <CommunitySelector
               communities={joinedCommunities}
               onSelect={(slug) => {
                 const selected = joinedCommunities.find((c) => c.slug === slug);
@@ -278,10 +358,87 @@ const Settings = () => {
                   setCurrentCommunity(selected); // set it globally in your context
                 }
               }}
-            />
+            /> */}
+
+            <form onSubmit={handleJoin} className="w-full max-w-sm">
+              <div className="flex items-center gap-4">
+                <select
+                  className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
+                  value={selectedId}
+                  onChange={(e) => setSelectedId(e.target.value)}
+                >
+                  <option value="">Select a community</option>
+                  {communities.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <IconBtn text="Join" icon="fi-rr-arrow-right" color="lilac" />
+              </div>
+            </form>
           </div>
         </div>
       </div>
+      {/* Admin community settings */}
+      {currentCommunity?.role === "admin" && (
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+          <input type="radio" name="my-accordion-2" />
+          <div className="collapse-title">
+            <div className="flex items-center gap-4">
+              <h4 className="font-semibold text-lg">Admin Settings</h4>
+              <span className="rounded-full border border-lilac px-4 py-1 text-sm">
+                {currentCommunity.name}
+              </span>
+            </div>
+          </div>
+          <div className="collapse-content ">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <h4>Select community apps</h4>
+                <div className="flex flex-col gap-4">
+                  <AppCheckbox
+                    icon={"fi-rr-text"}
+                    iconColor={"neon"}
+                    appName={"Posts"}
+                    checked={settings.posts ?? true}
+                    onChange={() => toggleSetting("posts")}
+                  />
+                  <AppCheckbox
+                    icon={"fi-rs-list-check"}
+                    iconColor={"aquamarine"}
+                    appName={"Lists"}
+                    checked={settings.lists ?? true}
+                    onChange={() => toggleSetting("lists")}
+                  />
+                  <AppCheckbox
+                    icon={"fi-rr-megaphone"}
+                    iconColor={"sage"}
+                    appName={"Messages"}
+                    checked={settings.messages ?? true}
+                    onChange={() => toggleSetting("messages")}
+                  />
+                  <AppCheckbox
+                    icon={"fi-rr-calendar"}
+                    iconColor={"lilac"}
+                    appName={"Calendar"}
+                    checked={settings.calendar ?? true}
+                    onChange={() => toggleSetting("calendar")}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center justify-end">
+                <IconBtn
+                  text={`Delete ${currentCommunity.name}`}
+                  icon="fi-rr-trash"
+                  color="ultramarine"
+                  onClick={handleDelete}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* // profile picture */}
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />

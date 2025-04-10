@@ -8,36 +8,38 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const { joinedCommunities, currentCommunity, setCurrentCommunity } =
     useCommunity();
 
+  // Default sidebar links
   const sidebarLinks = [
     {
-      target: "/posts",
       icon: "fi-rr-text",
       iconColor: "neon",
       text: "Posts",
       settingKey: "post",
+      target: "posts",
     },
     {
-      target: "/lists",
       icon: "fi-rs-list-check",
       iconColor: "aquamarine",
       text: "Lists",
       settingKey: "list",
+      target: "lists",
     },
     {
-      target: "/messages",
       icon: "fi-rr-megaphone",
       iconColor: "sage",
       text: "Messages",
       settingKey: "message",
+      target: "messages",
     },
     {
-      target: "/calendartabs",
       icon: "fi-rr-calendar",
       iconColor: "lilac",
       text: "Calendar",
       settingKey: "calendar",
+      target: "events",
     },
   ];
+
   const { logout } = useUser();
 
   const handleLogout = () => {
@@ -93,7 +95,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             onSelect={(slug) => {
               const selected = joinedCommunities.find((c) => c.slug === slug);
               if (selected) {
-                setCurrentCommunity(selected); // set it globally in your context
+                setCurrentCommunity(selected);
               }
             }}
           />
@@ -105,8 +107,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             (link) =>
               pinboardSettings[link.settingKey] && (
                 <SidebarLink
-                  key={link.target}
-                  target={link.target}
+                  key={link.text}
+                  target={
+                    currentCommunity
+                      ? `/community/${currentCommunity.id}/${link.target}`
+                      : link.target
+                  }
                   icon={link.icon}
                   iconColor={link.iconColor}
                   text={link.text}
@@ -127,7 +133,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
         <button
           className="flex items-center gap-4 cursor-pointer"
-          // onClick={() => setIsOpen((prev) => !prev)}
           onClick={handleLogout}
         >
           <i className="fi fi-rr-exit text-text text-2xl bg-base rounded-xl px-3 pt-3 pb-1 "></i>
