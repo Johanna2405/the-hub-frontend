@@ -16,7 +16,7 @@ const NavBar = ({ isOpen, setIsOpen }) => {
         />
         {/* Add null check for currentCommunity */}
         <span className="font-semibold">
-          {currentCommunity?.name || "No Community Selected"}
+          {currentCommunity?.name || "Private Space"}
         </span>
       </div>
       <div className="flex items-center gap-4">
