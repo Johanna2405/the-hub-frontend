@@ -9,6 +9,7 @@ const PostModal = ({
   onPostCreated,
   onPostUpdated,
   modalId = "app_modal",
+  communityId = null,
 }) => {
   const { user } = useUser();
 
@@ -32,6 +33,7 @@ const PostModal = ({
       content,
       imageUrl,
       userId: existingPost.userId ?? user.id,
+      ...(communityId && { community_id: communityId }),
     };
 
     try {
@@ -48,7 +50,7 @@ const PostModal = ({
       setContent("");
       setImageUrl("");
     } catch (err) {
-      console.error("❌ Error submitting post", err);
+      console.error("Error submitting post", err);
       alert("Something went wrong");
     } finally {
       setSubmitting(false);

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { deletePost } from "../../utils/postsAPI";
+import { deletePost, deleteCommunityPost } from "../../utils/postsAPI";
+import { useCommunity } from "../../context/CommunityContext";
 import IconBtn from "../IconBtn";
 import PostModal from "./PostModal";
 import Comments from "./Comments";
 
 const Post = ({ post, setPosts }) => {
   const [showEditModal, setShowEditModal] = useState(false);
+  const { currentCommunity } = useCommunity();
 
   if (!post) return null;
 
@@ -18,7 +20,12 @@ const Post = ({ post, setPosts }) => {
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this post?")) {
       try {
-        await deletePost(currentPost.id);
+        if (currentPost.community_id && currentCommunity) {
+          await deleteCommunityPost(currentCommunity.id, currentPost.id);
+        } else {
+          await deletePost(currentPost.id);
+        }
+
         setPosts((prev) => prev.filter((p) => p.id !== currentPost.id));
       } catch (err) {
         console.error("Failed to delete post", err);
