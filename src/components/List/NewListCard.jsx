@@ -21,11 +21,15 @@ const NewListCard = ({
   const navigate = useNavigate();
   const { user } = useUser();
   const { currentCommunity } = useCommunity();
-  const community_id = currentCommunity?.id;
+  let community_id = currentCommunity?.id;
 
   const onSubmit = async (data) => {
     try {
       const user_id = user.id;
+
+      if (data.privacy === "Private") {
+        community_id = null;
+      }
 
       const listPayload = {
         ...data,
