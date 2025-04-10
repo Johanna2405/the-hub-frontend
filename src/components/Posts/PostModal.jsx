@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 import { createPost, updatePost } from "../../utils/postsAPI";
+import { createCommunityPost } from "../../utils/community";
 import IconBtn from "../IconBtn";
 
 const PostModal = ({
@@ -9,6 +10,7 @@ const PostModal = ({
   onPostCreated,
   onPostUpdated,
   modalId = "app_modal",
+  communityId = null,
 }) => {
   const { user } = useUser();
 
@@ -31,7 +33,8 @@ const PostModal = ({
       title,
       content,
       imageUrl,
-      userId: existingPost.userId ?? user.id,
+      ...(communityId && { community_id: communityId }),
+      ...(!communityId && { userId: existingPost.userId ?? user.id }),
     };
 
     try {
@@ -39,7 +42,9 @@ const PostModal = ({
         const updated = await updatePost(existingPost.id, payload);
         onPostUpdated?.(updated);
       } else {
-        const created = await createPost(payload);
+        const created = communityId
+          ? await createCommunityPost(communityId, payload)
+          : await createPost(payload);
         onPostCreated?.(created);
       }
 
@@ -48,7 +53,7 @@ const PostModal = ({
       setContent("");
       setImageUrl("");
     } catch (err) {
-      console.error("❌ Error submitting post", err);
+      console.error("Error submitting post", err);
       alert("Something went wrong");
     } finally {
       setSubmitting(false);

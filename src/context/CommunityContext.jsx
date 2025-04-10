@@ -13,10 +13,7 @@ export const useCommunity = () => useContext(CommunityContext);
 
 export const CommunityProvider = ({ children }) => {
   const [joinedCommunities, setJoinedCommunities] = useState([]);
-  const [currentCommunity, setCurrentCommunity] = useState(() => {
-    const stored = localStorage.getItem("currentCommunity");
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [currentCommunity, setCurrentCommunity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [pinBoard, setPinBoard] = useState([]);
@@ -25,20 +22,13 @@ export const CommunityProvider = ({ children }) => {
 
   // Load communities
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     const initializeCommunities = async () => {
       try {
         const communities = await fetchJoinedCommunities();
         setJoinedCommunities(communities);
-
-        if (!currentCommunity && communities.length > 0) {
-          const lastSelected = localStorage.getItem("currentCommunity");
-          const fallback = lastSelected
-            ? JSON.parse(lastSelected)
-            : communities[0];
-
-          setCurrentCommunity(fallback);
-          //   navigate(`/c/${fallback.slug}`); navigate to pinboard of community?
-        }
       } catch (err) {
         console.error("Failed to fetch communities:", err);
       } finally {
@@ -56,6 +46,8 @@ export const CommunityProvider = ({ children }) => {
         "currentCommunity",
         JSON.stringify(currentCommunity)
       );
+    } else {
+      localStorage.removeItem("currentCommunity");
     }
   }, [currentCommunity]);
 

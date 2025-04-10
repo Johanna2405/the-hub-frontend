@@ -45,7 +45,7 @@ export const createUser = async ({ username, email, password }) => {
       email,
       password,
       profile_picture: null,
-      community_id: 1, // Default community ID for now
+      community_id: null,
     });
     return response.data;
   } catch (error) {
