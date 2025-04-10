@@ -69,7 +69,7 @@ const ListCard = ({
         <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
       </div>
 
-      {visibleItems.length > 0 && (
+      {items.length > 0 && (
         <ListItemFilter
           activeFilter={globalFilter}
           setActiveFilter={setGlobalFilter}
