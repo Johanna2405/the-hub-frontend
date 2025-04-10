@@ -11,11 +11,9 @@ const Post = ({ post, setPosts }) => {
 
   if (!post) return null;
 
+  const isPrivateSpace = !currentCommunity;
   const currentPost = post;
   const modalId = `edit_modal_${currentPost.id}`;
-
-  // Debugging
-  console.log("Post Author:", currentPost.author);
 
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this post?")) {
@@ -37,20 +35,30 @@ const Post = ({ post, setPosts }) => {
   return (
     <div className="flex flex-col min-h-[400px] w-full gap-4 bg-neon p-6 rounded-2xl">
       {/* Author */}
-      <div className="flex items-center gap-2">
-        <div className="avatar">
-          <div className="w-10 rounded-full">
-            <img
-              src={
-                currentPost.author?.profile_picture
-                  ? currentPost.author.profile_picture
-                  : "https://www.gravatar.com/avatar/?d=mp&f=y"
-              }
-              alt="Author"
-            />
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="avatar">
+            <div className="w-10 rounded-full">
+              <img
+                src={
+                  currentPost.author?.profile_picture
+                    ? currentPost.author.profile_picture
+                    : "public/default-profile.png"
+                }
+                alt="Author"
+              />
+            </div>
           </div>
+          <p className="text-[#181B4D]">{currentPost.author?.username}</p>
         </div>
-        <p className="text-[#181B4D]">{currentPost.author?.username}</p>
+        {/* Post Type Tag (only in private view) */}
+        {isPrivateSpace && (
+          <span className="text-xs text-white bg-lilac px-2 py-1 rounded-full self-start">
+            {currentPost.Community?.name
+              ? `${currentPost.Community.name}`
+              : "Private"}
+          </span>
+        )}
       </div>
 
       {/* Title + Image */}
