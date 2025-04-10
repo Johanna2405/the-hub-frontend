@@ -42,6 +42,7 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 {/* Community Routes */}
                 <Route path="community/:communityId">
+                  <Route path="pinboard" element={<PinBoard />} />
                   <Route path="posts" element={<PostPage />} />
                   <Route path="messages" element={<MessagePage />} />
                   <Route path="lists" element={<ListPage />} />

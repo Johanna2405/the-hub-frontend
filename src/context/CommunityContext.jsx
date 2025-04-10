@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {
   fetchJoinedCommunities,
+  fetchAllCommunities,
   fetchCommunitySettings,
   fetchCommunityPinBoard,
 } from "../utils/community";

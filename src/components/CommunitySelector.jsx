@@ -1,73 +1,62 @@
 import { useState } from "react";
-import { useCommunity } from "../context/CommunityContext";
 import { useNavigate } from "react-router";
+import IconBtn from "./IconBtn";
+import { useCommunity } from "../context/CommunityContext";
 
-const CommunitySelector = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { joinedCommunities, currentCommunity, setCurrentCommunity } =
-    useCommunity();
-
+const CommunitySelector = ({ communities = [], onSelect }) => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
+  const { setCurrentCommunity } = useCommunity();
 
   const handleSelect = (community) => {
+    setSelectedCommunity(community);
+    setOpen(false);
+    if (onSelect) onSelect(community.slug);
     setCurrentCommunity(community);
-    // navigate(`/c/${community.slug}`); check routing
-    setDropdownOpen(false);
+    navigate(`/community/${community.id}/pinboard`);
   };
 
+  if (!communities || communities.length === 0) {
+    return (
+      <div className="text-sm text-gray-400 italic">
+        You haven’t joined any communities yet.
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full">
-      <button
-        onClick={() => setDropdownOpen((prev) => !prev)}
-        className="w-full flex justify-between items-center bg-primary p-3 rounded-2xl border border-base text-text"
+    <div className="relative w-full max-w-sm">
+      <div
+        onClick={() => setOpen(!open)}
+        className="w-full text-text px-4 py-2 rounded-2xl flex justify-between items-center border border-lilac"
       >
-        <span>{currentCommunity?.name || "Select community"}</span>
-        <span className="fi fi-rr-angle-small-down text-xl" />
-      </button>
-      {/* Dropdown */}
-      {dropdownOpen && (
-        <ul className="absolute z-10 mt-2 w-full bg-primary border border-base rounded-xl shadow-lg max-h-60 overflow-y-auto">
-          {joinedCommunities.map((community) => (
-            <li
+        <span>
+          {selectedCommunity ? selectedCommunity.name : "Select a community"}
+        </span>
+        <IconBtn icon={"fi-rr-angle-small-down text-xl pt-2"} color={"lilac"} />
+      </div>
+
+      {open && (
+        <div className=" mt-2 w-full  border border-lilac rounded-2xl max-h-60 ">
+          {communities.map((community) => (
+            <button
               key={community.id}
-              className="flex justify-between items-center px-4 py-2 hover:bg-ultramarine hover:text-white cursor-pointer rounded-xl transition"
+              className="w-full px-4 py-3 text-left hover:bg-primary/80 hover:rounded-2xl transition flex items-center justify-between"
               onClick={() => handleSelect(community)}
             >
-              <span>{community.name}</span>
-              <span
-                className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                  community.role === "admin"
-                    ? "bg-lilac text-white"
-                    : "bg-slate-200 text-slate-700"
-                }`}
-              >
-                {community.role}
-              </span>
-            </li>
+              <span className="text-text cursor-pointer">{community.name}</span>
+              {community.role && (
+                <span
+                  className={`rounded-full border border-lilac px-4 py-1 text-xs`}
+                >
+                  {community.role}
+                </span>
+              )}
+            </button>
           ))}
-        </ul>
+        </div>
       )}
-      {/* <form> */}
-      {/* <select
-                className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
-                value={currentCommunity?.id || ""}
-                onChange={(e) => {
-                  const selected = joinedCommunities.find(
-                    (c) => c.id === e.target.value
-                  );
-                  if (selected) {
-                    setCurrentCommunity(selected);
-                  }
-                }}
-              >
-                {joinedCommunities.map((community) => (
-                  <option key={community.id} value={community.id}>
-                    {community.name}
-                  </option>
-                ))}
-              </select> */}
-      {/* </div> */}
-      {/* </form> */}
     </div>
   );
 };
