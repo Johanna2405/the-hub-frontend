@@ -15,10 +15,26 @@ export const CommunityProvider = ({ children }) => {
   const [joinedCommunities, setJoinedCommunities] = useState([]);
   const [currentCommunity, setCurrentCommunity] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState({
+    calendar: true,
+    lists: true,
+    posts: true,
+    events: true,
+    messages: true,
+  });
   const [pinBoard, setPinBoard] = useState([]);
 
-  //   const navigate = useNavigate();
+  // Load currentCommunity from localStorage (initial restore)
+  useEffect(() => {
+    const storedCommunity = localStorage.getItem("currentCommunity");
+    if (storedCommunity) {
+      try {
+        setCurrentCommunity(JSON.parse(storedCommunity));
+      } catch (err) {
+        console.error("Failed to parse currentCommunity:", err);
+      }
+    }
+  }, []);
 
   // Load communities
   useEffect(() => {
@@ -53,6 +69,7 @@ export const CommunityProvider = ({ children }) => {
 
   useEffect(() => {
     const loadExtras = async () => {
+      // if (!currentCommunity?.id) return;
       if (currentCommunity) {
         try {
           const settings = await fetchCommunitySettings(currentCommunity.id);
@@ -76,6 +93,7 @@ export const CommunityProvider = ({ children }) => {
         setCurrentCommunity,
         loading,
         settings,
+        setSettings,
         pinBoard,
         setPinBoard,
       }}
