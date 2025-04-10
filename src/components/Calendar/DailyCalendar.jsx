@@ -10,7 +10,7 @@ import { useUser } from "../../context/UserContext";
 
 const DailyCalendar = ({ onPrev, onNext }) => {
     const navigate = useNavigate();
-    const { user } = useUser(); // Get the current user (may be null)
+    const { user } = useUser();
     const [selectedDay, setSelectedDay] = useState("25");
     const [showNewEventModal, setShowNewEventModal] = useState(false);
     const [showEditEventModal, setShowEditEventModal] = useState(false);
@@ -18,15 +18,15 @@ const DailyCalendar = ({ onPrev, onNext }) => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch events on component mount
     useEffect(() => {
         const loadEvents = async () => {
             try {
-                // Fetch events without requiring user_id (backend should handle this)
                 const allEvents = await fetchEvents();
                 setEvents(allEvents);
+                localStorage.setItem("daily_events", JSON.stringify(allEvents));
             } catch (err) {
-                console.error("Error fetching events:", err);
+                const fallback = localStorage.getItem("daily_events");
+                if (fallback) setEvents(JSON.parse(fallback));
             } finally {
                 setLoading(false);
             }
@@ -34,64 +34,49 @@ const DailyCalendar = ({ onPrev, onNext }) => {
         loadEvents();
     }, []);
 
-    const validateTimeFormat = (time) => {
-        // Regular expression to match "HH:mm - HH:mm" format (e.g., "12:00 - 14:00")
-        const timeRegex = /^\d{2}:\d{2}\s*-\s*\d{2}:\d{2}$/;
-        return timeRegex.test(time);
-    };
+    const validateTimeFormat = (time) => /^\d{2}:\d{2}\s*-\s*\d{2}:\d{2}$/.test(time);
 
     const handleAddEvent = async (newEvent) => {
         try {
-            // Validate the time format
-            if (!validateTimeFormat(newEvent.time)) {
-                throw new Error("Invalid time format. Please use 'HH:mm - HH:mm' (e.g., '12:00 - 14:00').");
-            }
+            if (!validateTimeFormat(newEvent.time)) throw new Error("Invalid time format. Use 'HH:mm - HH:mm'.");
 
-            const [start, end] = newEvent.time.split("-").map((t) => t.trim());
+            const [start, end] = newEvent.time.split("-").map(t => t.trim());
             const startTime = `2025-03-${newEvent.day}T${start}:00`;
             const endTime = `2025-03-${newEvent.day}T${end}:00`;
 
-            // Validate that startTime and endTime are valid ISO 8601 strings
-            if (isNaN(Date.parse(startTime)) || isNaN(Date.parse(endTime))) {
-                throw new Error("Invalid time values. Please ensure the time is valid (e.g., '12:00 - 14:00').");
-            }
+            if (isNaN(Date.parse(startTime)) || isNaN(Date.parse(endTime))) throw new Error("Invalid time values.");
 
             const payload = {
-                user_id: user?.id || null, // user_id is optional; backend should handle null
+                user_id: user?.id || null,
                 title: newEvent.title,
                 description: newEvent.description,
                 type: newEvent.type,
-                date: `2025-03-${newEvent.day}`, // Format: YYYY-MM-DD
-                start_time: startTime, // Format: YYYY-MM-DDTHH:mm:ss
-                end_time: endTime, // Format: YYYY-MM-DDTHH:mm:ss
-                location: newEvent.location || "Not specified", // Optional, provide a default
+                date: `2025-03-${newEvent.day}`,
+                start_time: startTime,
+                end_time: endTime,
+                location: newEvent.location || "Not specified",
             };
+
             const saved = await createEvent(payload);
-            setEvents([...events, saved]);
-            setSelectedDay(newEvent.day); // Update selected day
+            const updated = [...events, saved];
+            setEvents(updated);
+            localStorage.setItem("daily_events", JSON.stringify(updated));
+            setSelectedDay(newEvent.day);
         } catch (err) {
-            console.error("Error saving new event:", err);
             alert(err.message || "Failed to add event");
         }
     };
 
     const handleEditEvent = async (updatedEvent) => {
         try {
-            // Validate the time format
-            if (!validateTimeFormat(updatedEvent.time)) {
-                throw new Error("Invalid time format. Please use 'HH:mm - HH:mm' (e.g., '12:00 - 14:00').");
-            }
+            if (!validateTimeFormat(updatedEvent.time)) throw new Error("Invalid time format. Use 'HH:mm - HH:mm'.");
 
-            const [start, end] = updatedEvent.time.split("-").map((t) => t.trim());
+            const [start, end] = updatedEvent.time.split("-").map(t => t.trim());
             const startTime = `2025-03-${updatedEvent.day}T${start}:00`;
             const endTime = `2025-03-${updatedEvent.day}T${end}:00`;
 
-            if (isNaN(Date.parse(startTime)) || isNaN(Date.parse(endTime))) {
-                throw new Error("Invalid time values. Please ensure the time is valid (e.g., '12:00 - 14:00').");
-            }
-
             const payload = {
-                user_id: user?.id || null, // user_id is optional
+                user_id: user?.id || null,
                 title: updatedEvent.title,
                 description: updatedEvent.description,
                 type: updatedEvent.type,
@@ -100,10 +85,12 @@ const DailyCalendar = ({ onPrev, onNext }) => {
                 end_time: endTime,
                 location: updatedEvent.location || "Not specified",
             };
+
             const result = await updateEvent(updatedEvent.id, payload);
-            setEvents(events.map((e) => (e.id === updatedEvent.id ? result : e)));
+            const updated = events.map((e) => (e.id === updatedEvent.id ? result : e));
+            setEvents(updated);
+            localStorage.setItem("daily_events", JSON.stringify(updated));
         } catch (err) {
-            console.error("Error updating event:", err);
             alert(err.message || "Failed to update event");
         }
     };
@@ -111,9 +98,10 @@ const DailyCalendar = ({ onPrev, onNext }) => {
     const handleDeleteEvent = async (eventId) => {
         try {
             await deleteEvent(eventId);
-            setEvents(events.filter((e) => e.id !== eventId));
+            const filtered = events.filter((e) => e.id !== eventId);
+            setEvents(filtered);
+            localStorage.setItem("daily_events", JSON.stringify(filtered));
         } catch (err) {
-            console.error("Error deleting event:", err);
             alert("Failed to delete event");
         }
     };
@@ -133,22 +121,15 @@ const DailyCalendar = ({ onPrev, onNext }) => {
     return (
         <div className="p-4 bg-base">
             <Header showBackButton={true} onBack={() => navigate(-1)} />
-
             <div className="flex items-center justify-between mb-8">
                 <h1 className="text-4xl font-bold text-text">Calendar</h1>
-                <IconBtn
-                    color="neon"
-                    icon="fi-rr-plus-small"
-                    onClick={() => setShowNewEventModal(true)}
-                />
+                <IconBtn color="neon" icon="fi-rr-plus-small" onClick={() => setShowNewEventModal(true)} />
             </div>
-
             <div className="flex items-center justify-between mb-8">
                 <IconBtn color="primary" icon="fi-rr-angle-small-left" onClick={onPrev} />
                 <h2 className="text-xl font-semibold text-text">Day</h2>
                 <IconBtn color="primary" icon="fi-rr-angle-small-right" onClick={onNext} />
             </div>
-
             <div className="flex gap-2 overflow-x-auto mb-6">
                 {days.map(({ day, label }) => (
                     <div
@@ -163,7 +144,6 @@ const DailyCalendar = ({ onPrev, onNext }) => {
                     </div>
                 ))}
             </div>
-
             {loading ? (
                 <div className="flex flex-col gap-4 items-center py-8 w-full">
                     <span className="loading loading-spinner loading-lg text-lilac mb-6"></span>
@@ -215,7 +195,7 @@ const DailyCalendar = ({ onPrev, onNext }) => {
                                                         hour: "2-digit",
                                                         minute: "2-digit",
                                                     })}`,
-                                                    day: event.date.split("-")[2], // Extract day from date
+                                                    day: event.date.split("-")[2],
                                                 });
                                                 setShowEditEventModal(true);
                                             }}
@@ -237,7 +217,6 @@ const DailyCalendar = ({ onPrev, onNext }) => {
                         ))}
                 </div>
             )}
-
             <NewEventModal
                 show={showNewEventModal}
                 onClose={() => setShowNewEventModal(false)}

@@ -1,20 +1,31 @@
-// src/components/Calendar/EditEventModal.jsx
+// Updated EditEventModal.jsx with dynamic time dropdowns
 import { useState, useEffect } from "react";
 
 const EditEventModal = ({ show, onClose, onSave, event }) => {
     const [title, setTitle] = useState("");
-    const [time, setTime] = useState("");
     const [description, setDescription] = useState("");
     const [type, setType] = useState("Private");
-    const [location, setLocation] = useState(""); // Added location field
+    const [location, setLocation] = useState("");
+    const [startTime, setStartTime] = useState("09:00");
+    const [endTime, setEndTime] = useState("10:00");
+
+    const timeOptions = Array.from({ length: 24 }, (_, hour) => {
+        const h = hour.toString().padStart(2, "0");
+        return [`${h}:00`, `${h}:30`];
+    }).flat();
 
     useEffect(() => {
         if (event) {
             setTitle(event.title || "");
-            setTime(event.time || "");
             setDescription(event.description || "");
             setType(event.type || "Private");
-            setLocation(event.location || ""); // Set location
+            setLocation(event.location || "");
+
+            if (event?.time) {
+                const [start, end] = event.time.split("-").map(t => t.trim());
+                setStartTime(start);
+                setEndTime(end);
+            }
         }
     }, [event]);
 
@@ -26,10 +37,10 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
             id: event.id,
             day: event.day,
             title,
-            time,
+            time: `${startTime} - ${endTime}`,
             description,
             type,
-            location, // Include location
+            location,
         });
         onClose();
     };
@@ -64,17 +75,35 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
                             required
                         />
                     </div>
+
                     <div>
-                        <label className="block text-text font-medium">Time</label>
-                        <input
-                            type="text"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                            className="input input-bordered w-full bg-primary text-text"
-                            placeholder="e.g., 12:00 - 14:00"
+                        <label className="block text-text font-medium">Start Time</label>
+                        <select
+                            value={startTime}
+                            onChange={(e) => setStartTime(e.target.value)}
+                            className="select select-bordered w-full bg-primary text-text"
                             required
-                        />
+                        >
+                            {timeOptions.map((time) => (
+                                <option key={time} value={time}>{time}</option>
+                            ))}
+                        </select>
                     </div>
+
+                    <div>
+                        <label className="block text-text font-medium">End Time</label>
+                        <select
+                            value={endTime}
+                            onChange={(e) => setEndTime(e.target.value)}
+                            className="select select-bordered w-full bg-primary text-text"
+                            required
+                        >
+                            {timeOptions.map((time) => (
+                                <option key={time} value={time}>{time}</option>
+                            ))}
+                        </select>
+                    </div>
+
                     <div>
                         <label className="block text-text font-medium">Description</label>
                         <textarea
