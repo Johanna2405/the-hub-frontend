@@ -33,7 +33,7 @@ const ListPage = () => {
         let data = [];
 
         if (isCommunityView) {
-          data = await fetchCommunityLists(user_id);
+          data = await fetchCommunityLists(currentCommunity?.id);
           console.log("Fetched lists community:", data);
         } else {
           data = await fetchListsPerUserId(user_id);
