@@ -3,6 +3,7 @@ import ListIconBtn from "./ListIconBtn";
 import { createList } from "../../utils/listsAPI";
 import { useNavigate } from "react-router";
 import { useUser } from "../../context/UserContext";
+import { useCommunity } from "../../context/CommunityContext";
 
 const NewListCard = ({
   defaultValues = {
@@ -19,14 +20,21 @@ const NewListCard = ({
 
   const navigate = useNavigate();
   const { user } = useUser();
+  const { currentCommunity } = useCommunity();
+  let community_id = currentCommunity?.id;
 
   const onSubmit = async (data) => {
     try {
       const user_id = user.id;
 
+      if (data.privacy === "Private") {
+        community_id = null;
+      }
+
       const listPayload = {
         ...data,
         user_id,
+        community_id,
       };
 
       // console.log("Sending payload:", listPayload);

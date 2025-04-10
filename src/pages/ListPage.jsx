@@ -6,15 +6,20 @@ import IconBtn from "../components/IconBtn";
 import ListFilter from "../components/List/ListFilter";
 import EmpyList from "../components/List/EmpyList";
 import { useUser } from "../context/UserContext";
+import { useCommunity } from "../context/CommunityContext";
 import {
   fetchListsPerUserId,
   createListItem,
   updateListItem,
   deleteListItem,
 } from "../utils/listsAPI";
+import { fetchCommunityLists } from "../utils/community";
 
 const ListPage = () => {
   const { user } = useUser();
+  const { currentCommunity } = useCommunity();
+  const isCommunityView = Boolean(currentCommunity?.id);
+
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("All");
@@ -25,11 +30,20 @@ const ListPage = () => {
 
     const loadLists = async () => {
       try {
-        const data = await fetchListsPerUserId(user_id);
-        console.log("Fetched lists:", data);
+        let data = [];
+
+        if (isCommunityView) {
+          data = await fetchCommunityLists(currentCommunity?.id);
+          console.log("Fetched lists community:", data);
+        } else {
+          data = await fetchListsPerUserId(user_id);
+          console.log("Fetched lists:", data);
+        }
+
         const formatted = data.map((list) => ({
           ...list,
         }));
+
         setLists(formatted);
       } catch (err) {
         console.error("Error loading lists:", err);
@@ -37,7 +51,7 @@ const ListPage = () => {
     };
 
     loadLists();
-  }, [user]);
+  }, [user, isCommunityView]);
 
   const handleItemToggle = async (listId, itemId) => {
     const targetList = lists.find((list) => list.id === listId);
@@ -166,7 +180,9 @@ const ListPage = () => {
   return (
     <div className="p-4">
       <Header
-        title="Your Lists"
+        title={
+          isCommunityView ? `${currentCommunity.name} Lists` : "Your Lists"
+        }
         showBackButton={true}
         onBack={() => navigate(-1)}
         RightAction={
@@ -178,7 +194,7 @@ const ListPage = () => {
         }
       />
 
-      {filteredLists.length > 0 && (
+      {lists.length > 0 && (
         <div className="pb-4">
           <ListFilter
             activeFilter={globalFilter}
@@ -201,6 +217,7 @@ const ListPage = () => {
             onUpdate={(itemId, name) => handleUpdateItem(list.id, itemId, name)}
             onDelete={(itemId) => handleDeleteItem(list.id, itemId)}
             showAddItemInput={true}
+            category={list.category}
           />
         ))
       )}

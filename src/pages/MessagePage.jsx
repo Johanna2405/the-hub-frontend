@@ -11,6 +11,7 @@ import {
   connectUser,
 } from "../utils/messageApi";
 import { useUser } from "../context/UserContext";
+import { useCommunity } from "../context/CommunityContext";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);
@@ -20,6 +21,8 @@ const MessagePage = () => {
   const navigate = useNavigate();
   const { user } = useUser();
   const user_id = user?.id;
+  const { currentCommunity } = useCommunity();
+  const isCommunityView = Boolean(currentCommunity?.id);
 
   useEffect(() => {
     if (user?.id) {
@@ -74,11 +77,21 @@ const MessagePage = () => {
   return (
     <>
       <Header
-        title="Community Chat"
+        title={
+          isCommunityView
+            ? `${currentCommunity.name} Community Chat`
+            : "Community Chat"
+        }
         showBackButton={true}
         onBack={() => navigate(-1)}
       />
-      {messages.length === 0 ? (
+
+      {!isCommunityView ? (
+        <div className="bg-primary rounded-xl p-6 w-full min-h-[65vh] flex items-center justify-center text-center text-lg text-text opacity-60">
+          Please select a community to view messages. Private messaging is not
+          available at the moment.
+        </div>
+      ) : messages.length === 0 ? (
         <div className="bg-primary rounded-xl p-4 w-full flex flex-col min-h-[70vh]">
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center text-text text-lg opacity-60 min-h-7">
@@ -89,9 +102,9 @@ const MessagePage = () => {
             <div className="flex items-center gap-2 mt-2 ml-1 px-3 py-1 bg-slate-100 rounded-full text-sm text-slate-700 shadow-sm w-fit animate-fade-in">
               <span className="font-medium">{typingUser}</span>
               <span className="flex space-x-1">
-                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce"></span>
+                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" />
               </span>
             </div>
           )}
@@ -116,9 +129,9 @@ const MessagePage = () => {
               <div className="flex items-center gap-2 mt-2 ml-1 px-3 py-1 bg-slate-100 rounded-full text-sm text-slate-700 shadow-sm w-fit animate-fade-in">
                 <span className="font-medium">{typingUser}</span>
                 <span className="flex space-x-1">
-                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce"></span>
+                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" />
                 </span>
               </div>
             )}

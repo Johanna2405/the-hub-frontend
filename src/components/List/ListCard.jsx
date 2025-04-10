@@ -11,6 +11,7 @@ const ListCard = ({
   onAddItem = () => {},
   onUpdate = () => {},
   onDelete = () => {},
+  category = "To Do",
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [newItemText, setNewItemText] = useState("");
@@ -31,9 +32,12 @@ const ListCard = ({
   };
 
   const normalizedTitle = title.toLowerCase();
+  const normalizedCategory = category?.toLowerCase() || "";
   const isGrocery =
     normalizedTitle.includes("grocery") ||
-    normalizedTitle.includes("groceries");
+    normalizedTitle.includes("groceries") ||
+    normalizedCategory === "shopping list";
+
   const colorClass = isGrocery ? "ultramarine" : "base";
 
   const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
@@ -65,7 +69,7 @@ const ListCard = ({
         <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
       </div>
 
-      {visibleItems.length > 0 && (
+      {items.length > 0 && (
         <ListItemFilter
           activeFilter={globalFilter}
           setActiveFilter={setGlobalFilter}
@@ -93,6 +97,7 @@ const ListCard = ({
             onUpdate={onUpdate}
             onDelete={onDelete}
             expanded={expanded}
+            category={category}
           />
         ))}
       </ul>
