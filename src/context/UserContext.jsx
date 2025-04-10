@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { fetchUser, userLogin, userLogout } from "../utils/user.js";
+import { useNavigate } from "react-router";
 
 const UserContext = createContext();
 
@@ -21,6 +22,8 @@ export const UserProvider = ({ children }) => {
         };
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     localStorage.setItem("pinboardSettings", JSON.stringify(pinboardSettings));
   }, [pinboardSettings]);
@@ -28,9 +31,14 @@ export const UserProvider = ({ children }) => {
   // Fetch user on initial load
   useEffect(() => {
     const initializeUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoading(false);
+        return; // Skip API call if no token
+      }
+
       try {
         const userData = await fetchUser();
-        console.log("Loaded user:", userData);
         setUser(userData);
       } catch (err) {
         console.warn("No valid token or user session found.", err);
@@ -59,6 +67,7 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     userLogout();
     setUser(null);
+    navigate("/get-started");
   };
 
   return (
