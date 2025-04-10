@@ -42,7 +42,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/get-started"; // Redirect to the landing page after logout, closing sidebar is not required this way
   };
 
   return (

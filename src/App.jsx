@@ -20,9 +20,9 @@ import "./toast.css";
 function App() {
   return (
     <>
-      <UserProvider>
-        <CommunityProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+        <UserProvider>
+          <CommunityProvider>
             <ToastContainer
               position="top-right"
               autoClose={3000}
@@ -57,9 +57,9 @@ function App() {
               </Route>
               <Route path="get-started" element={<LandingPage />} />
             </Routes>
-          </BrowserRouter>
-        </CommunityProvider>
-      </UserProvider>
+          </CommunityProvider>
+        </UserProvider>
+      </BrowserRouter>
     </>
   );
 }
