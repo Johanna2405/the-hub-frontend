@@ -180,7 +180,9 @@ const ListPage = () => {
   return (
     <div className="p-4">
       <Header
-        title="Your Lists"
+        title={
+          isCommunityView ? `${currentCommunity.name} Lists` : "Your Lists"
+        }
         showBackButton={true}
         onBack={() => navigate(-1)}
         RightAction={
