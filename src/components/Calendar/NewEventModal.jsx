@@ -1,25 +1,51 @@
-// src/components/Calendar/NewEventModal.jsx
 import { useState } from "react";
+
+const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            const h = hour.toString().padStart(2, "0");
+            const m = minute.toString().padStart(2, "0");
+            options.push(`${h}:${m}`);
+        }
+    }
+    return options;
+};
 
 const NewEventModal = ({ show, onClose, onSave, onDayChange, selectedDay }) => {
     const [day, setDay] = useState(selectedDay || "");
     const [title, setTitle] = useState("");
-    const [time, setTime] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
     const [description, setDescription] = useState("");
     const [type, setType] = useState("Private");
-    const [location, setLocation] = useState(""); // Added location field
+    const [location, setLocation] = useState("");
 
     if (!show) return null;
 
+    const timeOptions = generateTimeOptions();
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!startTime || !endTime) {
+            alert("Start and end time are required.");
+            return;
+        }
+        if (startTime >= endTime) {
+            alert("End time must be after start time.");
+            return;
+        }
+
+        const time = `${startTime} - ${endTime}`;
         onSave({ day, title, time, description, type, location });
+
         setDay("");
         setTitle("");
-        setTime("");
+        setStartTime("");
+        setEndTime("");
         setDescription("");
         setType("Private");
-        setLocation(""); // Reset location
+        setLocation("");
         onClose();
     };
 
@@ -70,16 +96,43 @@ const NewEventModal = ({ show, onClose, onSave, onDayChange, selectedDay }) => {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-text font-medium">Time</label>
-                        <input
-                            type="text"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                            className="input input-bordered w-full bg-primary text-text"
-                            placeholder="e.g., 12:00 - 14:00"
-                            required
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-text font-medium">Start Time</label>
+                            <select
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                                required
+                            >
+                                <option value="" disabled>
+                                    Start Time
+                                </option>
+                                {timeOptions.map((t) => (
+                                    <option key={t} value={t}>
+                                        {t}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-text font-medium">End Time</label>
+                            <select
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                                required
+                            >
+                                <option value="" disabled>
+                                    End Time
+                                </option>
+                                {timeOptions.map((t) => (
+                                    <option key={t} value={t}>
+                                        {t}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-text font-medium">Description</label>
