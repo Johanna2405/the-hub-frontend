@@ -12,6 +12,13 @@ const Comments = ({ postId }) => {
 
   useEffect(() => {
     const loadComments = async () => {
+      console.log("Fetching comments for postId:", postId);
+
+      if (!postId) {
+        console.warn("Post ID is missing – cannot load comments.");
+        setLoading(false);
+        return;
+      }
       try {
         const data = await getCommentsByPost(postId);
         setComments(data);

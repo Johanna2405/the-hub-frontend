@@ -33,7 +33,7 @@ export const fetchUserPosts = async (userId) => {
     const response = await API.get(`/posts?userId=${userId}`);
     return response.data;
   } catch (error) {
-    console.error("❌ Error fetching user posts:", error);
+    console.error("Error fetching user posts:", error);
     throw error;
   }
 };
@@ -54,4 +54,56 @@ export const updatePost = async (id, updatedData) => {
 export const deletePost = async (id) => {
   const response = await API.delete(`/posts/${id}`);
   return response.data;
+};
+
+// GET: Fetch posts for a specific community
+export const fetchCommunityPosts = async (communityId) => {
+  try {
+    const response = await API.get(`/communities/${communityId}/posts`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching community posts:", error);
+    throw error;
+  }
+};
+
+// POST: Create a post in a specific community
+export const createCommunityPost = async (communityId, postData) => {
+  try {
+    const response = await API.post(
+      `/communities/${communityId}/posts`,
+      postData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating community post:", error);
+    throw error;
+  }
+};
+
+// PUT: Update a post in a specific community
+export const updateCommunityPost = async (communityId, postId, updatedData) => {
+  try {
+    const response = await API.put(
+      `/communities/${communityId}/posts/${postId}`,
+      updatedData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating community post:", error);
+    throw error;
+  }
+};
+
+// DELETE: Delete a community post
+export const deleteCommunityPost = async (communityId, postId) => {
+  try {
+    const response = await API.delete(
+      `/communities/${communityId}/posts/${postId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting community post:", error);
+    throw error;
+  }
 };
