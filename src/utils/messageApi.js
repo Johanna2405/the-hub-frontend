@@ -18,6 +18,10 @@ export const fetchAllMessages = async () => {
 };
 
 export const setupChatListener = (setChat, setTypingUser, setOnlineUserIds) => {
+  socket.off("receive_message");
+  socket.off("display_typing");
+  socket.off("update_online_users");
+
   socket.on("receive_message", (msg) => {
     console.log("Received message:", msg);
     setChat((prev) => [...prev, msg]);
@@ -53,6 +57,7 @@ export const sendMessage = (messageData) => {
 export const emitTyping = (user) => {
   socket.emit("user_typing", {
     user_id: user.id,
+    community_id: user.community_id,
     username: user.username,
   });
 };
