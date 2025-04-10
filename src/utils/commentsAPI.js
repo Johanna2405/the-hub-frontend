@@ -29,7 +29,9 @@ export const createComment = async (commentData) => {
 // Get comments for a post
 export const getCommentsByPost = async (postId) => {
   try {
-    const response = await API.get(`/comments?postId=${postId}`);
+    const url = `/comments/${postId}`;
+    console.log("[GET Comments] Requesting:", `${BACKEND_URL}/api${url}`);
+    const response = await API.get(url);
     return response.data;
   } catch (error) {
     console.error("Error fetching comments:", error);
