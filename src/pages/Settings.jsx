@@ -9,6 +9,7 @@ import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
 import CommunitySelector from "../components/CommunitySelector";
 import { showToast } from "../utils/toast";
+import { fetchAllCommunities, joinCommunity } from "../utils/community";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -18,7 +19,8 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [communities, setCommunities] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
 
   const { pinboardSettings, setPinboardSettings } = useUser();
 
@@ -28,6 +30,36 @@ const Settings = () => {
   if (!user) {
     return <div className="p-8 text-center">Loading user data...</div>;
   }
+
+  // Load existing communities
+  useEffect(() => {
+    const loadCommunities = async () => {
+      try {
+        const data = await fetchAllCommunities();
+        setCommunities(data);
+      } catch (err) {
+        showToast("Failed to load communities", "error");
+      }
+    };
+
+    loadCommunities();
+  }, []);
+
+  // Join selected community
+  const handleJoin = async (e) => {
+    e.preventDefault();
+    if (!selectedId) return;
+
+    try {
+      await joinCommunity(selectedId);
+      const joined = communities.find((c) => c.id === parseInt(selectedId));
+      setCurrentCommunity(joined);
+      showToast(`Joined "${joined.name}"!`, "success");
+      navigate("/");
+    } catch (err) {
+      showToast(err.message, "error");
+    }
+  };
 
   const handleChangeUsername = async (e) => {
     {
@@ -279,6 +311,24 @@ const Settings = () => {
                 }
               }}
             />
+            <h4>Join a new community</h4>
+            <form onSubmit={handleJoin} className="w-full max-w-sm">
+              <div className="flex items-center gap-4">
+                <select
+                  className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
+                  value={selectedId}
+                  onChange={(e) => setSelectedId(e.target.value)}
+                >
+                  <option value="">Select a community</option>
+                  {communities.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <IconBtn text="Join" icon="fi-rr-arrow-right" color="lilac" />
+              </div>
+            </form>
           </div>
         </div>
       </div>
