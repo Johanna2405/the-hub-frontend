@@ -11,11 +11,17 @@ const ListItem = ({
   onDelete,
   editMode,
   expanded,
+  category,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
 
-  const isGrocery = title.toLowerCase() === "groceries";
+  const normalizedCategory = category?.toLowerCase() || "";
+  const isGrocery =
+    title.toLowerCase() === "groceries" ||
+    title.toLowerCase() === "grocery" ||
+    normalizedCategory === "shopping list";
+
   const ringColorClass = isGrocery ? "ring-primary" : "ring-text";
   const colorClass = isGrocery ? "ultramarine" : "base";
   const textClass = isGrocery ? "ultramarine" : "base";

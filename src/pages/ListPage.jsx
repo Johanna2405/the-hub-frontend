@@ -20,7 +20,6 @@ const ListPage = () => {
   const { currentCommunity } = useCommunity();
   const isCommunityView = Boolean(currentCommunity?.id);
 
-  console.log("currentcommunity:", currentCommunity);
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("All");
@@ -216,6 +215,7 @@ const ListPage = () => {
             onUpdate={(itemId, name) => handleUpdateItem(list.id, itemId, name)}
             onDelete={(itemId) => handleDeleteItem(list.id, itemId)}
             showAddItemInput={true}
+            category={list.category}
           />
         ))
       )}
