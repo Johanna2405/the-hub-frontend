@@ -1,4 +1,3 @@
-// Updated EditEventModal.jsx with dynamic time dropdowns
 import { useState, useEffect } from "react";
 
 const EditEventModal = ({ show, onClose, onSave, event }) => {
@@ -21,10 +20,13 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
             setType(event.type || "Private");
             setLocation(event.location || "");
 
-            if (event?.time) {
-                const [start, end] = event.time.split("-").map(t => t.trim());
-                setStartTime(start);
-                setEndTime(end);
+            if (event?.start_time && event?.end_time) {
+                const start = new Date(event.start_time);
+                const end = new Date(event.end_time);
+                const formatTime = (date) =>
+                    date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+                setStartTime(formatTime(start));
+                setEndTime(formatTime(end));
             }
         }
     }, [event]);

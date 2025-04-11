@@ -5,13 +5,13 @@ import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
 import {
-  fetchAllMessages,
   setupChatListener,
   sendMessage,
   connectUser,
 } from "../utils/messageApi";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
+import { fetchCommunityMessages } from "../utils/community";
 
 const MessagePage = () => {
   const [messages, setMessages] = useState([]);
@@ -32,12 +32,13 @@ const MessagePage = () => {
 
   useEffect(() => {
     if (!user_id) return;
+    if (!currentCommunity) return;
 
     let cleanup;
 
     const initializeChat = async () => {
       try {
-        const data = await fetchAllMessages();
+        const data = await fetchCommunityMessages(currentCommunity?.id);
         console.log("Fetched messages:", data);
         setMessages(data);
       } catch (err) {
@@ -54,7 +55,7 @@ const MessagePage = () => {
         cleanup();
       }
     };
-  }, [user_id]);
+  }, [user_id, currentCommunity]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -68,6 +69,7 @@ const MessagePage = () => {
     const messageData = {
       user_id: user_id,
       user: user,
+      community_id: currentCommunity.id,
       content: text,
     };
 
