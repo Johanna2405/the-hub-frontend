@@ -216,11 +216,11 @@ const Settings = () => {
               icon={"fi-rr-text"}
               iconColor={"neon"}
               appName={"Posts"}
-              checked={pinboardSettings.post}
+              checked={pinboardSettings.posts}
               onChange={() =>
                 setPinboardSettings((prev) => ({
                   ...prev,
-                  post: !prev.post,
+                  posts: !prev.posts,
                 }))
               }
             />
@@ -228,11 +228,11 @@ const Settings = () => {
               icon={"fi-rs-list-check"}
               iconColor={"aquamarine"}
               appName={"Lists"}
-              checked={pinboardSettings.list}
+              checked={pinboardSettings.lists}
               onChange={() =>
                 setPinboardSettings((prev) => ({
                   ...prev,
-                  list: !prev.list,
+                  lists: !prev.lists,
                 }))
               }
             />
@@ -240,11 +240,11 @@ const Settings = () => {
               icon={"fi-rr-megaphone"}
               iconColor={"sage"}
               appName={"Messages"}
-              checked={pinboardSettings.message}
+              checked={pinboardSettings.messages}
               onChange={() =>
                 setPinboardSettings((prev) => ({
                   ...prev,
-                  message: !prev.message,
+                  messages: !prev.messages,
                 }))
               }
             />

@@ -15,10 +15,10 @@ export const UserProvider = ({ children }) => {
       ? JSON.parse(stored)
       : {
           all: true,
-          post: true,
-          list: true,
+          posts: true,
+          lists: true,
           calendar: true,
-          message: true,
+          messages: true,
         };
   });
 
