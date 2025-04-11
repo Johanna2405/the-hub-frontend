@@ -77,6 +77,15 @@ export const fetchCommunityById = async (id) => {
   }
 };
 
+export const leaveCommunity = async (communityId) => {
+  try {
+    const res = await API.delete(`/communities/${communityId}/leave`);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 //(admin only)
 export const updateCommunity = async (id, data) => {
   try {
