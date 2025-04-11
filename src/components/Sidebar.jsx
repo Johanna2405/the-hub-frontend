@@ -13,21 +13,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       icon: "fi-rr-text",
       iconColor: "neon",
       text: "Posts",
-      settingKey: "post",
+      settingKey: "posts",
       target: "posts",
     },
     {
       icon: "fi-rs-list-check",
       iconColor: "aquamarine",
       text: "Lists",
-      settingKey: "list",
+      settingKey: "lists",
       target: "lists",
     },
     {
       icon: "fi-rr-megaphone",
       iconColor: "sage",
       text: "Messages",
-      settingKey: "message",
+      settingKey: "messages",
       target: "messages",
     },
     {
@@ -38,40 +38,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       target: "events",
     },
   ];
-
-  // const renderLinks = () => {
-  //   if (currentCommunity !== null) {
-  //     sidebarLinks.map((link) => {
-  //       settings[link.settingKey] && (
-  //         <SidebarLink
-  //           key={link.text}
-  //           target={
-  //             currentCommunity
-  //               ? `/community/${currentCommunity.id}/${link.target}`
-  //               : link.target
-  //           }
-  //           icon={link.icon}
-  //           iconColor={link.iconColor}
-  //           text={link.text}
-  //           setIsOpen={setIsOpen}
-  //         />
-  //       );
-  //     });
-  //   } else {
-  //     sidebarLinks.map((link) => {
-  //       pinboardSettings[link.settingKey] && (
-  //         <SidebarLink
-  //           key={link.text}
-  //           target={link.text}
-  //           icon={link.icon}
-  //           iconColor={link.iconColor}
-  //           text={link.text}
-  //           setIsOpen={setIsOpen}
-  //         />
-  //       );
-  //     });
-  //   }
-  // };
 
   const { logout } = useUser();
 
@@ -135,25 +101,28 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
-          {/* Render sidebar links dynamically based on pinboardSettings */}
-          {sidebarLinks.map(
-            (link) =>
-              pinboardSettings[link.settingKey] && (
-                <SidebarLink
-                  key={link.text}
-                  target={
-                    currentCommunity
-                      ? `/community/${currentCommunity.id}/${link.target}`
-                      : link.target
-                  }
-                  icon={link.icon}
-                  iconColor={link.iconColor}
-                  text={link.text}
-                  setIsOpen={setIsOpen}
-                />
-              )
-          )}
-          {/* {renderLinks()} */}
+          {sidebarLinks.map((link) => {
+            const isEnabled = currentCommunity
+              ? settings[link.settingKey]
+              : pinboardSettings[link.settingKey];
+
+            if (!isEnabled) return null;
+
+            const target = currentCommunity
+              ? `/community/${currentCommunity.id}/${link.target}`
+              : `/${link.target}`;
+
+            return (
+              <SidebarLink
+                key={link.text}
+                target={target}
+                icon={link.icon}
+                iconColor={link.iconColor}
+                text={link.text}
+                setIsOpen={setIsOpen}
+              />
+            );
+          })}
         </nav>
         <h3>Settings</h3>
         <div className="flex flex-col gap-4">
