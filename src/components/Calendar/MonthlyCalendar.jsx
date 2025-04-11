@@ -1,4 +1,3 @@
-// src/components/Calendar/MonthlyCalendar.jsx
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import Header from "../Header";
@@ -94,6 +93,10 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
                 end_time: endTime,
                 location: updatedEvent.location || "Not specified",
             };
+
+            if (!payload.start_time || !payload.end_time) {
+                throw new Error("Start time and End time are required.");
+            }
 
             const result = await updateEvent(updatedEvent.id, payload);
             const updated = events.map((e) =>
