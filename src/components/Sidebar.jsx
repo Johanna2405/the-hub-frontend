@@ -5,10 +5,9 @@ import CommunitySelector from "./CommunitySelector";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { pinboardSettings } = useUser();
-  const { joinedCommunities, currentCommunity, setCurrentCommunity } =
+  const { joinedCommunities, currentCommunity, setCurrentCommunity, settings } =
     useCommunity();
 
-  // Default sidebar links
   const sidebarLinks = [
     {
       icon: "fi-rr-text",
@@ -39,6 +38,40 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       target: "events",
     },
   ];
+
+  // const renderLinks = () => {
+  //   if (currentCommunity !== null) {
+  //     sidebarLinks.map((link) => {
+  //       settings[link.settingKey] && (
+  //         <SidebarLink
+  //           key={link.text}
+  //           target={
+  //             currentCommunity
+  //               ? `/community/${currentCommunity.id}/${link.target}`
+  //               : link.target
+  //           }
+  //           icon={link.icon}
+  //           iconColor={link.iconColor}
+  //           text={link.text}
+  //           setIsOpen={setIsOpen}
+  //         />
+  //       );
+  //     });
+  //   } else {
+  //     sidebarLinks.map((link) => {
+  //       pinboardSettings[link.settingKey] && (
+  //         <SidebarLink
+  //           key={link.text}
+  //           target={link.text}
+  //           icon={link.icon}
+  //           iconColor={link.iconColor}
+  //           text={link.text}
+  //           setIsOpen={setIsOpen}
+  //         />
+  //       );
+  //     });
+  //   }
+  // };
 
   const { logout } = useUser();
 
@@ -120,6 +153,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 />
               )
           )}
+          {/* {renderLinks()} */}
         </nav>
         <h3>Settings</h3>
         <div className="flex flex-col gap-4">
