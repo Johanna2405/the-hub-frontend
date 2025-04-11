@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useUser } from "../../context/userContext";
+import { useUser } from "../context/UserContext";
 import { userLogin } from "../utils/user";
 
 const SignIn = () => {

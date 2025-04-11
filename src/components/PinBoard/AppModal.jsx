@@ -1,5 +1,5 @@
 import IconBtn from "../IconBtn";
-import { useUser } from "../../context/userContext";
+import { useUser } from "../../context/UserContext";
 
 const AppModal = ({ children, onClose }) => {
   const { pinboardSettings } = useUser();

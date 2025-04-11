@@ -1,4 +1,4 @@
-import { useUser } from "../../context/userContext";
+import { useUser } from "../../context/UserContext";
 
 const CardFilter = ({ selected, onFilterChange }) => {
   const { pinboardSettings } = useUser();
