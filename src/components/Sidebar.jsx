@@ -102,25 +102,29 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
           {sidebarLinks.map((link) => {
-            const isEnabled = currentCommunity
-              ? settings[link.settingKey]
-              : pinboardSettings[link.settingKey];
+            const isInPrivateSpace = !currentCommunity;
 
-            if (!isEnabled) return null;
-
-            const target = currentCommunity
-              ? `/community/${currentCommunity.id}/${link.target}`
-              : `/${link.target}`;
+            // Decide whether the link should render
+            const shouldRender = isInPrivateSpace
+              ? pinboardSettings[link.settingKey] &&
+                link.settingKey !== "messages"
+              : settings[link.settingKey];
 
             return (
-              <SidebarLink
-                key={link.text}
-                target={target}
-                icon={link.icon}
-                iconColor={link.iconColor}
-                text={link.text}
-                setIsOpen={setIsOpen}
-              />
+              shouldRender && (
+                <SidebarLink
+                  key={link.text}
+                  target={
+                    currentCommunity
+                      ? `/community/${currentCommunity.id}/${link.target}`
+                      : `/${link.target}`
+                  }
+                  icon={link.icon}
+                  iconColor={link.iconColor}
+                  text={link.text}
+                  setIsOpen={setIsOpen}
+                />
+              )
             );
           })}
         </nav>
