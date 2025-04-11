@@ -21,7 +21,7 @@ const LandingPage = () => {
           </Link>
         </div>
       </header>
-      <section className="bg-primary p-16 flex flex-col gap-8 justify-center items-center min-h-screen text-center">
+      <section className="bg-primary p-16 flex flex-col gap-8 justify-center items-center min-h-screen text-center w-full">
         <h1 className="text-lilac">welcome to the hub</h1>
         <span className="text-5xl/18 md:text-5xl/22 font-black lg:w-2/3">
           A very good{" "}
