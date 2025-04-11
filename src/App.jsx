@@ -38,7 +38,7 @@ function App() {
                 <Route path="posts" element={<PostPage />} />
                 <Route path="lists" element={<ListPage />} />
                 <Route path="add-list" element={<NewListPage />} />
-                <Route path="calendartabs" element={<CalendarTabs />} />
+                <Route path="events" element={<CalendarTabs />} />
                 <Route path="settings" element={<Settings />} />
                 {/* Community Routes */}
                 <Route path="community/:communityId">

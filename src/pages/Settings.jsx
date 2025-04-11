@@ -236,7 +236,7 @@ const Settings = () => {
                 }))
               }
             />
-            <AppCheckbox
+            {/* <AppCheckbox
               icon={"fi-rr-megaphone"}
               iconColor={"sage"}
               appName={"Messages"}
@@ -247,7 +247,7 @@ const Settings = () => {
                   messages: !prev.messages,
                 }))
               }
-            />
+            /> */}
             <AppCheckbox
               icon={"fi-rr-calendar"}
               iconColor={"lilac"}
