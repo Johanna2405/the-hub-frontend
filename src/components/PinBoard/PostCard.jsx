@@ -5,7 +5,7 @@ import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router";
 import IconBtn from "../IconBtn";
 
-const PostCard = ({ postId, onRemove }) => {
+const PostCard = ({ postId, onRemove, onSelectPost }) => {
   const [expanded, setExpanded] = useState(false);
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -57,7 +57,8 @@ const PostCard = ({ postId, onRemove }) => {
     setSelectedPost(post);
     setShowDropdown(false);
 
-    // Save selection for private boards
+    onSelectPost?.(post.id);
+
     if (isPrivate) {
       const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
       const updated = stored.map((app) =>
@@ -68,11 +69,11 @@ const PostCard = ({ postId, onRemove }) => {
   };
 
   return (
-    <div className="relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-neon text-[#181B4D] flex flex-col justify-between">
+    <div className="group relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-neon text-[#181B4D] flex flex-col justify-between">
       <div>
         <i className="fi-rr-text"></i>
         <h2 className="font-bold text-lg mb-2">Pinned Post</h2>
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <IconBtn icon="fi fi-br-cross" transparent onClick={onRemove} />
         </div>
 

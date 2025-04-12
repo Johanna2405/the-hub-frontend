@@ -76,6 +76,20 @@ const PinBoard = () => {
     }
   };
 
+  // Select post for pinned app
+  const handlePostSelect = async (index, postId) => {
+    const updated = [...pinBoard];
+    updated[index] = { ...updated[index], postId };
+
+    setPinBoard(updated);
+
+    try {
+      await updateCommunityPinBoard(currentCommunity.id, updated);
+    } catch (err) {
+      console.error("❌ Failed to update community pinboard:", err);
+    }
+  };
+
   // Filter cards
   const filteredApps =
     selectedFilter === "all"
@@ -89,10 +103,17 @@ const PinBoard = () => {
   // Dynamically render correct Card Component
   const renderCard = (app, index) => {
     const onRemove = () => handleRemoveApp(index);
+    const onSelectPost = (postId) => handlePostSelect(index, postId);
 
     switch (app.type) {
       case "posts":
-        return <PostCard postId={app.postId} onRemove={onRemove} />;
+        return (
+          <PostCard
+            postId={app.postId}
+            onRemove={onRemove}
+            onSelectPost={onSelectPost}
+          />
+        );
       case "lists":
         return <ListCard onRemove={onRemove} />;
       case "events":
