@@ -4,8 +4,6 @@ import { useUser } from "../../context/UserContext";
 const AppModal = ({ onSelect }) => {
   const { pinboardSettings } = useUser();
 
-  console.log("🧪 pinboardSettings:", pinboardSettings);
-
   const apps = [
     {
       label: "Posts",
@@ -35,7 +33,7 @@ const AppModal = ({ onSelect }) => {
 
   return (
     <div>
-      <h3 className="mt-24">Add something here</h3>
+      <h3 className="mt-8">Add something here</h3>
 
       <div className="mt-4 flex justify-center">
         <IconBtn
@@ -49,7 +47,6 @@ const AppModal = ({ onSelect }) => {
             <h3 className="font-bold text-lg  mb-4">Choose an App</h3>
 
             {apps.map((app) => (
-              // ❗ Test with no condition
               <div
                 key={app.type}
                 className="flex justify-between items-center bg-base rounded-xl p-2 px-4 my-2"
@@ -69,7 +66,6 @@ const AppModal = ({ onSelect }) => {
                   className="text-4xl"
                   color="neon"
                   onClick={() => {
-                    console.log("📦 App selected:", app.type);
                     onSelect(app.type);
                     document.getElementById("app_modal").close();
                   }}
