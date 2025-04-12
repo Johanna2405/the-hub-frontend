@@ -1,14 +1,14 @@
-import { useUser } from "../../context/userContext";
+import { useUser } from "../../context/UserContext";
 
 const CardFilter = ({ selected, onFilterChange }) => {
   const { pinboardSettings } = useUser();
 
   const filters = [
-    { label: "All", value: "all", color: "primary" }, // neutral
-    { label: "Posts", value: "post", color: "neon" }, // neon
-    { label: "Lists", value: "list", color: "ultramarine" }, // ultramarine
-    { label: "Messages", value: "message", color: "sage" }, // sage
-    { label: "Events", value: "event", color: "lilac" }, // lilac
+    { label: "All", value: "all", color: "primary" },
+    { label: "Posts", value: "post", color: "neon" },
+    { label: "Lists", value: "list", color: "ultramarine" },
+    { label: "Messages", value: "message", color: "sage" },
+    { label: "Events", value: "event", color: "lilac" },
   ];
 
   return (

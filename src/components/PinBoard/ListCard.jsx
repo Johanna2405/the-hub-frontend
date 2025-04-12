@@ -38,13 +38,12 @@ const ListCard = () => {
 
       {items.length > 3 && (
         <div className="flex justify-end mt-4">
-          <button onClick={() => setExpanded(!expanded)}>
-            <IconBtn
-              icon={expanded ? "fi-rr-angle-up" : "fi-rr-angle-down"}
-              color="neon"
-              transparent
-            />
-          </button>
+          <IconBtn
+            icon={expanded ? "fi-rr-angle-up" : "fi-rr-angle-down"}
+            color="neon"
+            transparent
+            onClick={() => setExpanded(!expanded)}
+          />
         </div>
       )}
     </div>

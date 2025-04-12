@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
-import { fetchUserPosts, fetchCommunityPosts } from "../utils/postsAPI";
+import {
+  fetchUserPosts,
+  fetchCommunityPosts,
+  sortPostsByNewest,
+} from "../utils/postsAPI";
 
 import Header from "../components/Header";
 import PostModal from "../components/Posts/PostModal";
@@ -21,23 +25,17 @@ const PostPage = () => {
   useEffect(() => {
     if (loadingUser) return;
 
-    console.log("📍 PostPage loaded:");
-    console.log("➡️ currentCommunity:", currentCommunity);
-    console.log("➡️ user:", user);
-
     const loadPosts = async () => {
       try {
         if (isCommunityView) {
-          console.log("🔄 Loading community posts...");
           const data = await fetchCommunityPosts(currentCommunity.id);
-          setPosts(data);
+          setPosts(sortPostsByNewest(data));
         } else if (user?.id) {
-          console.log("🔄 Loading private posts...");
           const data = await fetchUserPosts(user.id);
-          setPosts(data);
+          setPosts(sortPostsByNewest(data));
         }
       } catch (err) {
-        console.error("❌ Error loading posts", err);
+        console.error("Error loading posts", err);
       } finally {
         setLoading(false);
       }

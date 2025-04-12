@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
+import { useCommunity } from "../context/CommunityContext";
+import { updateCommunityPinBoard } from "../utils/community";
 
 import PostCard from "../components/PinBoard/PostCard";
 import EventCard from "../components/PinBoard/EventCard";
@@ -10,47 +12,75 @@ import AppModal from "../components/PinBoard/AppModal";
 
 const PinBoard = () => {
   const { user } = useUser();
+  const { currentCommunity, pinBoard, setPinBoard, settings } = useCommunity();
   const [pinnedApps, setPinnedApps] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("all");
 
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
-    setPinnedApps(stored);
-  }, []);
+  const isCommunity = Boolean(currentCommunity?.id);
+  const isAdmin = currentCommunity?.role === "admin";
 
-  // Load pinned apps from local storage on first render
+  console.log("📌 PinBoard Settings:", settings);
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
-    setPinnedApps(stored);
-  }, []);
+    if (isCommunity) {
+      console.log("📌 PinBoard Settings:", currentCommunity?.settings);
+      console.log("📌 PinBoard (raw):", pinBoard);
+    }
+  }, [currentCommunity, pinBoard]);
+
+  // Load private pinned apps from localStorage
+  useEffect(() => {
+    if (!isCommunity) {
+      const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
+      setPinnedApps(stored);
+    }
+  }, [isCommunity]);
+
+  // Final list of pinned apps (format: [{ type: "post" }, ...])
+  const activePinnedApps = isCommunity ? pinBoard : pinnedApps;
 
   // Add new app type to pinned apps
-  const handleAddApp = (type) => {
-    const updated = [...pinnedApps, { type }];
-    setPinnedApps(updated);
-    localStorage.setItem("pinnedApps", JSON.stringify(updated));
+  const handleAddApp = async (type) => {
+    console.log("🆕 Add App clicked:", type);
+
+    const newEntry = { type }; // später ggf. mit extra IDs etc.
+
+    if (isCommunity) {
+      const updated = [...pinBoard, newEntry];
+      console.log("📤 Will send updated pinBoard:", updated);
+      setPinBoard(updated);
+      try {
+        await updateCommunityPinBoard(currentCommunity.id, updated);
+      } catch (err) {
+        console.error("❌ Failed to update community pinboard:", err);
+      }
+    } else {
+      const updated = [...pinnedApps, newEntry];
+      setPinnedApps(updated);
+      localStorage.setItem("pinnedApps", JSON.stringify(updated));
+    }
   };
 
   // Filter cards
   const filteredApps =
     selectedFilter === "all"
-      ? pinnedApps
-      : pinnedApps.filter((app) => app.type === selectedFilter);
+      ? activePinnedApps
+      : activePinnedApps.filter((app) => app.type === selectedFilter);
 
   // Split filtered apps into two columns (A/B)
   const columnA = filteredApps.filter((_, index) => index % 2 === 0);
   const columnB = filteredApps.filter((_, index) => index % 2 !== 0);
 
   // Dynamically render correct Card Component
-  const renderCard = (type) => {
-    switch (type) {
-      case "post":
-        return <PostCard />;
-      case "list":
+  const renderCard = (app) => {
+    switch (app.type) {
+      case "posts":
+        return <PostCard postId={app.postId} />;
+      case "lists":
         return <ListCard />;
-      case "event":
+      case "events":
         return <EventCard />;
-      case "message":
+      case "messages":
         return <MessageCard />;
       default:
         return null;
@@ -78,22 +108,22 @@ const PinBoard = () => {
         selected={selectedFilter}
         onFilterChange={setSelectedFilter}
       />
-
-      {pinnedApps.length === 0 && <AppModal onSelect={handleAddApp} />}
+      {/* App Modal always visible for admins or private space */}
+      {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
 
       {filteredApps.length > 0 && (
         <div className="flex gap-4 w-full justify-center">
           {/* Column A */}
           <div className="flex flex-col w-1/2">
             {columnA.map((app, index) => (
-              <div key={index}>{renderCard(app.type)}</div>
+              <div key={index}>{renderCard(app)}</div>
             ))}
           </div>
 
           {/* Column B */}
           <div className="flex flex-col w-1/2">
             {columnB.map((app, index) => (
-              <div key={index}>{renderCard(app.type)}</div>
+              <div key={index}>{renderCard(app)}</div>
             ))}
           </div>
         </div>

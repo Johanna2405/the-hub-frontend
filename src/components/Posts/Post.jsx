@@ -43,7 +43,7 @@ const Post = ({ post, setPosts }) => {
                 src={
                   currentPost.author?.profile_picture
                     ? currentPost.author.profile_picture
-                    : "public/default-profile.png"
+                    : "/default-profile.png"
                 }
                 alt="Author"
               />
