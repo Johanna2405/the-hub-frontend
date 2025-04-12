@@ -14,6 +14,7 @@ import {
   joinCommunity,
   updateCommunitySettings,
   deleteCommunity,
+  leaveCommunity,
 } from "../utils/community";
 
 const Settings = () => {
@@ -173,6 +174,18 @@ const Settings = () => {
     }
   };
 
+  const handleLeave = async (communityId) => {
+    try {
+      await leaveCommunity(communityId);
+
+      setCurrentCommunity(null);
+      navigate(0);
+    } catch (err) {
+      console.error("Failed to leave community:", err);
+      showToast("Failed to leave community", "error");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8 pb-12">
       <Header
@@ -236,7 +249,7 @@ const Settings = () => {
                 }))
               }
             />
-            <AppCheckbox
+            {/* <AppCheckbox
               icon={"fi-rr-megaphone"}
               iconColor={"sage"}
               appName={"Messages"}
@@ -247,7 +260,7 @@ const Settings = () => {
                   messages: !prev.messages,
                 }))
               }
-            />
+            /> */}
             <AppCheckbox
               icon={"fi-rr-calendar"}
               iconColor={"lilac"}
@@ -344,7 +357,7 @@ const Settings = () => {
       <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
         <input type="radio" name="my-accordion-2" />
         <div className="collapse-title font-semibold text-lg">
-          Join a new community
+          Community Settings
         </div>
         <div className="collapse-content ">
           <div className="flex flex-col gap-4">
@@ -359,7 +372,7 @@ const Settings = () => {
                 }
               }}
             /> */}
-
+            <h4>Join a new Community</h4>
             <form onSubmit={handleJoin} className="w-full max-w-sm">
               <div className="flex items-center gap-4">
                 <select
@@ -377,9 +390,21 @@ const Settings = () => {
                 <IconBtn text="Join" icon="fi-rr-arrow-right" color="lilac" />
               </div>
             </form>
+            {currentCommunity && (
+              <div className="flex flex-col gap-4 items-start">
+                <h4>Leave your Community</h4>
+                <IconBtn
+                  text={`Leave ${currentCommunity.name}`}
+                  icon="fi-rr-leave"
+                  color="ultramarine"
+                  onClick={() => handleLeave(currentCommunity.id)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
+
       {/* Admin community settings */}
       {currentCommunity?.role === "admin" && (
         <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">

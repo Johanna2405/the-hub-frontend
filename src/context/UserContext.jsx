@@ -18,7 +18,6 @@ export const UserProvider = ({ children }) => {
           posts: true,
           lists: true,
           calendar: true,
-          messages: true,
         };
   });
 
