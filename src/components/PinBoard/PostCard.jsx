@@ -5,7 +5,7 @@ import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router";
 import IconBtn from "../IconBtn";
 
-const PostCard = ({ postId, onRemove, onSelectPost }) => {
+const PostCard = ({ postId, onRemove, onSelectPost, index }) => {
   const [expanded, setExpanded] = useState(false);
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -37,11 +37,9 @@ const PostCard = ({ postId, onRemove, onSelectPost }) => {
           if (found) setSelectedPost(found);
         } else if (isPrivate) {
           const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
-          const match = stored.find(
-            (app) => app.type === "posts" && app.postId
-          );
-          if (match?.postId) {
-            const found = postList.find((p) => p.id === match.postId);
+          const thisCard = stored[index];
+          if (thisCard?.postId) {
+            const found = postList.find((p) => p.id === thisCard.postId);
             if (found) setSelectedPost(found);
           }
         }
@@ -61,9 +59,11 @@ const PostCard = ({ postId, onRemove, onSelectPost }) => {
 
     if (isPrivate) {
       const stored = JSON.parse(localStorage.getItem("pinnedApps")) || [];
-      const updated = stored.map((app) =>
-        app.type === "posts" ? { ...app, postId: post.id } : app
-      );
+      const updated = [...stored];
+      updated[index] = {
+        ...updated[index],
+        postId: post.id,
+      };
       localStorage.setItem("pinnedApps", JSON.stringify(updated));
     }
   };
@@ -72,7 +72,9 @@ const PostCard = ({ postId, onRemove, onSelectPost }) => {
     <div className="group relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-neon text-[#181B4D] flex flex-col justify-between">
       <div>
         <i className="fi-rr-text"></i>
-        <h2 className="font-bold text-lg mb-2">Pinned Post</h2>
+        <h2 className="font-bold text-lg mb-2">
+          {selectedPost?.title || "Pinned Post"}
+        </h2>
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <IconBtn icon="fi fi-br-cross" transparent onClick={onRemove} />
         </div>
@@ -115,7 +117,6 @@ const PostCard = ({ postId, onRemove, onSelectPost }) => {
         {/* Post preview */}
         {selectedPost && (
           <>
-            <p className="font-medium">{selectedPost.title}</p>
             <p className="text-sm">
               {expanded
                 ? selectedPost.content

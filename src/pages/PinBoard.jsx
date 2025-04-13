@@ -109,13 +109,14 @@ const PinBoard = () => {
       case "posts":
         return (
           <PostCard
+            index={index}
             postId={app.postId}
             onRemove={onRemove}
             onSelectPost={onSelectPost}
           />
         );
       case "lists":
-        return <ListCard onRemove={onRemove} />;
+        return <ListCard onRemove={onRemove} listIndex={index} />;
       case "events":
         return <EventCard onRemove={onRemove} />;
       case "messages":
