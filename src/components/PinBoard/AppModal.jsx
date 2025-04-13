@@ -7,25 +7,19 @@ const AppModal = ({ onSelect }) => {
   const apps = [
     {
       label: "Posts",
-      type: "posts", // was: "posts"
+      type: "posts",
       icon: "fi fi-rr-edit",
       color: "neon",
     },
     {
       label: "Lists",
-      type: "lists", // was: "lists"
+      type: "lists",
       icon: "fi fi-rr-list",
       color: "ultramarine",
     },
     {
-      label: "Messages",
-      type: "messages", // was: "messages"
-      icon: "fi fi-rr-megaphone",
-      color: "sage",
-    },
-    {
       label: "Events",
-      type: "events", // was: "events"
+      type: "events",
       icon: "fi fi-rr-calendar",
       color: "lilac",
     },

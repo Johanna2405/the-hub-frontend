@@ -90,6 +90,22 @@ const PinBoard = () => {
     }
   };
 
+  const handleEventSelect = async (index, eventId) => {
+    const updated = [...pinBoard];
+    updated[index] = { ...updated[index], eventId };
+    setPinBoard(updated);
+
+    if (isCommunity) {
+      try {
+        await updateCommunityPinBoard(currentCommunity.id, updated);
+      } catch (err) {
+        console.error("❌ Failed to update pinboard:", err);
+      }
+    } else {
+      localStorage.setItem("pinnedApps", JSON.stringify(updated));
+    }
+  };
+
   // Filter cards
   const filteredApps =
     selectedFilter === "all"
@@ -101,9 +117,11 @@ const PinBoard = () => {
   const columnB = filteredApps.filter((_, index) => index % 2 !== 0);
 
   // Dynamically render correct Card Component
+  // PinBoard.jsx
   const renderCard = (app, index) => {
     const onRemove = () => handleRemoveApp(index);
     const onSelectPost = (postId) => handlePostSelect(index, postId);
+    const onSelectEvent = (eventId) => handleEventSelect(index, eventId); // neu
 
     switch (app.type) {
       case "posts":
@@ -118,9 +136,14 @@ const PinBoard = () => {
       case "lists":
         return <ListCard onRemove={onRemove} listIndex={index} />;
       case "events":
-        return <EventCard onRemove={onRemove} />;
-      case "messages":
-        return <MessageCard onRemove={onRemove} />;
+        return (
+          <EventCard
+            index={index}
+            eventId={app.eventId}
+            onRemove={onRemove}
+            onSelectEvent={onSelectEvent} // neu
+          />
+        );
       default:
         return null;
     }

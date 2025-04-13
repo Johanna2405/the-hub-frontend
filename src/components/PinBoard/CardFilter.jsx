@@ -5,10 +5,9 @@ const CardFilter = ({ selected, onFilterChange }) => {
 
   const filters = [
     { label: "All", value: "all", color: "primary" },
-    { label: "Posts", value: "post", color: "neon" },
-    { label: "Lists", value: "list", color: "ultramarine" },
-    { label: "Messages", value: "message", color: "sage" },
-    { label: "Events", value: "event", color: "lilac" },
+    { label: "Posts", value: "posts", color: "neon" },
+    { label: "Lists", value: "lists", color: "ultramarine" },
+    { label: "Events", value: "events", color: "lilac" },
   ];
 
   return (
