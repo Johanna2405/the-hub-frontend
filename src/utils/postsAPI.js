@@ -107,3 +107,10 @@ export const deleteCommunityPost = async (communityId, postId) => {
     throw error;
   }
 };
+
+// Function to sort posts by newest first
+export const sortPostsByNewest = (posts) => {
+  return [...posts].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+};

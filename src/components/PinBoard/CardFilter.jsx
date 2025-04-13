@@ -4,11 +4,10 @@ const CardFilter = ({ selected, onFilterChange }) => {
   const { pinboardSettings } = useUser();
 
   const filters = [
-    { label: "All", value: "all", color: "primary" }, // neutral
-    { label: "Posts", value: "post", color: "neon" }, // neon
-    { label: "Lists", value: "list", color: "ultramarine" }, // ultramarine
-    { label: "Messages", value: "message", color: "sage" }, // sage
-    { label: "Events", value: "event", color: "lilac" }, // lilac
+    { label: "All", value: "all", color: "primary" },
+    { label: "Posts", value: "posts", color: "neon" },
+    { label: "Lists", value: "lists", color: "ultramarine" },
+    { label: "Events", value: "events", color: "lilac" },
   ];
 
   return (

@@ -41,10 +41,7 @@ const CommentItem = ({ comment, currentUserId, setComments }) => {
           <div className="avatar">
             <div className="w-8 h-8 rounded-full">
               <img
-                src={
-                  comment.author?.profile_picture ||
-                  "https://www.gravatar.com/avatar/?d=mp&f=y"
-                }
+                src={comment.author?.profile_picture || "/default-profile.png"}
                 alt="avatar"
               />
             </div>
