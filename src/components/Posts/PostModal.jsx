@@ -62,7 +62,6 @@ const PostModal = ({
 
   return (
     <div>
-      {/* Nur im Create-Modus anzeigen */}
       {mode === "create" && (
         <IconBtn
           icon="fi fi-rr-plus"
