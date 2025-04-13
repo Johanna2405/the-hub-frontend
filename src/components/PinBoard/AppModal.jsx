@@ -27,13 +27,10 @@ const AppModal = ({ onSelect }) => {
 
   return (
     <div>
-      <h3 className="mt-8">Add something here</h3>
-
       <div className="mt-4 flex justify-center">
         <IconBtn
           icon="fi fi-rr-plus"
-          color="lilac"
-          text="create"
+          color="neon"
           onClick={() => document.getElementById("app_modal").showModal()}
         />
         <dialog id="app_modal" className="modal">

@@ -32,9 +32,8 @@ const EventCard = ({ onRemove, index }) => {
         let result = [];
 
         if (isCommunity && currentCommunity?.id) {
-          // Placeholder: später Filter nach community_id
           console.log("🌐 Fetching events for community (not implemented)");
-          result = []; // backend liefert nix, wenn nicht verknüpft
+          result = [];
         } else {
           console.log("👤 Fetching events for user...");
           result = await fetchEvents();
@@ -47,7 +46,7 @@ const EventCard = ({ onRemove, index }) => {
           if (found) setSelectedEvent(found);
         }
       } catch (err) {
-        console.error("❌ Failed to fetch events:", err);
+        console.error("Failed to fetch events:", err);
       }
     };
 
@@ -69,7 +68,7 @@ const EventCard = ({ onRemove, index }) => {
       localStorage.setItem("pinnedApps", JSON.stringify(updated));
     }
 
-    console.log("✅ Selected event:", event);
+    console.log("Selected event:", event);
   };
 
   const formattedDate = selectedEvent
@@ -77,7 +76,7 @@ const EventCard = ({ onRemove, index }) => {
     : null;
 
   return (
-    <div className="relative group rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-lilac text-[#181B4D] flex flex-col justify-between">
+    <div className="relative group rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[280px] bg-lilac text-[#181B4D] flex flex-col justify-between">
       {/* Remove-Button */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
         <IconBtn icon="fi fi-br-cross" transparent onClick={onRemove} />

@@ -69,7 +69,7 @@ const PostCard = ({ postId, onRemove, onSelectPost, index }) => {
   };
 
   return (
-    <div className="group relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-neon text-[#181B4D] flex flex-col justify-between">
+    <div className="group relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[280px] bg-neon text-[#181B4D] flex flex-col justify-between">
       <div>
         <i className="fi-rr-text"></i>
         <h2 className="font-bold text-lg mb-2">

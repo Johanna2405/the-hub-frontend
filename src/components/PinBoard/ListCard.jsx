@@ -95,7 +95,7 @@ const ListCard = ({ onRemove, listIndex }) => {
   const visibleItems = expanded ? listItems : listItems.slice(0, 3);
 
   return (
-    <div className="relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[250px] bg-primary text-[#181B4D] flex flex-col justify-between group">
+    <div className="relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[280px] bg-primary text-[#181B4D] flex flex-col justify-between group">
       {/* Remove-Button */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
         <IconBtn icon="fi fi-br-cross" transparent onClick={onRemove} />

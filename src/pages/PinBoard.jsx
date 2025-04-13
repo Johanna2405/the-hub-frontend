@@ -7,7 +7,6 @@ import PostCard from "../components/PinBoard/PostCard";
 import EventCard from "../components/PinBoard/EventCard";
 import ListCard from "../components/PinBoard/ListCard";
 import CardFilter from "../components/PinBoard/CardFilter";
-import MessageCard from "../components/PinBoard/MessageCard";
 import AppModal from "../components/PinBoard/AppModal";
 
 const PinBoard = () => {
@@ -18,15 +17,6 @@ const PinBoard = () => {
 
   const isCommunity = Boolean(currentCommunity?.id);
   const isAdmin = currentCommunity?.role === "admin";
-
-  console.log("📌 PinBoard Settings:", settings);
-
-  useEffect(() => {
-    if (isCommunity) {
-      console.log("📌 PinBoard Settings:", currentCommunity?.settings);
-      console.log("📌 PinBoard (raw):", pinBoard);
-    }
-  }, [currentCommunity, pinBoard]);
 
   // Load private pinned apps from localStorage
   useEffect(() => {
@@ -67,7 +57,7 @@ const PinBoard = () => {
       try {
         await updateCommunityPinBoard(currentCommunity.id, updated);
       } catch (err) {
-        console.error("❌ Failed to update community pinboard:", err);
+        console.error("Failed to update community pinboard:", err);
       }
     } else {
       const updated = pinnedApps.filter((_, i) => i !== indexToRemove);
@@ -86,7 +76,7 @@ const PinBoard = () => {
     try {
       await updateCommunityPinBoard(currentCommunity.id, updated);
     } catch (err) {
-      console.error("❌ Failed to update community pinboard:", err);
+      console.error("Failed to update community pinboard:", err);
     }
   };
 
@@ -99,7 +89,7 @@ const PinBoard = () => {
       try {
         await updateCommunityPinBoard(currentCommunity.id, updated);
       } catch (err) {
-        console.error("❌ Failed to update pinboard:", err);
+        console.error("Failed to update pinboard:", err);
       }
     } else {
       localStorage.setItem("pinnedApps", JSON.stringify(updated));
@@ -141,7 +131,7 @@ const PinBoard = () => {
             index={index}
             eventId={app.eventId}
             onRemove={onRemove}
-            onSelectEvent={onSelectEvent} // neu
+            onSelectEvent={onSelectEvent}
           />
         );
       default:
@@ -162,35 +152,42 @@ const PinBoard = () => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col w-1/2 items-center justify-center gap-4">
+    <div className="container mx-auto flex flex-col items-center justify-center gap-4">
       <h2 className="text-neon">Hello {user?.username}</h2>
-      <h1>{getGreeting()}</h1>
-
-      <CardFilter
-        selected={selectedFilter}
-        onFilterChange={setSelectedFilter}
-      />
-
-      {filteredApps.length > 0 && (
-        <div className="flex gap-4 w-full justify-center">
-          {/* Column A */}
-          <div className="flex flex-col w-1/2">
-            {columnA.map((app, index) => (
-              <div key={index}>{renderCard(app, index)}</div>
-            ))}
-          </div>
-
-          {/* Column B */}
-          <div className="flex flex-col w-1/2">
-            {columnB.map((app, index) => (
-              <div key={index}>{renderCard(app, index + columnA.length)}</div>
-            ))}
-          </div>
+      <div className="grid grid-cols-3 w-full items-center ">
+        <div></div>
+        <div className="flex items-center justify-center">
+          <h1>{getGreeting()}</h1>
         </div>
-      )}
+        {/* App Modal always visible for admins or private space */}
+        <div className="flex items-center justify-end">
+          {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
+        </div>
+      </div>
+      <div className="container mx-auto flex flex-col w-1/2 items-center justify-center gap-4">
+        <CardFilter
+          selected={selectedFilter}
+          onFilterChange={setSelectedFilter}
+        />
 
-      {/* App Modal always visible for admins or private space */}
-      {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
+        {filteredApps.length > 0 && (
+          <div className="flex gap-4 w-full justify-center">
+            {/* Column A */}
+            <div className="flex flex-col w-1/2">
+              {columnA.map((app, index) => (
+                <div key={index}>{renderCard(app, index)}</div>
+              ))}
+            </div>
+
+            {/* Column B */}
+            <div className="flex flex-col w-1/2">
+              {columnB.map((app, index) => (
+                <div key={index}>{renderCard(app, index + columnA.length)}</div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
