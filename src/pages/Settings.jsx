@@ -32,6 +32,7 @@ const Settings = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [communities, setCommunities] = useState([]);
   const [selectedId, setSelectedId] = useState("");
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const { pinboardSettings, setPinboardSettings } = useUser();
 
@@ -43,6 +44,15 @@ const Settings = () => {
     setSettings,
     refreshJoinedCommunities,
   } = useCommunity();
+
+  //clear old object URLs for profile temporary images
+  // useEffect(() => {
+  //   return () => {
+  //     if (previewUrl) {
+  //       URL.revokeObjectURL(previewUrl);
+  //     }
+  //   };
+  // }, [previewUrl]);
 
   // Load existing communities
   useEffect(() => {
@@ -128,10 +138,13 @@ const Settings = () => {
 
     try {
       const updatedUser = await updateProfilePicture(selectedFile);
+
       setUser((prev) => ({
         ...prev,
         profile_picture: updatedUser.profile_picture,
       }));
+
+      setPreviewUrl(null);
       showToast("Profile picture updated!", "success");
     } catch (err) {
       console.error("Upload error:", err);
@@ -491,7 +504,9 @@ const Settings = () => {
             <div className="avatar flex flex-col gap-4 items-center">
               <div className="w-44 rounded-full">
                 <img
-                  src={user?.profile_picture || "/default-profile.png"}
+                  src={
+                    previewUrl || user?.profilePicture || "/default-profile.png"
+                  }
                   alt="Profile"
                   className="object-cover w-full h-full"
                 />
@@ -500,7 +515,15 @@ const Settings = () => {
                 type="file"
                 accept="image/*"
                 className="file-input file-input-secondary h-full border-2"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setSelectedFile(file);
+
+                  if (file) {
+                    const objectUrl = URL.createObjectURL(file);
+                    setPreviewUrl(objectUrl);
+                  }
+                }}
               />
               <IconBtn
                 text={"save"}
