@@ -7,7 +7,7 @@ const CardFilter = ({ selected, onFilterChange }) => {
     { label: "All", value: "all", color: "primary" },
     { label: "Posts", value: "posts", color: "neon" },
     { label: "Lists", value: "lists", color: "ultramarine" },
-    { label: "Events", value: "events", color: "lilac" },
+    { label: "Events", value: "calendar", color: "lilac" }, //changed value from events to calendar, hope this doesn't break anything
   ];
 
   return (

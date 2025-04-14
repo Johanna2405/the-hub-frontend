@@ -109,7 +109,7 @@ const SignUp = () => {
           <div className="form-control">
             <label className="label">
               <span className="label-text text-text font-medium pb-2">
-                Password
+                Password (min 8 characters)
               </span>
             </label>
             <input

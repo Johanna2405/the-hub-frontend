@@ -14,13 +14,13 @@
   --color-accent: var(--color-accent);
   --color-error: var(--color-error);
   /* Calendar */
-  --color-lilac: #d5b4fb;
+  --color-lilac: #c29af5;
   /* Posts */
-  --color-neon: #d9e73c;
+  --color-neon: #c1d721;
   /* Lists */
   --color-ultramarine: #5b4efe;
   /* Messages */
-  --color-sage: #e2f5a6;
+  --color-sage: #a6cb5b;
 }
 
 @plugin "daisyui" {
@@ -39,17 +39,17 @@
   --color-base-content: #181a4d;
   --color-primary: #d4dee8;
   --color-primary-content: #181a4d;
-  --color-secondary: #d5b4fb;
+  --color-secondary: #c29af5;
   --color-secondary-content: #181a4d;
-  --color-accent: #d9e73c;
+  --color-accent: #c1d721;
   --color-accent-content: #181a4d;
   --color-neutral: #181a4d;
   --color-neutral-content: #f5f5f5;
   --color-info: #283287;
   --color-info-content: #f5f5f5;
-  --color-success: #d5b4fb;
+  --color-success: #c29af5;
   --color-success-content: #181a4d;
-  --color-warning: #d5b4fb;
+  --color-warning: #c29af5;
   --color-warning-content: #181a4d;
   --color-error: #fd5c32;
   --color-error-content: #f5f5f5;
@@ -62,38 +62,45 @@
 
 @plugin "daisyui/theme" {
   name: "thedarkhub";
-  /* prefersdark: true;
-  color-scheme: dark; */
+  prefersdark: true;
+  color-scheme: dark;
 
-  --color-base-100: #22232b; /* Dark background */
-  --color-base-200: #2e2f38; /* Slightly lighter background */
-  --color-base-300: #3a3b46; /* Even lighter background for depth */
-  --color-base-content: #e3e4e8; /* Light text for contrast */
+  --color-base-100: #1a1a1a; /* Background */
+  --color-base-200: #2b2e34; /* Slightly lighter bg */
+  --color-base-300: #3c3f46; /* Depth layers */
+  --color-base-content: #f5f5f5; /* Light text */
 
-  --color-primary: #3a3b46; /* Muted primary for dark mode */
-  --color-primary-content: #e3e4e8; /* Light text */
+  --color-primary: #2b2e34; /* Sidebar/cards */
+  --color-primary-content: #f5f5f5; /* Readable text */
 
-  --color-secondary: #8a67d3; /* Soft purple */
-  --color-secondary-content: #e3e4e8; /* Light text */
+  --color-secondary: #9d79e0; /* Dark mode lilac (Calendar) */
+  --color-secondary-content: #1a1a1a;
 
-  --color-accent: #b5c924; /* Adjusted yellow-green for dark mode */
-  --color-accent-content: #22232b; /* Dark text for contrast */
+  --color-accent: #b2c414; /* Dark mode neon (Posts) */
+  --color-accent-content: #1a1a1a;
 
-  --color-neutral: #e3e4e8; /* Light text */
-  --color-neutral-content: #22232b; /* Dark background for contrast */
+  --color-neutral: #f5f5f5;
+  --color-neutral-content: #1a1a1a;
 
-  --color-info: #4a5dc3; /* Deep blue for info */
-  --color-info-content: #e3e4e8; /* Light text */
+  --color-info: #4a5dc3; /* Ultramarine stays strong */
+  --color-info-content: #f5f5f5;
 
-  --color-success: #8a67d3; /* Matching secondary */
-  --color-success-content: #e3e4e8; /* Light text */
+  --color-success: #9d79e0; /* Lilac reused for success */
+  --color-success-content: #1a1a1a;
 
-  --color-warning: #8a67d3; /* Matching secondary */
-  --color-warning-content: #e3e4e8; /* Light text */
+  --color-warning: #b2c414; /* Matching neon accent */
+  --color-warning-content: #1a1a1a;
 
-  --color-error: #fd5c32; /* Keeping the strong red */
-  --color-error-content: #e3e4e8; /* Light text */
-  /* border radius */
+  --color-error: #fd5c32; /* Keep bold red */
+  --color-error-content: #f5f5f5;
+
+  /* Feature colors (you can reference these in components or utilities if needed) */
+  --color-lilac: #9d79e0;
+  --color-neon: #b2c414;
+  --color-ultramarine: #5b4efe;
+  --color-sage: #8ebd49;
+
+  /* Border radius */
   --radius-selector: 1rem;
   --radius-field: 1rem;
   --radius-box: 2rem;

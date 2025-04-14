@@ -1,7 +1,7 @@
 const ThemeController = () => {
   return (
     <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-secondary">
+      <div tabIndex={0} role="button" className="btn btn-secondary text-base">
         Choose your theme
         <svg
           width="12px"
@@ -21,7 +21,7 @@ const ThemeController = () => {
           <input
             type="radio"
             name="theme-dropdown"
-            className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start hover:border-none"
+            className="theme-controller w-full btn btn-sm  btn-ghost justify-start hover:border-none"
             aria-label="Default light"
             value="thehub"
           />
@@ -30,7 +30,7 @@ const ThemeController = () => {
           <input
             type="radio"
             name="theme-dropdown"
-            className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start  hover:border-none"
+            className="theme-controller w-full btn btn-sm btn-ghost justify-start  hover:border-none"
             aria-label="Default dark"
             value="thedarkhub"
           />

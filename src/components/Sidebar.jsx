@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
     {
       icon: "fi-rs-list-check",
-      iconColor: "aquamarine",
+      iconColor: "ultramarine",
       text: "Lists",
       settingKey: "lists",
       target: "lists",
@@ -79,14 +79,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         } transition-opacity duration-300`}
       >
         <div className="flex flex-col gap-4">
-          <SidebarLink
-            target={"/"}
-            icon={"fi-rr-thumbtack"}
-            iconColor={"ultramarine"}
-            text={"Your Pinboard"}
-            setIsOpen={setIsOpen}
-            className={"bg-primary py-2"}
-          />
+          {!currentCommunity && (
+            <SidebarLink
+              target={"/"}
+              icon={"fi-rr-thumbtack"}
+              iconColor={"ultramarine"}
+              text={"Your Pinboard"}
+              setIsOpen={setIsOpen}
+              className={"bg-primary py-2"}
+            />
+          )}
+
           {currentCommunity && (
             <SidebarLink
               target={`/community/${currentCommunity.id}/pinboard`}

@@ -222,38 +222,39 @@ const Settings = () => {
       </div> */}
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
         {/* Pinboard settings */}
-        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
-          <input type="radio" name="my-accordion-2" defaultChecked />
-          <div className="collapse-title font-semibold text-lg">
-            Pinboard settings
-          </div>
-          <div className="collapse-content ">
-            <div className="flex flex-col gap-4">
-              <AppCheckbox
-                icon={"fi-rr-text"}
-                iconColor={"neon"}
-                appName={"Posts"}
-                checked={pinboardSettings.posts}
-                onChange={() =>
-                  setPinboardSettings((prev) => ({
-                    ...prev,
-                    posts: !prev.posts,
-                  }))
-                }
-              />
-              <AppCheckbox
-                icon={"fi-rs-list-check"}
-                iconColor={"aquamarine"}
-                appName={"Lists"}
-                checked={pinboardSettings.lists}
-                onChange={() =>
-                  setPinboardSettings((prev) => ({
-                    ...prev,
-                    lists: !prev.lists,
-                  }))
-                }
-              />
-              {/* <AppCheckbox
+        {currentCommunity === null && (
+          <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title font-semibold text-lg">
+              Pinboard settings
+            </div>
+            <div className="collapse-content ">
+              <div className="flex flex-col gap-4">
+                <AppCheckbox
+                  icon={"fi-rr-text"}
+                  iconColor={"neon"}
+                  appName={"Posts"}
+                  checked={pinboardSettings.posts}
+                  onChange={() =>
+                    setPinboardSettings((prev) => ({
+                      ...prev,
+                      posts: !prev.posts,
+                    }))
+                  }
+                />
+                <AppCheckbox
+                  icon={"fi-rs-list-check"}
+                  iconColor={"ultramarine"}
+                  appName={"Lists"}
+                  checked={pinboardSettings.lists}
+                  onChange={() =>
+                    setPinboardSettings((prev) => ({
+                      ...prev,
+                      lists: !prev.lists,
+                    }))
+                  }
+                />
+                {/* <AppCheckbox
               icon={"fi-rr-megaphone"}
               iconColor={"sage"}
               appName={"Messages"}
@@ -265,31 +266,34 @@ const Settings = () => {
                 }))
               }
             /> */}
-              <AppCheckbox
-                icon={"fi-rr-calendar"}
-                iconColor={"lilac"}
-                appName={"Calendar"}
-                checked={pinboardSettings.calendar}
-                onChange={() =>
-                  setPinboardSettings((prev) => ({
-                    ...prev,
-                    calendar: !prev.calendar,
-                  }))
-                }
-              />
+                <AppCheckbox
+                  icon={"fi-rr-calendar"}
+                  iconColor={"lilac"}
+                  appName={"Calendar"}
+                  checked={pinboardSettings.calendar}
+                  onChange={() =>
+                    setPinboardSettings((prev) => ({
+                      ...prev,
+                      calendar: !prev.calendar,
+                    }))
+                  }
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
         {/* change user data  */}
         <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
           <input type="radio" name="my-accordion-2" />
-          <div className="collapse-title font-semibold text-lg">
+          <div className="collapse-title font-semibold text-lg ">
             Change username & password
           </div>
           <div className="collapse-content ">
             <div className="flex flex-col gap-4">
-              <span className="label-text font-medium text-text">
-                Current Username: {user.username} | E-Mail: {user.email}
+              <span className="label-text font-medium text-text py-4 border-b border-lilac">
+                Current Username: {user.username} <br />
+                E-Mail: {user.email}
               </span>
 
               {/* Form */}
@@ -298,7 +302,7 @@ const Settings = () => {
                 onSubmit={handleChangeUsername}
               >
                 {/* Username Input */}
-                <div className="form-control flex flex-col items-start  gap-4 md:flex-row md:items-center ">
+                <div className="form-control flex flex-col items-start gap-4 xl:flex-row xl:items-center pb-8 border-b border-lilac">
                   <label className="label">
                     <span className="label-text font-medium text-text">
                       New username
@@ -312,7 +316,7 @@ const Settings = () => {
                     onChange={(e) => setNewUsername(e.target.value)}
                     required
                   />
-                  <button type="submit" className="btn btn-secondary">
+                  <button type="submit" className="btn btn-secondary text-base">
                     change username
                   </button>
                 </div>
@@ -322,10 +326,10 @@ const Settings = () => {
                 onSubmit={handleChangePassword}
               >
                 {/* Password Input */}
-                <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
+                <div className="form-control flex flex-col items-start gap-4 xl:flex-row xl:items-center pt-4">
                   <label className="label">
                     <span className="label-text text-text font-medium">
-                      New password
+                      New password (min 8 characters)
                     </span>
                   </label>
                   <input
@@ -339,7 +343,7 @@ const Settings = () => {
                 </div>
 
                 {/* Confirm Password Input */}
-                <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
+                <div className="form-control flex flex-col items-start gap-4 xl:flex-row xl:items-center ">
                   <label className="label">
                     <span className="label-text text-text font-medium">
                       Confirm new password
@@ -354,8 +358,8 @@ const Settings = () => {
                     required
                   />
                 </div>
-                <div className="flex md:justify-end justify-start">
-                  <button type="submit" className="btn btn-secondary">
+                <div className="flex xl:justify-end justify-start">
+                  <button type="submit" className="btn btn-secondary text-base">
                     change password
                   </button>
                 </div>
