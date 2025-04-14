@@ -111,7 +111,7 @@ const PinBoard = () => {
   const renderCard = (app, index) => {
     const onRemove = () => handleRemoveApp(index);
     const onSelectPost = (postId) => handlePostSelect(index, postId);
-    const onSelectEvent = (eventId) => handleEventSelect(index, eventId); // neu
+    const onSelectEvent = (eventId) => handleEventSelect(index, eventId);
 
     switch (app.type) {
       case "posts":
@@ -124,7 +124,7 @@ const PinBoard = () => {
           />
         );
       case "lists":
-        return <ListCard onRemove={onRemove} listIndex={index} />;
+        return <ListCard index={index} onRemove={onRemove} listIndex={index} />;
       case "events":
         return (
           <EventCard

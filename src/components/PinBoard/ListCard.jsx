@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 
 import IconBtn from "../IconBtn";
 
-const ListCard = ({ onRemove, listIndex }) => {
+const ListCard = ({ onRemove, listIndex, index }) => {
   const { currentCommunity, pinBoard, setPinBoard } = useCommunity();
   const [lists, setLists] = useState([]);
   const [selectedList, setSelectedList] = useState(null);
@@ -26,7 +26,7 @@ const ListCard = ({ onRemove, listIndex }) => {
 
   const listId = isCommunity
     ? pinBoard[listIndex]?.listId
-    : pinnedApps[listIndex]?.listId;
+    : JSON.parse(localStorage.getItem("pinnedApps"))?.[index]?.listId;
 
   // Load all available lists
   useEffect(() => {
@@ -41,7 +41,9 @@ const ListCard = ({ onRemove, listIndex }) => {
           const res = await fetchListsPerUserId(user.id);
           setLists(res);
           const found = res.find((l) => l.id === listId);
-          if (found) setSelectedList(found);
+          if (found) {
+            setSelectedList(found);
+          }
         }
       } catch (err) {
         console.error("Failed to load lists:", err);
@@ -49,7 +51,17 @@ const ListCard = ({ onRemove, listIndex }) => {
     };
 
     loadLists();
-  }, [currentCommunity, listId]);
+  }, [currentCommunity, listId, user]);
+
+  // Set selected list in private space if listId matches
+  useEffect(() => {
+    if (!isCommunity && lists.length > 0 && listId) {
+      const match = lists.find((l) => l.id === listId);
+      if (match) {
+        setSelectedList(match);
+      }
+    }
+  }, [lists, listId, isCommunity]);
 
   // Load list items when a list is selected
   useEffect(() => {
@@ -79,16 +91,21 @@ const ListCard = ({ onRemove, listIndex }) => {
       listId: list.id,
     };
 
-    setPinBoard(updated);
-
     if (isCommunity) {
+      setPinBoard(updated);
       try {
         await updateCommunityPinBoard(currentCommunity.id, updated);
+        console.log("✅ Community pinboard updated");
       } catch (err) {
-        console.error("Failed to save pinboard:", err);
+        console.error("Failed to save community pinboard:", err);
       }
     } else {
-      localStorage.setItem("pinnedApps", JSON.stringify(updated));
+      try {
+        localStorage.setItem("pinnedApps", JSON.stringify(updated));
+        console.log("💾 Saved pinnedApps to localStorage:", updated);
+      } catch (err) {
+        console.error("Failed to save to localStorage:", err);
+      }
     }
   };
 

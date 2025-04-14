@@ -3,8 +3,13 @@ import { useUser } from "../context/UserContext";
 import IconBtn from "./IconBtn";
 
 const NavBar = ({ isOpen, setIsOpen }) => {
-  const { currentCommunity } = useCommunity();
+  const { currentCommunity, cleanUpCommunity } = useCommunity();
   const { user, logout } = useUser();
+
+  const handleLogout = () => {
+    cleanUpCommunity();
+    logout();
+  };
 
   return (
     <nav className="flex items-center justify-between p-4 w-full bg-primary shadow-sm">
@@ -21,7 +26,7 @@ const NavBar = ({ isOpen, setIsOpen }) => {
       </div>
       <div className="flex items-center gap-4">
         <span>{user?.username || "Guest"}</span>
-        <IconBtn icon="fi-rr-exit" color="text" onClick={logout} />
+        <IconBtn icon="fi-rr-exit" color="text" onClick={handleLogout} />
       </div>
     </nav>
   );
