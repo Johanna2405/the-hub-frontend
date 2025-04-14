@@ -4,7 +4,12 @@ import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
 import { useNavigate } from "react-router";
-import { changeUsername, changePassword, updateStatus } from "../utils/user";
+import {
+  changeUsername,
+  changePassword,
+  // updateStatus,
+  updateProfilePicture,
+} from "../utils/user";
 import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
 import CommunitySelector from "../components/CommunitySelector";
@@ -31,7 +36,7 @@ const Settings = () => {
   const { pinboardSettings, setPinboardSettings } = useUser();
 
   const {
-    joinedCommunities,
+    // joinedCommunities,
     currentCommunity,
     setCurrentCommunity,
     settings,
@@ -46,6 +51,7 @@ const Settings = () => {
         const data = await fetchAllCommunities();
         setCommunities(data);
       } catch (err) {
+        console.log(err);
         showToast("Failed to load communities", "error");
       }
     };
@@ -113,15 +119,22 @@ const Settings = () => {
   };
 
   const handlePictureUpload = async () => {
+    if (!selectedFile) {
+      showToast("No file selected!", "error");
+      return;
+    }
+
+    console.log("Selected File:", selectedFile);
+
     try {
-      const updatedUser = await updateProfilePicture(user.id, selectedFile);
+      const updatedUser = await updateProfilePicture(selectedFile);
       setUser((prev) => ({
         ...prev,
         profile_picture: updatedUser.profile_picture,
       }));
       showToast("Profile picture updated!", "success");
     } catch (err) {
-      console.error(err);
+      console.error("Upload error:", err);
       showToast("Failed to upload picture.", "error");
     }
   };
@@ -485,6 +498,7 @@ const Settings = () => {
               </div>
               <input
                 type="file"
+                accept="image/*"
                 className="file-input file-input-secondary h-full border-2"
                 onChange={(e) => setSelectedFile(e.target.files[0])}
               />
