@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
-import Header from "../Header";
 import IconBtn from "../IconBtn";
 import NewEventModal from "./NewEventModal";
 import EditEventModal from "./EditEventModal";
@@ -29,15 +28,37 @@ const DailyCalendar = ({ onPrev, onNext }) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, i) => {
-    const date = new Date(selectedYear, selectedMonth, i + 1);
-    const dayName = date.toLocaleDateString("en-GB", { weekday: "short" });
-    return {
-      day: (i + 1).toString().padStart(2, "0"),
-      label: dayName,
-    };
-  });
+  const getWeekDays = (currentDate) => {
+    const week = [];
+    const dayIndex = currentDate.getDay();
+    const monday = new Date(currentDate);
+    monday.setDate(currentDate.getDate() - ((dayIndex + 6) % 7));
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const label = date.toLocaleDateString("en-GB", { weekday: "short" });
+
+      week.push({
+        fullDate: date,
+        day,
+        month,
+        year: date.getFullYear().toString(),
+        label,
+      });
+    }
+
+    return week;
+  };
+
+  const currentDate = new Date(
+    selectedYear,
+    selectedMonth,
+    parseInt(selectedDay)
+  );
+  const weekDays = getWeekDays(currentDate);
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -53,6 +74,13 @@ const DailyCalendar = ({ onPrev, onNext }) => {
       }
     };
     loadEvents();
+  }, []);
+
+  useEffect(() => {
+    const today = new Date();
+    setSelectedDay(today.getDate().toString().padStart(2, "0"));
+    setSelectedMonth(today.getMonth());
+    setSelectedYear(today.getFullYear());
   }, []);
 
   const handleAddEvent = async (newEvent) => {
@@ -120,63 +148,68 @@ const DailyCalendar = ({ onPrev, onNext }) => {
     }
   };
 
-  console.log("📆 days.length", days.length);
-  console.log("📆 selectedMonth", selectedMonth);
-  console.log("📆 selectedYear", selectedYear);
+  const goToPrevDay = () => {
+    const currentDate = new Date(
+      selectedYear,
+      selectedMonth,
+      parseInt(selectedDay)
+    );
+    currentDate.setDate(currentDate.getDate() - 1);
+
+    setSelectedDay(currentDate.getDate().toString().padStart(2, "0"));
+    setSelectedMonth(currentDate.getMonth());
+    setSelectedYear(currentDate.getFullYear());
+  };
+
+  const goToNextDay = () => {
+    const currentDate = new Date(
+      selectedYear,
+      selectedMonth,
+      parseInt(selectedDay)
+    );
+    currentDate.setDate(currentDate.getDate() + 1);
+
+    setSelectedDay(currentDate.getDate().toString().padStart(2, "0"));
+    setSelectedMonth(currentDate.getMonth());
+    setSelectedYear(currentDate.getFullYear());
+  };
 
   return (
     <div className="p-4 bg-base">
-      <Header showBackButton={true} onBack={() => navigate(-1)} />
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl font-bold text-text">Calendar</h1>
-        <IconBtn
-          color="neon"
-          icon="fi-rr-plus-small"
-          onClick={() => setShowNewEventModal(true)}
-        />
-      </div>
       <div className="flex items-center justify-between mb-8">
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-left"
-          onClick={() => {
-            if (selectedMonth === 0) {
-              setSelectedMonth(11);
-              setSelectedYear(selectedYear - 1);
-            } else {
-              setSelectedMonth(selectedMonth - 1);
-            }
-          }}
+          onClick={goToPrevDay}
         />
         <h2 className="text-xl font-semibold text-text">Day</h2>
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-right"
-          onClick={() => {
-            if (selectedMonth === 11) {
-              setSelectedMonth(0);
-              setSelectedYear(selectedYear + 1);
-            } else {
-              setSelectedMonth(selectedMonth + 1);
-            }
-          }}
+          onClick={goToNextDay}
         />
       </div>
 
-      {/* problem zone */}
-      <div className="w-full">
+      <div className="w-full flex items-center justify-center">
         <div className="flex flex-wrap gap-2 mb-6">
-          {days.map(({ day, label }) => (
+          {weekDays.map(({ day, label, month, year }) => (
             <div
-              key={day}
+              key={`${day}-${month}-${year}`}
+              onClick={() => {
+                setSelectedDay(day);
+                setSelectedMonth(parseInt(month) - 1);
+                setSelectedYear(parseInt(year));
+              }}
               className={`flex flex-col items-center border rounded-xl px-4 py-2 cursor-pointer transition-all duration-200 w-16 ${
-                selectedDay === day ? "bg-primary text-base" : "bg-base"
+                selectedDay === day &&
+                selectedMonth === parseInt(month) - 1 &&
+                selectedYear.toString() === year
+                  ? "bg-primary text-base"
+                  : "bg-base"
               }`}
             >
               <span className="text-text font-bold text-lg">{day}</span>
-              <span className="text-lilac font-semibold text-sm">
-                {(selectedMonth + 1).toString().padStart(2, "0")}
-              </span>
+              <span className="text-lilac font-semibold text-sm">{month}</span>
               <span className="text-sm text-text">{label}</span>
             </div>
           ))}
