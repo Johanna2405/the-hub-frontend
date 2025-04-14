@@ -25,12 +25,12 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between">
+    <div className="flex flex-col items-center justify-between">
       {/* Main Content */}
-      <div className="flex flex-col items-center w-full max-w-md px-4 py-8 sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+      <div className="flex flex-col items-center py-8 ">
         {/* Welcome Text */}
         <h1 className="m-7 mb-8 sm:text-4xl text-center">
-          Welcome to the hub.
+          Welcome back to the hub.
         </h1>
         <h2 className="text-neon mb-8 sm:text-2xl">Sign in</h2>
 

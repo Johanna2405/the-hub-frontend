@@ -65,7 +65,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       `}
     >
       <div className="flex justify-between p-4">
-        <img src="/logoipsum-329.svg" alt="Logo" />
+        <img src="/hub-dark.svg" alt="Logo" className="w-32" />
         <button
           className="btn bg-base border-none pt-1"
           onClick={() => setIsOpen(false)}

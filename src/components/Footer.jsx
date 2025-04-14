@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="bg-primary w-full px-4 pt-8 pap-8 min-h-[33vh] flex flex-col justify-between">
+    <footer className="bg-primary w-full px-4 pt-8 pap-8 min-h-[33vh] md:min-h-[28vh] flex flex-col justify-between">
       <div className="flex flex-col md:flex-row items-center justify-between">
         <div className="p-8 flex flex-col items-center md:items-start gap-4">
           <Link to={"/get-started"}>
