@@ -112,17 +112,15 @@ const ListCard = ({ onRemove, listIndex, index }) => {
   const visibleItems = expanded ? listItems : listItems.slice(0, 3);
 
   return (
-    <div className="relative rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[280px] bg-primary text-[#181B4D] flex flex-col justify-between group">
+    <div className="relative rounded-3xl p-4 transition-all duration-300 min-h-32 bg-primary text-text flex flex-col justify-between group mb-4">
       {/* Remove-Button */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
-        <IconBtn icon="fi fi-br-cross" transparent onClick={onRemove} />
+      <div className="absolute top-2 right-2 lg:opacity-0 opacity-40 group-hover:opacity-100 transition">
+        <IconBtn icon="fi-br-cross-small" transparent onClick={onRemove} />
       </div>
 
-      <div>
-        <i className="fi fi-rr-list"></i>
-        <h2 className="font-bold text-lg mb-2">
-          {selectedList?.title || "Pinned List"}
-        </h2>
+      <div className="flex flex-col gap-2">
+        <i className="fi-rr-list text-lg"></i>
+        <h3>{selectedList?.title || "Pinned List"}</h3>
 
         {!selectedList && (
           <div className="flex flex-col gap-2">
@@ -180,8 +178,8 @@ const ListCard = ({ onRemove, listIndex, index }) => {
 
             {/* View full list */}
             {expanded && (
-              <h3
-                className="mt-2 hover:underline text-sm font-medium cursor-pointer"
+              <span
+                className="mt-2 hover:underline text-sm font-bold cursor-pointer"
                 onClick={() => {
                   if (isCommunity) {
                     navigate(`/community/${currentCommunity.id}/lists`);
@@ -191,7 +189,7 @@ const ListCard = ({ onRemove, listIndex, index }) => {
                 }}
               >
                 View full list
-              </h3>
+              </span>
             )}
           </>
         )}

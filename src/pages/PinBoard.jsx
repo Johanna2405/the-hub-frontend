@@ -152,19 +152,14 @@ const PinBoard = () => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col">
       <h2 className="text-neon">Hello {user?.username}</h2>
-      <div className="grid grid-cols-3 w-full items-center ">
-        <div></div>
-        <div className="flex items-center justify-center">
-          <h1>{getGreeting()}</h1>
-        </div>
+      <div className="flex gap-4 justify-between w-full items-center pb-4">
+        <h1 className="pt-2">{getGreeting()}</h1>
         {/* App Modal always visible for admins or private space */}
-        <div className="flex items-center justify-end">
-          {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
-        </div>
+        {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
       </div>
-      <div className="container mx-auto flex flex-col w-1/2 items-center justify-center gap-4">
+      <div className="flex flex-col gap-4 ">
         <CardFilter
           selected={selectedFilter}
           onFilterChange={setSelectedFilter}

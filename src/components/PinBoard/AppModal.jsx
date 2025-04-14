@@ -29,7 +29,7 @@ const AppModal = ({ onSelect }) => {
     <div>
       <div className="mt-4 flex justify-center">
         <IconBtn
-          icon="fi fi-rr-plus"
+          icon="fi-rr-plus-small"
           color="neon"
           onClick={() => document.getElementById("app_modal").showModal()}
         />

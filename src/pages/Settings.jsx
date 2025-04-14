@@ -190,9 +190,9 @@ const Settings = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 pb-12">
+    <div className="flex flex-col gap-8 ">
       <Header
-        title="Settings"
+        title={`Settings for ${user.username}`}
         showBackButton={true}
         onBack={() => navigate(-1)}
       />
@@ -201,9 +201,9 @@ const Settings = () => {
         <ThemeController />
       </div>
       {/* update status */}
-      <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4 md:w-3/4">
-        <span className="font-semibold">Update your status</span>
+      {/* <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4 md:w-3/4">
         <h2>{user.username}</h2>
+        <span className="font-semibold">Update your status</span>
         <div className="flex items-center gap-2">
           <input
             type="text"
@@ -219,40 +219,41 @@ const Settings = () => {
             // onClick={handleStatusUpdate}
           />
         </div>
-      </div>
-      {/* Pinboard settings */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-        <input type="radio" name="my-accordion-2" defaultChecked />
-        <div className="collapse-title font-semibold text-lg">
-          Pinboard settings
-        </div>
-        <div className="collapse-content ">
-          <div className="flex flex-col gap-4">
-            <AppCheckbox
-              icon={"fi-rr-text"}
-              iconColor={"neon"}
-              appName={"Posts"}
-              checked={pinboardSettings.posts}
-              onChange={() =>
-                setPinboardSettings((prev) => ({
-                  ...prev,
-                  posts: !prev.posts,
-                }))
-              }
-            />
-            <AppCheckbox
-              icon={"fi-rs-list-check"}
-              iconColor={"aquamarine"}
-              appName={"Lists"}
-              checked={pinboardSettings.lists}
-              onChange={() =>
-                setPinboardSettings((prev) => ({
-                  ...prev,
-                  lists: !prev.lists,
-                }))
-              }
-            />
-            {/* <AppCheckbox
+      </div> */}
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
+        {/* Pinboard settings */}
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
+          <input type="radio" name="my-accordion-2" defaultChecked />
+          <div className="collapse-title font-semibold text-lg">
+            Pinboard settings
+          </div>
+          <div className="collapse-content ">
+            <div className="flex flex-col gap-4">
+              <AppCheckbox
+                icon={"fi-rr-text"}
+                iconColor={"neon"}
+                appName={"Posts"}
+                checked={pinboardSettings.posts}
+                onChange={() =>
+                  setPinboardSettings((prev) => ({
+                    ...prev,
+                    posts: !prev.posts,
+                  }))
+                }
+              />
+              <AppCheckbox
+                icon={"fi-rs-list-check"}
+                iconColor={"aquamarine"}
+                appName={"Lists"}
+                checked={pinboardSettings.lists}
+                onChange={() =>
+                  setPinboardSettings((prev) => ({
+                    ...prev,
+                    lists: !prev.lists,
+                  }))
+                }
+              />
+              {/* <AppCheckbox
               icon={"fi-rr-megaphone"}
               iconColor={"sage"}
               appName={"Messages"}
@@ -264,109 +265,115 @@ const Settings = () => {
                 }))
               }
             /> */}
-            <AppCheckbox
-              icon={"fi-rr-calendar"}
-              iconColor={"lilac"}
-              appName={"Calendar"}
-              checked={pinboardSettings.calendar}
-              onChange={() =>
-                setPinboardSettings((prev) => ({
-                  ...prev,
-                  calendar: !prev.calendar,
-                }))
-              }
-            />
+              <AppCheckbox
+                icon={"fi-rr-calendar"}
+                iconColor={"lilac"}
+                appName={"Calendar"}
+                checked={pinboardSettings.calendar}
+                onChange={() =>
+                  setPinboardSettings((prev) => ({
+                    ...prev,
+                    calendar: !prev.calendar,
+                  }))
+                }
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {/* change user data  */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-        <input type="radio" name="my-accordion-2" />
-        <div className="collapse-title font-semibold text-lg">
-          Change username & password
-        </div>
-        <div className="collapse-content ">
-          <div className="flex flex-col gap-4">
-            <span className="label-text font-medium text-text">
-              Current Username: {user.username} | E-Mail: {user.email}
-            </span>
+        {/* change user data  */}
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
+          <input type="radio" name="my-accordion-2" />
+          <div className="collapse-title font-semibold text-lg">
+            Change username & password
+          </div>
+          <div className="collapse-content ">
+            <div className="flex flex-col gap-4">
+              <span className="label-text font-medium text-text">
+                Current Username: {user.username} | E-Mail: {user.email}
+              </span>
 
-            {/* Form */}
-            <form className="w-full space-y-4" onSubmit={handleChangeUsername}>
-              {/* Username Input */}
-              <div className="form-control flex flex-col items-start  gap-4 md:flex-row md:items-center ">
-                <label className="label">
-                  <span className="label-text font-medium text-text">
-                    New username
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  placeholder={user.username}
-                  className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                  required
-                />
-                <button type="submit" className="btn btn-secondary">
-                  change username
-                </button>
-              </div>
-            </form>
-            <form className="w-full space-y-4" onSubmit={handleChangePassword}>
-              {/* Password Input */}
-              <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
-                <label className="label">
-                  <span className="label-text text-text font-medium">
-                    New password
-                  </span>
-                </label>
-                <input
-                  type="password"
-                  placeholder="********"
-                  className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                />
-              </div>
+              {/* Form */}
+              <form
+                className="w-full space-y-4"
+                onSubmit={handleChangeUsername}
+              >
+                {/* Username Input */}
+                <div className="form-control flex flex-col items-start  gap-4 md:flex-row md:items-center ">
+                  <label className="label">
+                    <span className="label-text font-medium text-text">
+                      New username
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={user.username}
+                    className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    required
+                  />
+                  <button type="submit" className="btn btn-secondary">
+                    change username
+                  </button>
+                </div>
+              </form>
+              <form
+                className="w-full space-y-4"
+                onSubmit={handleChangePassword}
+              >
+                {/* Password Input */}
+                <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
+                  <label className="label">
+                    <span className="label-text text-text font-medium">
+                      New password
+                    </span>
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="********"
+                    className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </div>
 
-              {/* Confirm Password Input */}
-              <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
-                <label className="label">
-                  <span className="label-text text-text font-medium">
-                    Confirm new password
-                  </span>
-                </label>
-                <input
-                  type="password"
-                  placeholder="********"
-                  className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex md:justify-end justify-start">
-                <button type="submit" className="btn btn-secondary">
-                  change password
-                </button>
-              </div>
-            </form>
+                {/* Confirm Password Input */}
+                <div className="form-control flex flex-col items-start gap-4 md:flex-row md:items-center ">
+                  <label className="label">
+                    <span className="label-text text-text font-medium">
+                      Confirm new password
+                    </span>
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="********"
+                    className="input input-bordered w-full bg-primary focus:outline-lilac focus:ring-2 rounded-2xl"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex md:justify-end justify-start">
+                  <button type="submit" className="btn btn-secondary">
+                    change password
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-      {/* change community */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-        <input type="radio" name="my-accordion-2" />
-        <div className="collapse-title font-semibold text-lg">
-          Community Settings
-        </div>
-        <div className="collapse-content ">
-          <div className="flex flex-col gap-4">
-            {/* Removed the selector bc sidebar alone works fine  */}
-            {/* <h4>Choose your community</h4> */}
-            {/* <CommunitySelector
+        {/* change community */}
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
+          <input type="radio" name="my-accordion-2" />
+          <div className="collapse-title font-semibold text-lg">
+            Community Settings
+          </div>
+          <div className="collapse-content ">
+            <div className="flex flex-col gap-4">
+              {/* Removed the selector bc sidebar alone works fine  */}
+              {/* <h4>Choose your community</h4> */}
+              {/* <CommunitySelector
               communities={joinedCommunities}
               onSelect={(slug) => {
                 const selected = joinedCommunities.find((c) => c.slug === slug);
@@ -375,125 +382,126 @@ const Settings = () => {
                 }
               }}
             /> */}
-            <h4>Join a new Community</h4>
-            <form onSubmit={handleJoin} className="w-full max-w-sm">
-              <div className="flex items-center gap-4">
-                <select
-                  className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
-                  value={selectedId}
-                  onChange={(e) => setSelectedId(e.target.value)}
-                >
-                  <option value="">Select a community</option>
-                  {communities.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                <IconBtn text="Join" icon="fi-rr-arrow-right" color="lilac" />
-              </div>
-            </form>
-            {currentCommunity && (
-              <div className="flex flex-col gap-4 items-start">
-                <h4>Leave your Community</h4>
-                <IconBtn
-                  text={`Leave ${currentCommunity.name}`}
-                  icon="fi-rr-leave"
-                  color="ultramarine"
-                  onClick={() => handleLeave(currentCommunity.id)}
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Admin community settings */}
-      {currentCommunity?.role === "admin" && (
-        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-          <input type="radio" name="my-accordion-2" />
-          <div className="collapse-title">
-            <div className="flex items-center gap-4">
-              <h4 className="font-semibold text-lg">Admin Settings</h4>
-              <span className="rounded-full border border-lilac px-4 py-1 text-sm">
-                {currentCommunity.name}
-              </span>
+              <h4>Join a new Community</h4>
+              <form onSubmit={handleJoin} className="w-full max-w-sm">
+                <div className="flex items-center gap-4">
+                  <select
+                    className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
+                    value={selectedId}
+                    onChange={(e) => setSelectedId(e.target.value)}
+                  >
+                    <option value="">Select a community</option>
+                    {communities.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                  <IconBtn text="Join" icon="fi-rr-arrow-right" color="lilac" />
+                </div>
+              </form>
+              {currentCommunity && (
+                <div className="flex flex-col gap-4 items-start">
+                  <h4>Leave your Community</h4>
+                  <IconBtn
+                    text={`Leave ${currentCommunity.name}`}
+                    icon="fi-rr-leave"
+                    color="ultramarine"
+                    onClick={() => handleLeave(currentCommunity.id)}
+                  />
+                </div>
+              )}
             </div>
           </div>
-          <div className="collapse-content ">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <h4>Select community apps</h4>
-                <div className="flex flex-col gap-4">
-                  <AppCheckbox
-                    icon={"fi-rr-text"}
-                    iconColor={"neon"}
-                    appName={"Posts"}
-                    checked={settings.posts ?? true}
-                    onChange={() => toggleSetting("posts")}
-                  />
-                  <AppCheckbox
-                    icon={"fi-rs-list-check"}
-                    iconColor={"aquamarine"}
-                    appName={"Lists"}
-                    checked={settings.lists ?? true}
-                    onChange={() => toggleSetting("lists")}
-                  />
-                  <AppCheckbox
-                    icon={"fi-rr-megaphone"}
-                    iconColor={"sage"}
-                    appName={"Messages"}
-                    checked={settings.messages ?? true}
-                    onChange={() => toggleSetting("messages")}
-                  />
-                  <AppCheckbox
-                    icon={"fi-rr-calendar"}
-                    iconColor={"lilac"}
-                    appName={"Calendar"}
-                    checked={settings.calendar ?? true}
-                    onChange={() => toggleSetting("calendar")}
+        </div>
+
+        {/* Admin community settings */}
+        {currentCommunity?.role === "admin" && (
+          <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title">
+              <div className="flex items-center gap-4">
+                <h4 className="font-semibold text-lg">Admin Settings</h4>
+                <span className="rounded-full border border-lilac px-4 py-1 text-sm">
+                  {currentCommunity.name}
+                </span>
+              </div>
+            </div>
+            <div className="collapse-content ">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <h4>Select community apps</h4>
+                  <div className="flex flex-col gap-4">
+                    <AppCheckbox
+                      icon={"fi-rr-text"}
+                      iconColor={"neon"}
+                      appName={"Posts"}
+                      checked={settings.posts ?? true}
+                      onChange={() => toggleSetting("posts")}
+                    />
+                    <AppCheckbox
+                      icon={"fi-rs-list-check"}
+                      iconColor={"aquamarine"}
+                      appName={"Lists"}
+                      checked={settings.lists ?? true}
+                      onChange={() => toggleSetting("lists")}
+                    />
+                    <AppCheckbox
+                      icon={"fi-rr-megaphone"}
+                      iconColor={"sage"}
+                      appName={"Messages"}
+                      checked={settings.messages ?? true}
+                      onChange={() => toggleSetting("messages")}
+                    />
+                    <AppCheckbox
+                      icon={"fi-rr-calendar"}
+                      iconColor={"lilac"}
+                      appName={"Calendar"}
+                      checked={settings.calendar ?? true}
+                      onChange={() => toggleSetting("calendar")}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <IconBtn
+                    text={`Delete ${currentCommunity.name}`}
+                    icon="fi-rr-trash"
+                    color="ultramarine"
+                    onClick={handleDelete}
                   />
                 </div>
               </div>
-              <div className="flex items-center justify-end">
-                <IconBtn
-                  text={`Delete ${currentCommunity.name}`}
-                  icon="fi-rr-trash"
-                  color="ultramarine"
-                  onClick={handleDelete}
-                />
-              </div>
             </div>
           </div>
-        </div>
-      )}
-      {/* // profile picture */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-        <input type="radio" name="my-accordion-2" />
-        <div className="collapse-title font-semibold text-lg">
-          Edit profile picture
-        </div>
-        <div className="collapse-content ">
-          <div className="flex flex-col gap-8 py-4">
-            <div className="avatar flex flex-col gap-4 items-center">
-              <div className="w-44 rounded-full">
-                <img
-                  src={user?.profile_picture || "/default-profile.png"}
-                  alt="Profile"
-                  className="object-cover w-full h-full"
+        )}
+        {/* // profile picture */}
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
+          <input type="radio" name="my-accordion-2" />
+          <div className="collapse-title font-semibold text-lg">
+            Edit profile picture
+          </div>
+          <div className="collapse-content ">
+            <div className="flex flex-col gap-8 py-4">
+              <div className="avatar flex flex-col gap-4 items-center">
+                <div className="w-44 rounded-full">
+                  <img
+                    src={user?.profile_picture || "/default-profile.png"}
+                    alt="Profile"
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <input
+                  type="file"
+                  className="file-input file-input-secondary h-full border-2"
+                  onChange={(e) => setSelectedFile(e.target.files[0])}
+                />
+                <IconBtn
+                  text={"save"}
+                  color={"ultramarine"}
+                  icon={"fi-rr-disk"}
+                  onClick={handlePictureUpload}
                 />
               </div>
-              <input
-                type="file"
-                className="file-input file-input-secondary h-full border-2"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-              />
-              <IconBtn
-                text={"save"}
-                color={"ultramarine"}
-                icon={"fi-rr-disk"}
-                onClick={handlePictureUpload}
-              />
             </div>
           </div>
         </div>

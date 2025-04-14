@@ -28,7 +28,7 @@ const ListCard = ({
 
   const cardStyles = {
     default: "bg-primary text-text",
-    grocery: "bg-ultramarine text-primary",
+    grocery: "bg-ultramarine text-base",
   };
 
   const normalizedTitle = title.toLowerCase();
@@ -62,9 +62,9 @@ const ListCard = ({
 
   return (
     <div
-      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${cardStyleClass}`}
+      className={`rounded-xl p-6 transition-all duration-300 ${cardStyleClass}`}
     >
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-bold">{title}</h3>
         <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
       </div>
@@ -84,7 +84,7 @@ const ListCard = ({
         </div>
       )}
 
-      <ul className="space-y-1">
+      <ul className="space-y-1 py-2">
         {visibleItems.map((item) => (
           <ListItem
             key={item.id}

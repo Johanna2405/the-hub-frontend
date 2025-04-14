@@ -64,7 +64,7 @@ const PostModal = ({
     <div>
       {mode === "create" && (
         <IconBtn
-          icon="fi fi-rr-plus"
+          icon="fi-rr-plus-small"
           color="neon"
           onClick={() => document.getElementById(modalId).showModal()}
         />

@@ -11,7 +11,7 @@ const CardFilter = ({ selected, onFilterChange }) => {
   ];
 
   return (
-    <div className="flex gap-2 flex-wrap justify-center mb-4">
+    <div className="flex gap-2 flex-wrap my-4">
       {filters.map(
         (filter) =>
           pinboardSettings[filter.value] && (
