@@ -31,6 +31,10 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+export const communityCleanup = () => {
+  localStorage.removeItem("currentCommunity");
+};
+
 // --- Community --- //
 export const fetchAllCommunities = async () => {
   try {

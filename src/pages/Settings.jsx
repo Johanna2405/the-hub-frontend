@@ -36,6 +36,7 @@ const Settings = () => {
     setCurrentCommunity,
     settings,
     setSettings,
+    refreshJoinedCommunities,
   } = useCommunity();
 
   // Load existing communities
@@ -63,6 +64,8 @@ const Settings = () => {
 
     try {
       await joinCommunity(selectedId);
+      await refreshJoinedCommunities();
+
       const joined = communities.find((c) => c.id === parseInt(selectedId));
       setCurrentCommunity(joined);
       showToast(`Joined "${joined.name}"!`, "success");

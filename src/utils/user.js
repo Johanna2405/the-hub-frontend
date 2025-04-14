@@ -35,6 +35,7 @@ export const userLogin = async (email, password) => {
 // Logout function
 export const userLogout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("pinboardSettings");
 };
 
 // Create a new user (Sign Up)

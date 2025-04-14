@@ -1,11 +1,10 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {
   fetchJoinedCommunities,
-  fetchAllCommunities,
   fetchCommunitySettings,
   fetchCommunityPinBoard,
+  communityCleanup,
 } from "../utils/community";
-import { useNavigate } from "react-router";
 
 const CommunityContext = createContext();
 
@@ -24,6 +23,15 @@ export const CommunityProvider = ({ children }) => {
   });
   const [pinBoard, setPinBoard] = useState([]);
 
+  const refreshJoinedCommunities = async () => {
+    try {
+      const communities = await fetchJoinedCommunities();
+      setJoinedCommunities(communities);
+    } catch (err) {
+      console.error("Failed to refresh communities:", err);
+    }
+  };
+
   // Load currentCommunity from localStorage (initial restore)
   useEffect(() => {
     const storedCommunity = localStorage.getItem("currentCommunity");
@@ -41,23 +49,20 @@ export const CommunityProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    const initializeCommunities = async () => {
-      try {
-        const communities = await fetchJoinedCommunities();
-        setJoinedCommunities(communities);
-      } catch (err) {
-        console.error("Failed to fetch communities:", err);
-      } finally {
-        setLoading(false);
-      }
+    const load = async () => {
+      await refreshJoinedCommunities();
+      setLoading(false);
     };
 
-    initializeCommunities();
+    load();
   }, []);
 
   // Persist currentCommunity in localStorage
   useEffect(() => {
-    if (currentCommunity) {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    if (token && currentCommunity) {
       localStorage.setItem(
         "currentCommunity",
         JSON.stringify(currentCommunity)
@@ -85,6 +90,20 @@ export const CommunityProvider = ({ children }) => {
     loadExtras();
   }, [currentCommunity]);
 
+  const cleanUpCommunity = () => {
+    setCurrentCommunity(null);
+    setJoinedCommunities([]);
+    setSettings({
+      calendar: true,
+      lists: true,
+      posts: true,
+      events: true,
+      messages: true,
+    });
+    setPinBoard([]);
+    communityCleanup();
+  };
+
   return (
     <CommunityContext.Provider
       value={{
@@ -96,6 +115,8 @@ export const CommunityProvider = ({ children }) => {
         setSettings,
         pinBoard,
         setPinBoard,
+        cleanUpCommunity,
+        refreshJoinedCommunities,
       }}
     >
       {children}

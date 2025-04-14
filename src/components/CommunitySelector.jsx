@@ -3,7 +3,11 @@ import { useNavigate } from "react-router";
 import IconBtn from "./IconBtn";
 import { useCommunity } from "../context/CommunityContext";
 
-const CommunitySelector = ({ communities = [], onSelect }) => {
+const CommunitySelector = ({
+  communities = [],
+  onSelect,
+  refreshCommunities,
+}) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedCommunity, setSelectedCommunity] = useState(null);
@@ -43,7 +47,10 @@ const CommunitySelector = ({ communities = [], onSelect }) => {
   return (
     <div className="relative w-full max-w-sm">
       <div
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          if (!open) refreshCommunities?.();
+          setOpen(!open);
+        }}
         className="w-full text-text px-4 py-2 rounded-2xl flex justify-between items-center border border-lilac"
       >
         <span>
