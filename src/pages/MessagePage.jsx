@@ -23,6 +23,7 @@ const MessagePage = () => {
   const user_id = user?.id;
   const { currentCommunity } = useCommunity();
   const isCommunityView = Boolean(currentCommunity?.id);
+  const [lastSeenMap, setLastSeenMap] = useState({});
 
   useEffect(() => {
     if (user?.id) {
@@ -34,7 +35,12 @@ const MessagePage = () => {
     if (!user_id) return;
     if (!currentCommunity) return;
 
-    let cleanup;
+    const cleanup = setupChatListener(
+      setMessages,
+      setTypingUser,
+      setOnlineUserIds,
+      setLastSeenMap
+    );
 
     const initializeChat = async () => {
       try {
@@ -44,8 +50,6 @@ const MessagePage = () => {
       } catch (err) {
         console.error("Failed to fetch messages", err);
       }
-
-      cleanup = setupChatListener(setMessages, setTypingUser, setOnlineUserIds);
     };
 
     initializeChat();
@@ -123,6 +127,7 @@ const MessagePage = () => {
                 <MessageList
                   messages={messages}
                   onlineUserIds={onlineUserIds}
+                  lastSeenMap={lastSeenMap}
                 />
                 <div ref={messagesEndRef} />
               </div>
