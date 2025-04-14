@@ -9,6 +9,7 @@ import {
   changePassword,
   // updateStatus,
   updateProfilePicture,
+  fetchUser,
 } from "../utils/user";
 import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
@@ -25,7 +26,7 @@ import {
 const Settings = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState("");
-  const { user, setUser } = useUser();
+  const { user, setUser, pinboardSettings, setPinboardSettings } = useUser();
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,8 +34,6 @@ const Settings = () => {
   const [communities, setCommunities] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
-
-  const { pinboardSettings, setPinboardSettings } = useUser();
 
   const {
     // joinedCommunities,
@@ -46,13 +45,13 @@ const Settings = () => {
   } = useCommunity();
 
   //clear old object URLs for profile temporary images
-  // useEffect(() => {
-  //   return () => {
-  //     if (previewUrl) {
-  //       URL.revokeObjectURL(previewUrl);
-  //     }
-  //   };
-  // }, [previewUrl]);
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   // Load existing communities
   useEffect(() => {
@@ -137,13 +136,12 @@ const Settings = () => {
     console.log("Selected File:", selectedFile);
 
     try {
-      const updatedUser = await updateProfilePicture(selectedFile);
+      await updateProfilePicture(selectedFile);
 
-      setUser((prev) => ({
-        ...prev,
-        profile_picture: updatedUser.profile_picture,
-      }));
+      const updatedUser = await fetchUser();
+      setUser(updatedUser);
 
+      setSelectedFile(null);
       setPreviewUrl(null);
       showToast("Profile picture updated!", "success");
     } catch (err) {
