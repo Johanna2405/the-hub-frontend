@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { deletePost, deleteCommunityPost } from "../../utils/postsAPI";
 import { useCommunity } from "../../context/CommunityContext";
+import { useUser } from "../../context/UserContext";
 import IconBtn from "../IconBtn";
 import PostModal from "./PostModal";
 import Comments from "./Comments";
@@ -8,12 +9,14 @@ import Comments from "./Comments";
 const Post = ({ post, setPosts }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const { currentCommunity } = useCommunity();
+  const { user } = useUser();
 
   if (!post) return null;
 
   const isPrivateSpace = !currentCommunity;
   const currentPost = post;
   const modalId = `edit_modal_${currentPost.id}`;
+  const isAuthor = user?.id === currentPost?.author?.id;
 
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this post?")) {
@@ -75,21 +78,23 @@ const Post = ({ post, setPosts }) => {
       <p>{currentPost.content}</p>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-2">
-        <IconBtn
-          icon="fi fi-rr-pencil"
-          text="Update"
-          color="ultramarine"
-          onClick={() => setShowEditModal(true)}
-        />
+      {isAuthor && (
+        <div className="flex justify-end gap-2">
+          <IconBtn
+            icon="fi fi-rr-pencil"
+            text="Update"
+            color="ultramarine"
+            onClick={() => setShowEditModal(true)}
+          />
 
-        <IconBtn
-          icon="fi fi-rr-trash"
-          text="Delete"
-          color="red"
-          onClick={handleDelete}
-        />
-      </div>
+          <IconBtn
+            icon="fi fi-rr-trash"
+            text="Delete"
+            color="red"
+            onClick={handleDelete}
+          />
+        </div>
+      )}
 
       {/* Edit Modal */}
       {showEditModal && (
