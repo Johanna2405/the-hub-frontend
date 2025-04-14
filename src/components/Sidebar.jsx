@@ -2,11 +2,20 @@ import SidebarLink from "./SidebarLink";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
 import CommunitySelector from "./CommunitySelector";
+import { useNavigate } from "react-router";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
+  const navigate = useNavigate();
   const { pinboardSettings } = useUser();
-  const { joinedCommunities, currentCommunity, setCurrentCommunity, settings } =
-    useCommunity();
+  const {
+    joinedCommunities,
+    currentCommunity,
+    setCurrentCommunity,
+    settings,
+    cleanUpCommunity,
+    refreshJoinedCommunities,
+  } = useCommunity();
+  const { logout } = useUser();
 
   const sidebarLinks = [
     {
@@ -39,9 +48,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
   ];
 
-  const { logout } = useUser();
-
   const handleLogout = () => {
+    cleanUpCommunity();
     logout();
   };
 
@@ -95,8 +103,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               const selected = joinedCommunities.find((c) => c.slug === slug);
               if (selected) {
                 setCurrentCommunity(selected);
+                navigate(`/community/${selected.id}/pinboard`);
               }
             }}
+            refreshCommunities={refreshJoinedCommunities}
           />
         </div>
         <h3>Apps</h3>
