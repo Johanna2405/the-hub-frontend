@@ -1,5 +1,12 @@
 import { io } from "socket.io-client";
-const socket = io(import.meta.env.VITE_BACKEND_URL);
+
+const token = localStorage.getItem("token");
+
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  auth: {
+    token: token,
+  },
+});
 
 export const setupChatListener = (setChat, setTypingUser, setOnlineUserIds) => {
   socket.off("receive_message");
@@ -49,13 +56,14 @@ export const emitTyping = (user) => {
 export const connectUser = (user) => {
   if (!user?.id) return;
 
-  if (socket.connected) {
-    console.log("Socket is already connected, emitting user_connected");
+  const emitUserConnected = () => {
+    console.log("Emitting user_connected");
     socket.emit("user_connected", user);
-  } else {
-    socket.on("connect", () => {
-      console.log("Socket just connected, emitting user_connected");
-      socket.emit("user_connected", user);
-    });
+  };
+
+  if (socket.connected) {
+    emitUserConnected();
   }
+
+  socket.off("connect").on("connect", emitUserConnected);
 };
