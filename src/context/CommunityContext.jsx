@@ -68,7 +68,6 @@ export const CommunityProvider = ({ children }) => {
         JSON.stringify(currentCommunity)
       );
     } else {
-      console.log("communityCleanup useeffect");
       localStorage.removeItem("currentCommunity");
     }
   }, [currentCommunity]);

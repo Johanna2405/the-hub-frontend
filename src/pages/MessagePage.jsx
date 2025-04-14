@@ -45,7 +45,6 @@ const MessagePage = () => {
     const initializeChat = async () => {
       try {
         const data = await fetchCommunityMessages(currentCommunity?.id);
-        console.log("Fetched messages:", data);
         setMessages(data);
       } catch (err) {
         console.error("Failed to fetch messages", err);
