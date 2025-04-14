@@ -1,4 +1,3 @@
-// src/components/Calendar/WeeklyCalendar.jsx
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import Header from "../Header";
@@ -17,24 +16,28 @@ import { useUser } from "../../context/UserContext";
 const WeeklyCalendar = ({ onPrev, onNext }) => {
     const navigate = useNavigate();
     const { user } = useUser();
-    const [selectedDay, setSelectedDay] = useState("25");
-    const [expanded, setExpanded] = useState("25");
+    const today = new Date();
+    const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
+    const [selectedYear, setSelectedYear] = useState(today.getFullYear());
+    const [selectedDay, setSelectedDay] = useState(today.getDate().toString().padStart(2, "0"));
     const [showNewEventModal, setShowNewEventModal] = useState(false);
     const [showAddEventModal, setShowAddEventModal] = useState(false);
     const [showEditEventModal, setShowEditEventModal] = useState(false);
     const [currentEvent, setCurrentEvent] = useState(null);
     const [currentDayForAddEvent, setCurrentDayForAddEvent] = useState(null);
     const [events, setEvents] = useState([]);
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
 
-    const days = [
-        { day: "22", label: "Sat" },
-        { day: "23", label: "Sun" },
-        { day: "24", label: "Mon" },
-        { day: "25", label: "Tue" },
-        { day: "26", label: "Wed" },
-        { day: "27", label: "Thu" },
-        { day: "28", label: "Fri" },
-    ];
+    const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+    const days = Array.from({ length: daysInMonth }, (_, i) => {
+        const date = new Date(selectedYear, selectedMonth, i + 1);
+        const dayName = date.toLocaleDateString("en-GB", { weekday: "short" });
+        return {
+            day: (i + 1).toString().padStart(2, "0"),
+            label: dayName,
+        };
+    });
 
     useEffect(() => {
         const loadEvents = async () => {
@@ -53,15 +56,16 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
     const handleAddEvent = async (newEvent) => {
         try {
             const [start, end] = newEvent.time.split("-").map((t) => t.trim());
-            const startTime = `2025-03-${newEvent.day}T${start}:00`;
-            const endTime = `2025-03-${newEvent.day}T${end}:00`;
+            const dateString = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${newEvent.day}`;
+            const startTime = `${dateString}T${start}:00`;
+            const endTime = `${dateString}T${end}:00`;
 
             const payload = {
                 user_id: user?.id || null,
                 title: newEvent.title,
                 description: newEvent.description,
                 type: newEvent.type,
-                date: `2025-03-${newEvent.day}`,
+                date: dateString,
                 start_time: startTime,
                 end_time: endTime,
                 location: newEvent.location || "Not specified",
@@ -72,7 +76,6 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
             setEvents(updated);
             localStorage.setItem("weekly_events", JSON.stringify(updated));
             setSelectedDay(newEvent.day);
-            setExpanded(newEvent.day);
         } catch (err) {
             alert(err.message || "Failed to add event");
         }
@@ -84,18 +87,14 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
 
     const handleEditEvent = async (updatedEvent) => {
         try {
-            const [start, end] = updatedEvent.time.split("-").map((t) => t.trim());
-            const startTime = `2025-03-${updatedEvent.day}T${start}:00`;
-            const endTime = `2025-03-${updatedEvent.day}T${end}:00`;
-
             const payload = {
                 user_id: user?.id || null,
                 title: updatedEvent.title,
                 description: updatedEvent.description,
                 type: updatedEvent.type,
-                date: `2025-03-${updatedEvent.day}`,
-                start_time: startTime,
-                end_time: endTime,
+                date: updatedEvent.date,
+                start_time: updatedEvent.start_time,
+                end_time: updatedEvent.end_time,
                 location: updatedEvent.location || "Not specified",
             };
 
@@ -140,29 +139,50 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
                 />
             </div>
             <div className="flex items-center justify-between mb-8">
-                <IconBtn color="primary" icon="fi-rr-angle-small-left" onClick={onPrev} />
+                <IconBtn
+                    color="primary"
+                    icon="fi-rr-angle-small-left"
+                    onClick={() => {
+                        if (selectedMonth === 0) {
+                            setSelectedMonth(11);
+                            setSelectedYear(selectedYear - 1);
+                        } else {
+                            setSelectedMonth(selectedMonth - 1);
+                        }
+                    }}
+                />
                 <h2 className="text-xl font-semibold text-text">Week</h2>
-                <IconBtn color="primary" icon="fi-rr-angle-small-right" onClick={onNext} />
+                <IconBtn
+                    color="primary"
+                    icon="fi-rr-angle-small-right"
+                    onClick={() => {
+                        if (selectedMonth === 11) {
+                            setSelectedMonth(0);
+                            setSelectedYear(selectedYear + 1);
+                        } else {
+                            setSelectedMonth(selectedMonth + 1);
+                        }
+                    }}
+                />
             </div>
             <div className="flex gap-2 overflow-x-auto mb-6">
                 {days.map(({ day, label }) => (
                     <div
                         key={day}
                         onClick={() => setSelectedDay(day)}
-                        className={`flex flex-col items-center border rounded-xl px-4 py-2 cursor-pointer transition-all duration-200 w-16 min-w-[64px] ${selectedDay === day ? "bg-primary text-base" : "bg-base"
-                            }`}
+                        className={`flex flex-col items-center border rounded-xl px-4 py-2 cursor-pointer transition-all duration-200 w-16 min-w-[64px] ${selectedDay === day ? "bg-primary text-base" : "bg-base"}`}
                     >
                         <span className="text-text font-bold text-lg">{day}</span>
-                        <span className="text-lilac font-semibold text-sm">03</span>
+                        <span className="text-lilac font-semibold text-sm">{(selectedMonth + 1).toString().padStart(2, "0")}</span>
                         <span className="text-sm text-text">{label}</span>
                     </div>
                 ))}
             </div>
             {groupedEvents[selectedDay] ? (
-                <div className={`rounded-3xl p-6 mb-4 ${selectedDay === "25" ? "bg-secondary" : "bg-primary"}`}>
+                <div className={`rounded-3xl p-6 mb-4 ${selectedDay === today.getDate().toString().padStart(2, "0") ? "bg-secondary" : "bg-primary"}`}>
                     <div className="flex justify-between items-center mb-2">
                         <h3 className="font-bold text-text">
-                            {new Date(2025, 2, parseInt(selectedDay)).toLocaleDateString("en-GB", {
+                            {new Date(selectedYear, selectedMonth, parseInt(selectedDay)).toLocaleDateString("en-GB", {
                                 weekday: "long",
                                 day: "2-digit",
                                 month: "2-digit",
@@ -174,8 +194,7 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
                         {groupedEvents[selectedDay].map((event) => (
                             <div
                                 key={event.id}
-                                className={`rounded-2xl p-4 flex justify-between items-center ${selectedDay === "25" ? "bg-[#F1DAFF]" : "bg-primary"
-                                    }`}
+                                className={`rounded-2xl p-4 flex justify-between items-center ${selectedDay === today.getDate().toString().padStart(2, "0") ? "bg-[#F1DAFF]" : "bg-primary"}`}
                             >
                                 <div>
                                     <p className="mb-1 !text-base">
@@ -235,7 +254,7 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
                                 </div>
                             </div>
                         ))}
-                        {selectedDay === "25" && (
+                        {selectedDay === today.getDate().toString().padStart(2, "0") && (
                             <a
                                 className="text-text font-bold mt-2 cursor-pointer"
                                 onClick={() => navigate("/calendar/day")}
@@ -254,9 +273,10 @@ const WeeklyCalendar = ({ onPrev, onNext }) => {
                 onSave={handleAddEvent}
                 onDayChange={(day) => {
                     setSelectedDay(day);
-                    setExpanded(day);
                 }}
                 selectedDay={selectedDay}
+                selectedMonth={currentMonth}
+                selectedYear={currentYear}
             />
             <AddEventModal
                 show={showAddEventModal}
