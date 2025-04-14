@@ -12,9 +12,6 @@ const MessageBubble = ({ message, onlineUserIds, lastSeenMap }) => {
   const isOnline = onlineUserIds.includes(String(message.user_id));
   const lastSeen = lastSeenMap?.[message.user_id];
 
-  console.log("lastSeenMap:", lastSeenMap);
-  console.log("message.user_id:", message.user_id);
-
   const isLastSeen = !isOnline && !!lastSeen;
   const statusMessage = isOnline
     ? "Active"

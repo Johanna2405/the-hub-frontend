@@ -34,7 +34,6 @@ export const setupChatListener = (
   });
 
   socket.on("update_online_users", ({ userIds, lastSeen }) => {
-    console.log("woot", userIds, lastSeen);
     setOnlineUserIds(userIds);
     setLastSeenMap(lastSeen);
   });
