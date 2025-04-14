@@ -14,6 +14,8 @@ const generateTimeOptions = () => {
 
 const NewEventModal = ({ show, onClose, onSave, onDayChange, selectedDay }) => {
     const [day, setDay] = useState(selectedDay || "");
+    const [month, setMonth] = useState("03");
+    const [year, setYear] = useState("2025");
     const [title, setTitle] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
@@ -37,9 +39,11 @@ const NewEventModal = ({ show, onClose, onSave, onDayChange, selectedDay }) => {
         }
 
         const time = `${startTime} - ${endTime}`;
-        onSave({ day, title, time, description, type, location });
+        onSave({ day, month, year, title, time, description, type, location });
 
         setDay("");
+        setMonth("03");
+        setYear("2025");
         setTitle("");
         setStartTime("");
         setEndTime("");
@@ -48,11 +52,6 @@ const NewEventModal = ({ show, onClose, onSave, onDayChange, selectedDay }) => {
         setLocation("");
         onClose();
     };
-
-    const days = Array.from({ length: 28 }, (_, i) => ({
-        value: (i + 1).toString().padStart(2, "0"),
-        label: (i + 1).toString().padStart(2, "0"),
-    }));
 
     return (
         <div className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-90 flex items-center justify-center">
@@ -64,26 +63,52 @@ const NewEventModal = ({ show, onClose, onSave, onDayChange, selectedDay }) => {
                     </button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-text font-medium">Day</label>
-                        <select
-                            value={day}
-                            onChange={(e) => {
-                                setDay(e.target.value);
-                                onDayChange(e.target.value);
-                            }}
-                            className="select select-bordered w-full bg-primary text-text"
-                            required
-                        >
-                            <option value="" disabled>
-                                Select a day
-                            </option>
-                            {days.map((d) => (
-                                <option key={d.value} value={d.value}>
-                                    {d.label}/03/2025
-                                </option>
-                            ))}
-                        </select>
+                    <div className="grid grid-cols-3 gap-2">
+                        <div>
+                            <label className="block text-text font-medium">Day</label>
+                            <select
+                                value={day}
+                                onChange={(e) => {
+                                    setDay(e.target.value);
+                                    onDayChange(e.target.value);
+                                }}
+                                className="select select-bordered w-full bg-primary text-text"
+                                required
+                            >
+                                <option value="" disabled>Select day</option>
+                                {Array.from({ length: 31 }, (_, i) => (
+                                    <option key={i} value={(i + 1).toString().padStart(2, "0")}>
+                                        {(i + 1).toString().padStart(2, "0")}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-text font-medium">Month</label>
+                            <select
+                                value={month}
+                                onChange={(e) => setMonth(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                            >
+                                {Array.from({ length: 12 }, (_, i) => (
+                                    <option key={i + 1} value={(i + 1).toString().padStart(2, "0")}>
+                                        {(i + 1).toString().padStart(2, "0")}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-text font-medium">Year</label>
+                            <select
+                                value={year}
+                                onChange={(e) => setYear(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                            >
+                                {["2024", "2025", "2026"].map((y) => (
+                                    <option key={y} value={y}>{y}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-text font-medium">Title</label>

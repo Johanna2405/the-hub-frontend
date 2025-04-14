@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { UserProvider } from "./context/UserContext.jsx";
 import { CommunityProvider } from "./context/CommunityContext.jsx";
+import { ToastContainer } from "react-toastify";
 import MainLayout from "./layouts/MainLayout.jsx";
 import SignedOutLayout from "./layouts/SignedOutLayout.jsx";
 import MessagePage from "./pages/MessagePage.jsx";
@@ -14,8 +15,8 @@ import NewListPage from "./pages/NewListPage.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 import CalendarTabs from "./components/Calendar/CalendarTabs.jsx";
 import Settings from "./pages/Settings.jsx";
-import { ToastContainer } from "react-toastify";
 import "./toast.css";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -32,7 +33,15 @@ function App() {
               pauseOnHover
             />
             <Routes>
-              <Route path="/" element={<MainLayout />}>
+              {/* Protected Routes */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <MainLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route index element={<PinBoard />} />
                 <Route path="messages" element={<MessagePage />} />
                 <Route path="posts" element={<PostPage />} />
@@ -40,6 +49,7 @@ function App() {
                 <Route path="add-list" element={<NewListPage />} />
                 <Route path="events" element={<CalendarTabs />} />
                 <Route path="settings" element={<Settings />} />
+
                 {/* Community Routes */}
                 <Route path="community/:communityId">
                   <Route path="pinboard" element={<PinBoard />} />
@@ -50,6 +60,8 @@ function App() {
                   <Route path="events" element={<CalendarTabs />} />
                 </Route>
               </Route>
+
+              {/* Public Routes */}
               <Route path="/" element={<SignedOutLayout />}>
                 <Route path="signin" element={<SignIn />} />
                 <Route path="signup" element={<SignUp />} />

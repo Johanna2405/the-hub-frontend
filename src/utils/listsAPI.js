@@ -5,6 +5,15 @@ const API = axios.create({
   baseURL: `${BACKEND_URL}/api`,
 });
 
+// Add token to all requests
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // ------- LISTS -------
 
 // GET all lists per user ID

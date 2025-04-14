@@ -1,6 +1,7 @@
 import { useUser } from "../../context/UserContext";
+import { formatTimeAgo } from "../../utils/helpers";
 
-const MessageBubble = ({ message, onlineUserIds }) => {
+const MessageBubble = ({ message, onlineUserIds, lastSeenMap }) => {
   const { user } = useUser();
   const user_id = user?.id;
   const user_name = user?.name;
@@ -9,6 +10,17 @@ const MessageBubble = ({ message, onlineUserIds }) => {
   const username = message.User?.username || user_name || "Unknown User";
   const profilePicture = message.User?.profile_picture || null;
   const isOnline = onlineUserIds.includes(String(message.user_id));
+  const lastSeen = lastSeenMap?.[message.user_id];
+
+  console.log("lastSeenMap:", lastSeenMap);
+  console.log("message.user_id:", message.user_id);
+
+  const isLastSeen = !isOnline && !!lastSeen;
+  const statusMessage = isOnline
+    ? "Active"
+    : isLastSeen
+    ? `Last seen ${formatTimeAgo(lastSeen)}`
+    : "Offline";
 
   return (
     <div className={`chat ${isOwn ? "chat-end" : "chat-start"} my-4`}>
@@ -29,7 +41,12 @@ const MessageBubble = ({ message, onlineUserIds }) => {
                 <span
                   className={`
                     absolute top-[40%] left-2 
-                    px-2 py-0.5 text-xs text-white rounded shadow-lg z-10
+                    ${
+                      isLastSeen
+                        ? "px-1.5 py-0.5 text-[10px] leading-tight"
+                        : "px-2 py-0.5 text-xs"
+                    }
+                    text-white rounded shadow-lg z-10
                     opacity-0 group-hover:opacity-100 
                     transition-opacity duration-200
                     after:content-[''] after:absolute after:-top-1 after:left-2
@@ -41,7 +58,7 @@ const MessageBubble = ({ message, onlineUserIds }) => {
                     }
                   `}
                 >
-                  {isOnline ? "Active" : "Offline"}
+                  {statusMessage}
                 </span>
               </span>
             </div>
@@ -58,7 +75,12 @@ const MessageBubble = ({ message, onlineUserIds }) => {
                 <span
                   className={`
                     absolute top-[40%] left-2 
-                    px-2 py-0.5 text-xs text-white rounded shadow-lg z-10
+                    ${
+                      isLastSeen
+                        ? "px-1 py-0.5 text-[10px] leading-tight w-24"
+                        : "px-2 py-0.5 text-xs"
+                    }
+                    text-white rounded shadow-lg z-10
                     opacity-0 group-hover:opacity-100 
                     transition-opacity duration-200
                     after:content-[''] after:absolute after:-top-1 after:left-2
@@ -70,7 +92,7 @@ const MessageBubble = ({ message, onlineUserIds }) => {
                     }
                   `}
                 >
-                  {isOnline ? "Active" : "Offline"}
+                  {statusMessage}
                 </span>
               </span>
             </div>

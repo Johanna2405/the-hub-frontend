@@ -16,15 +16,21 @@ import { useUser } from "../../context/UserContext";
 const MonthlyCalendar = ({ onPrev, onNext }) => {
     const navigate = useNavigate();
     const { user } = useUser();
-    const [selectedDay, setSelectedDay] = useState("25");
+    const today = new Date();
+    const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
+    const [selectedYear, setSelectedYear] = useState(today.getFullYear());
+    const [selectedDay, setSelectedDay] = useState(today.getDate().toString().padStart(2, "0"));
     const [showNewEventModal, setShowNewEventModal] = useState(false);
     const [showAddEventModal, setShowAddEventModal] = useState(false);
     const [showEditEventModal, setShowEditEventModal] = useState(false);
     const [currentEvent, setCurrentEvent] = useState(null);
     const [events, setEvents] = useState([]);
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
 
-    const days = Array.from({ length: 28 }, (_, i) => {
-        const date = new Date(2025, 2, i + 1);
+    const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+    const days = Array.from({ length: daysInMonth }, (_, i) => {
+        const date = new Date(selectedYear, selectedMonth, i + 1);
         const dayName = date.toLocaleDateString("en-GB", { weekday: "short" });
         return {
             day: (i + 1).toString().padStart(2, "0"),
@@ -49,15 +55,16 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
     const handleAddEvent = async (newEvent) => {
         try {
             const [start, end] = newEvent.time.split("-").map((t) => t.trim());
-            const startTime = `2025-03-${newEvent.day}T${start}:00`;
-            const endTime = `2025-03-${newEvent.day}T${end}:00`;
+            const dateString = `${selectedYear}-${(selectedMonth + 1).toString().padStart(2, "0")}-${newEvent.day}`;
+            const startTime = `${dateString}T${start}:00`;
+            const endTime = `${dateString}T${end}:00`;
 
             const payload = {
                 user_id: user?.id || null,
                 title: newEvent.title,
                 description: newEvent.description,
                 type: newEvent.type,
-                date: `2025-03-${newEvent.day}`,
+                date: dateString,
                 start_time: startTime,
                 end_time: endTime,
                 location: newEvent.location || "Not specified",
@@ -79,24 +86,16 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
 
     const handleEditEvent = async (updatedEvent) => {
         try {
-            const [start, end] = updatedEvent.time.split("-").map((t) => t.trim());
-            const startTime = `2025-03-${updatedEvent.day}T${start}:00`;
-            const endTime = `2025-03-${updatedEvent.day}T${end}:00`;
-
             const payload = {
                 user_id: user?.id || null,
                 title: updatedEvent.title,
                 description: updatedEvent.description,
                 type: updatedEvent.type,
-                date: `2025-03-${updatedEvent.day}`,
-                start_time: startTime,
-                end_time: endTime,
+                date: updatedEvent.date,
+                start_time: updatedEvent.start_time,
+                end_time: updatedEvent.end_time,
                 location: updatedEvent.location || "Not specified",
             };
-
-            if (!payload.start_time || !payload.end_time) {
-                throw new Error("Start time and End time are required.");
-            }
 
             const result = await updateEvent(updatedEvent.id, payload);
             const updated = events.map((e) =>
@@ -121,9 +120,10 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
     };
 
     const groupedEvents = events.reduce((acc, event) => {
-        const day = event.date.split("-")[2];
-        if (!acc[day]) acc[day] = [];
-        acc[day].push(event);
+        const [y, m, d] = event.date.split("-");
+        if (parseInt(m) - 1 !== selectedMonth || parseInt(y) !== selectedYear) return acc;
+        if (!acc[d]) acc[d] = [];
+        acc[d].push(event);
         return acc;
     }, {});
 
@@ -139,21 +139,48 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
                 />
             </div>
             <div className="flex items-center justify-between mb-4">
-                <IconBtn color="primary" icon="fi-rr-angle-small-left" onClick={onPrev} />
-                <h2 className="text-xl font-semibold text-text">Month</h2>
-                <IconBtn color="primary" icon="fi-rr-angle-small-right" onClick={onNext} />
+                <IconBtn
+                    color="primary"
+                    icon="fi-rr-angle-small-left"
+                    onClick={() => {
+                        if (selectedMonth === 0) {
+                            setSelectedMonth(11);
+                            setSelectedYear(selectedYear - 1);
+                        } else {
+                            setSelectedMonth(selectedMonth - 1);
+                        }
+                    }}
+                />
+                <h2 className="text-xl font-semibold text-text">
+                    {new Date(selectedYear, selectedMonth).toLocaleString("default", {
+                        month: "long",
+                        year: "numeric",
+                    })}
+                </h2>
+                <IconBtn
+                    color="primary"
+                    icon="fi-rr-angle-small-right"
+                    onClick={() => {
+                        if (selectedMonth === 11) {
+                            setSelectedMonth(0);
+                            setSelectedYear(selectedYear + 1);
+                        } else {
+                            setSelectedMonth(selectedMonth + 1);
+                        }
+                    }}
+                />
             </div>
-            <div className="text-center text-lilac font-bold text-xl mb-4">March</div>
-            <div className="grid grid-cols-7 gap-2 mb-8">
-                {days.map((day) => (
+            <div className="text-center text-lilac font-bold text-xl mb-4">{new Date(selectedYear, selectedMonth).toLocaleString("default", { month: "long" })}</div>
+            <div className="flex gap-2 overflow-x-auto mb-6">
+                {days.map(({ day, label }) => (
                     <div
-                        key={day.day}
-                        onClick={() => setSelectedDay(day.day)}
-                        className={`flex flex-col items-center border rounded-xl px-4 py-2 cursor-pointer transition-all duration-200 ${selectedDay === day.day ? "bg-primary text-base" : "bg-base"
-                            }`}
+                        key={day}
+                        onClick={() => setSelectedDay(day)}
+                        className={`flex flex-col items-center border rounded-xl px-4 py-2 cursor-pointer transition-all duration-200 w-16 min-w-[64px] ${selectedDay === day ? "bg-primary text-base" : "bg-base"}`}
                     >
-                        <span className="text-text font-bold text-lg">{day.day}</span>
-                        <span className="text-sm text-text">{day.label}</span>
+                        <span className="text-text font-bold text-lg">{day}</span>
+                        <span className="text-lilac font-semibold text-sm">{(selectedMonth + 1).toString().padStart(2, "0")}</span>
+                        <span className="text-sm text-text">{label}</span>
                     </div>
                 ))}
             </div>
@@ -164,7 +191,7 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
                         <div key={day} className={`rounded-3xl p-6 mb-4 bg-primary`}>
                             <div className="flex justify-between items-center mb-2">
                                 <h3 className="font-bold text-text">
-                                    {new Date(2025, 2, parseInt(day)).toLocaleDateString("en-GB", {
+                                    {new Date(selectedYear, selectedMonth, parseInt(day)).toLocaleDateString("en-GB", {
                                         weekday: "long",
                                         day: "2-digit",
                                         month: "2-digit",
@@ -254,14 +281,20 @@ const MonthlyCalendar = ({ onPrev, onNext }) => {
                 show={showNewEventModal}
                 onClose={() => setShowNewEventModal(false)}
                 onSave={handleAddEvent}
-                onDayChange={setSelectedDay}
+                onDayChange={(day) => {
+                    setSelectedDay(day);
+                }}
                 selectedDay={selectedDay}
+                selectedMonth={currentMonth}
+                selectedYear={currentYear}
             />
             <AddEventModal
                 show={showAddEventModal}
                 onClose={() => setShowAddEventModal(false)}
                 onSave={handleAddAdditionalEvent}
                 selectedDay={selectedDay}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
             />
             <EditEventModal
                 show={showEditEventModal}

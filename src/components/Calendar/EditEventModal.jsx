@@ -7,6 +7,9 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
     const [location, setLocation] = useState("");
     const [startTime, setStartTime] = useState("09:00");
     const [endTime, setEndTime] = useState("10:00");
+    const [day, setDay] = useState("01");
+    const [month, setMonth] = useState("01");
+    const [year, setYear] = useState(new Date().getFullYear().toString());
 
     const timeOptions = Array.from({ length: 24 }, (_, hour) => {
         const h = hour.toString().padStart(2, "0");
@@ -28,6 +31,13 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
                 setStartTime(formatTime(start));
                 setEndTime(formatTime(end));
             }
+
+            if (event?.date) {
+                const [yr, mo, dy] = event.date.split("-");
+                setYear(yr);
+                setMonth(mo);
+                setDay(dy);
+            }
         }
     }, [event]);
 
@@ -37,9 +47,10 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
         e.preventDefault();
         onSave({
             id: event.id,
-            day: event.day,
+            date: `${year}-${month}-${day}`,
             title,
-            time: `${startTime} - ${endTime}`,
+            start_time: `${year}-${month}-${day}T${startTime}:00`,
+            end_time: `${year}-${month}-${day}T${endTime}:00`,
             description,
             type,
             location,
@@ -57,14 +68,48 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
                     </button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-text font-medium">Day</label>
-                        <input
-                            type="text"
-                            value={event.day ? `${event.day}/03/2025` : ""}
-                            className="input input-bordered w-full bg-primary text-text"
-                            disabled
-                        />
+                    <div className="grid grid-cols-3 gap-2">
+                        <div>
+                            <label className="block text-text font-medium">Day</label>
+                            <select
+                                value={day}
+                                onChange={(e) => setDay(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                            >
+                                {Array.from({ length: 31 }, (_, i) => (
+                                    <option key={i} value={(i + 1).toString().padStart(2, "0")}>
+                                        {(i + 1).toString().padStart(2, "0")}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-text font-medium">Month</label>
+                            <select
+                                value={month}
+                                onChange={(e) => setMonth(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                            >
+                                {Array.from({ length: 12 }, (_, i) => (
+                                    <option key={i + 1} value={(i + 1).toString().padStart(2, "0")}>
+                                        {(i + 1).toString().padStart(2, "0")}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-text font-medium">Year</label>
+                            <select
+                                value={year}
+                                onChange={(e) => setYear(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                            >
+                                {Array.from({ length: 50 }, (_, i) => {
+                                    const yearOption = (new Date().getFullYear() + i).toString();
+                                    return <option key={yearOption} value={yearOption}>{yearOption}</option>;
+                                })}
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-text font-medium">Title</label>

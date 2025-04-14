@@ -1,8 +1,20 @@
+const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            const h = hour.toString().padStart(2, "0");
+            const m = minute.toString().padStart(2, "0");
+            options.push(`${h}:${m}`);
+        }
+    }
+    return options;
+};
 import { useState } from "react";
 
-const AddEventModal = ({ show, onClose, onSave, selectedDay }) => {
+const AddEventModal = ({ show, onClose, onSave, selectedDay, selectedMonth, selectedYear }) => {
     const [title, setTitle] = useState("");
-    const [time, setTime] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
     const [description, setDescription] = useState("");
     const [type, setType] = useState("Private");
 
@@ -10,9 +22,19 @@ const AddEventModal = ({ show, onClose, onSave, selectedDay }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!startTime || !endTime) {
+            alert("Start and end time are required.");
+            return;
+        }
+        if (startTime >= endTime) {
+            alert("End time must be after start time.");
+            return;
+        }
+        const time = `${startTime} - ${endTime}`;
         onSave({ title, time, description, type, day: selectedDay });
         setTitle("");
-        setTime("");
+        setStartTime("");
+        setEndTime("");
         setDescription("");
         setType("Private");
         onClose();
@@ -32,7 +54,11 @@ const AddEventModal = ({ show, onClose, onSave, selectedDay }) => {
                         <label className="block text-text font-medium">Day</label>
                         <input
                             type="text"
-                            value={selectedDay ? `${selectedDay}/03/2025` : ""}
+                            value={
+                                selectedDay && selectedMonth !== undefined && selectedYear
+                                    ? `${selectedDay}/${(selectedMonth + 1).toString().padStart(2, "0")}/${selectedYear}`
+                                    : ""
+                            }
                             className="input input-bordered w-full bg-primary text-text"
                             disabled
                         />
@@ -48,16 +74,35 @@ const AddEventModal = ({ show, onClose, onSave, selectedDay }) => {
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-text font-medium">Time</label>
-                        <input
-                            type="text"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                            className="input input-bordered w-full bg-primary text-text"
-                            placeholder="e.g., 12:00 - 14:00"
-                            required
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-text font-medium">Start Time</label>
+                            <select
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                                required
+                            >
+                                <option value="" disabled>Start Time</option>
+                                {generateTimeOptions().map((t) => (
+                                    <option key={t} value={t}>{t}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-text font-medium">End Time</label>
+                            <select
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                className="select select-bordered w-full bg-primary text-text"
+                                required
+                            >
+                                <option value="" disabled>End Time</option>
+                                {generateTimeOptions().map((t) => (
+                                    <option key={t} value={t}>{t}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-text font-medium">Description</label>
