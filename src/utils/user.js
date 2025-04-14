@@ -94,15 +94,10 @@ export const updateStatus = async (userId, status) => {
 };
 
 // Update profile picture
-export const updateProfilePicture = async (userId, file) => {
+export const updateProfilePicture = async (file) => {
   const formData = new FormData();
   formData.append("profile_picture", file);
 
-  const response = await API.put(`/users/${userId}/profile-picture`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
+  const response = await API.post(`/upload/profile/`, formData);
   return response.data;
 };
