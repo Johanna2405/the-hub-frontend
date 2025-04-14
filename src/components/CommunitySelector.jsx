@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import IconBtn from "./IconBtn";
 import { useCommunity } from "../context/CommunityContext";
@@ -19,6 +19,10 @@ const CommunitySelector = ({
     slug: null,
     role: null,
   };
+
+  useEffect(() => {
+    setSelectedCommunity(currentCommunity);
+  }, [currentCommunity]);
 
   const dropdownCommunities = [privateSpace, ...communities];
 
