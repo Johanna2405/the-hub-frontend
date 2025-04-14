@@ -8,18 +8,23 @@ const socket = io(import.meta.env.VITE_BACKEND_URL, {
   },
 });
 
-export const setupChatListener = (setChat, setTypingUser, setOnlineUserIds) => {
+export const setupChatListener = (
+  setChat,
+  setTypingUser,
+  setOnlineUserIds,
+  setLastSeenMap
+) => {
   socket.off("receive_message");
   socket.off("display_typing");
   socket.off("update_online_users");
 
   socket.on("receive_message", (msg) => {
-    console.log("Received message:", msg);
+    // console.log("Received message:", msg);
     setChat((prev) => [...prev, msg]);
   });
 
   socket.on("display_typing", (data) => {
-    console.log(`${data.username} is typing...`);
+    // console.log(`${data.username} is typing...`);
     setTypingUser(data.username);
 
     // Optionally clear after a few seconds
@@ -28,9 +33,10 @@ export const setupChatListener = (setChat, setTypingUser, setOnlineUserIds) => {
     }, 2000);
   });
 
-  socket.on("update_online_users", (onlineUserIds) => {
-    console.log("Online user IDs from server:", onlineUserIds);
-    setOnlineUserIds(onlineUserIds);
+  socket.on("update_online_users", ({ userIds, lastSeen }) => {
+    console.log("woot", userIds, lastSeen);
+    setOnlineUserIds(userIds);
+    setLastSeenMap(lastSeen);
   });
 
   return () => {
@@ -41,7 +47,7 @@ export const setupChatListener = (setChat, setTypingUser, setOnlineUserIds) => {
 };
 
 export const sendMessage = (messageData) => {
-  console.log("Sending message:", messageData);
+  // console.log("Sending message:", messageData);
   socket.emit("send_message", messageData);
 };
 
@@ -57,7 +63,7 @@ export const connectUser = (user) => {
   if (!user?.id) return;
 
   const emitUserConnected = () => {
-    console.log("Emitting user_connected");
+    // console.log("Emitting user_connected");
     socket.emit("user_connected", user);
   };
 
