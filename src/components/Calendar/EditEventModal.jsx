@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { formatTime, getDaysInMonth, timeOptions } from "../../utils/helpers";
+import { showToast } from "../../utils/toast";
 
 const EditEventModal = ({ show, onClose, onSave, event }) => {
   const [title, setTitle] = useState("");
@@ -50,22 +51,22 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
       e.preventDefault();
 
       if (!title.trim()) {
-        alert("Title is required.");
+        showToast("Title is required.", "error");
         return;
       }
 
       if (!description.trim()) {
-        alert("Description is required.");
+        showToast("Description is required.", "error");
         return;
       }
 
       if (!location.trim()) {
-        alert("Location is required.");
+        showToast("Location is required.", "error");
         return;
       }
 
       if (!type) {
-        alert("Please select a type.");
+        showToast("Please select a type.", "error");
         return;
       }
 
@@ -85,7 +86,8 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
       });
       onClose();
     } catch (error) {
-      console.error("Error saving event:", error);
+      console.error("Failed to edit event:", error);
+      showToast("Failed to edit event", "error");
     }
   };
 

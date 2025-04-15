@@ -60,32 +60,32 @@ const NewEventModal = ({
       }
 
       if (!title.trim()) {
-        alert("Title is required.");
+        showToast("Title is required.", "error");
         return;
       }
 
       if (!day || !month || !year) {
-        alert("Please select a valid date.");
+        showToast("Please select a valid date.", "error");
         return;
       }
 
       if (!startTime || !endTime) {
-        alert("Start and end time are required.");
+        showToast("Start and end time are required.", "error");
         return;
       }
 
       if (startTime >= endTime) {
-        alert("End time must be after start time.");
+        showToast("End time must be after start time.", "error");
         return;
       }
 
       if (!description.trim()) {
-        alert("Description is required.");
+        showToast("Description is required.", "error");
         return;
       }
 
       if (!location.trim()) {
-        alert("Location is required.");
+        showToast("Location is required.", "error");
         return;
       }
 

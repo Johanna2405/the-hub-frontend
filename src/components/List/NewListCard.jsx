@@ -4,6 +4,7 @@ import { createList } from "../../utils/listsAPI";
 import { useNavigate } from "react-router";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
+import { showToast } from "../../utils/toast";
 
 const NewListCard = ({
   defaultValues = {
@@ -40,10 +41,12 @@ const NewListCard = ({
       // console.log("Sending payload:", listPayload);
       await createList(listPayload);
 
+      showToast(`List added!`, "success");
       // console.log("List created:", createdList);
       navigate(`/lists`);
     } catch (error) {
       console.error("Error creating list:", error);
+      showToast(`Error creating list!`, "error");
     }
   };
 
