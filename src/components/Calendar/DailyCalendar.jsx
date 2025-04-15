@@ -3,19 +3,23 @@ import IconBtn from "../IconBtn";
 import EventList from "./EventList";
 import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
+import { useCommunity } from "../../context/CommunityContext";
+import { fetchCommunityEvents } from "../../utils/community";
 
 const DailyCalendar = ({ onPrev, onNext }) => {
   const { user } = useUser();
+  const { currentCommunity } = useCommunity();
   const today = new Date();
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState(
     today.getDate().toString().padStart(2, "0")
   );
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isCommunityView = Boolean(currentCommunity?.id);
 
+  console.log("isCommunityView??", isCommunityView);
   const getWeekDays = (currentDate) => {
     const week = [];
     const dayIndex = currentDate.getDay();
@@ -49,11 +53,24 @@ const DailyCalendar = ({ onPrev, onNext }) => {
   const weekDays = getWeekDays(currentDate);
 
   useEffect(() => {
+    const user_id = user?.id;
+    if (!user_id) return;
+
     const loadEvents = async () => {
       try {
-        const allEvents = await fetchEvents();
-        setEvents(allEvents);
-        localStorage.setItem("daily_events", JSON.stringify(allEvents));
+        let events = [];
+        if (isCommunityView) {
+          events = await fetchCommunityEvents(currentCommunity?.id);
+        } else {
+          events = await fetchEvents();
+        }
+
+        const formattedEvents = events.map((event) => ({
+          ...event,
+        }));
+
+        setEvents(formattedEvents);
+        localStorage.setItem("daily_events", JSON.stringify(formattedEvents));
       } catch (err) {
         const fallback = localStorage.getItem("daily_events");
         if (fallback) setEvents(JSON.parse(fallback));
@@ -63,7 +80,7 @@ const DailyCalendar = ({ onPrev, onNext }) => {
       }
     };
     loadEvents();
-  }, []);
+  }, [user, isCommunityView, currentCommunity]);
 
   useEffect(() => {
     const today = new Date();

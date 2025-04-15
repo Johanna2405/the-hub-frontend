@@ -1,30 +1,43 @@
 import { useState, useEffect } from "react";
 import IconBtn from "../IconBtn";
 import EventList from "./EventList";
-import {
-  fetchEvents,
-  createEvent,
-  updateEvent,
-  deleteEvent,
-} from "../../utils/calendarAPI";
+import { fetchEvents, deleteEvent } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
+import { useCommunity } from "../../context/CommunityContext";
+import { fetchCommunityEvents } from "../../utils/community";
 
 const WeeklyCalendar = () => {
   const { user } = useUser();
-
+  const { currentCommunity } = useCommunity();
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
   const [detailView, setDetailView] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isCommunityView = Boolean(currentCommunity?.id);
 
   useEffect(() => {
+    const user_id = user?.id;
+    if (!user_id) return;
+
     const loadEvents = async () => {
       try {
-        const all = await fetchEvents();
-        setEvents(all);
-        localStorage.setItem("weekly_events", JSON.stringify(all));
+        let events = [];
+
+        if (isCommunityView) {
+          events = await fetchCommunityEvents(currentCommunity?.id);
+        } else {
+          events = await fetchEvents();
+        }
+
+        const formattedEvents = events.map((event) => ({
+          ...event,
+        }));
+
+        setEvents(formattedEvents);
+        localStorage.setItem("weekly_events", JSON.stringify(formattedEvents));
       } catch (err) {
+        console.log("Error loading events:", err);
         const fallback = localStorage.getItem("weekly_events");
         if (fallback) setEvents(JSON.parse(fallback));
       } finally {
@@ -84,14 +97,14 @@ const WeeklyCalendar = () => {
     }
   };
 
-  const handleDeleteEvent = async (id) => {
-    try {
-      await deleteEvent(id);
-      setEvents((prev) => prev.filter((e) => e.id !== id));
-    } catch (err) {
-      alert("Failed to delete event");
-    }
-  };
+  // const handleDeleteEvent = async (id) => {
+  //   try {
+  //     await deleteEvent(id);
+  //     setEvents((prev) => prev.filter((e) => e.id !== id));
+  //   } catch (err) {
+  //     alert("Failed to delete event");
+  //   }
+  // };
 
   return (
     <div className="p-4 bg-base">
