@@ -2,6 +2,7 @@ import { useState } from "react";
 import { updateEvent, deleteEvent } from "../../utils/calendarAPI";
 import IconBtn from "../IconBtn";
 import EditEventModal from "./EditEventModal";
+import { showToast } from "../../utils/toast";
 
 const EventList = ({
   loading,
@@ -83,10 +84,11 @@ const EventList = ({
   const handleDelete = async (id) => {
     try {
       await deleteEvent(id);
+      showToast(`Event deleted!`, "success");
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err) {
       console.log(err);
-      alert("Delete failed");
+      showToast("Failed to delete an event", "error");
     }
   };
 
@@ -94,13 +96,15 @@ const EventList = ({
     try {
       const result = await updateEvent(updatedEvent.id, updatedEvent);
 
+      showToast(`Event updated!`, "success");
+
       setEvents((prev) =>
         prev.map((e) => (e.id === updatedEvent.id ? result : e))
       );
       setShowEditModal(false);
     } catch (err) {
       console.log(err);
-      alert("Update failed");
+      showToast("Failed to update an event", "error");
     }
   };
 

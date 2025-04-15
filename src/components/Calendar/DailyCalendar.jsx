@@ -5,8 +5,9 @@ import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";
+import { showToast } from "../../utils/toast";
 
-const DailyCalendar = ({ onPrev, onNext }) => {
+const DailyCalendar = ({ refreshTrigger }) => {
   const { user } = useUser();
   const { currentCommunity } = useCommunity();
   const today = new Date();
@@ -70,17 +71,19 @@ const DailyCalendar = ({ onPrev, onNext }) => {
         }));
 
         setEvents(formattedEvents);
-        localStorage.setItem("daily_events", JSON.stringify(formattedEvents));
+        // localStorage.setItem("daily_events", JSON.stringify(formattedEvents));
       } catch (err) {
         const fallback = localStorage.getItem("daily_events");
         if (fallback) setEvents(JSON.parse(fallback));
         console.log("Error fetching events:", err);
+        showToast("Error fetching events", "error");
       } finally {
         setLoading(false);
       }
     };
+
     loadEvents();
-  }, [user, isCommunityView, currentCommunity]);
+  }, [user, isCommunityView, currentCommunity, refreshTrigger]);
 
   useEffect(() => {
     const today = new Date();
