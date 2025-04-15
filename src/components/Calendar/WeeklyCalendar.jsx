@@ -35,7 +35,7 @@ const WeeklyCalendar = () => {
         }));
 
         setEvents(formattedEvents);
-        localStorage.setItem("weekly_events", JSON.stringify(formattedEvents));
+        // localStorage.setItem("weekly_events", JSON.stringify(formattedEvents));
       } catch (err) {
         console.log("Error loading events:", err);
         const fallback = localStorage.getItem("weekly_events");

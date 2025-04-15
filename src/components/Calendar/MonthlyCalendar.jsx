@@ -37,7 +37,7 @@ const MonthlyCalendar = () => {
         }));
 
         setEvents(formattedEvents);
-        localStorage.setItem("monthly_events", JSON.stringify(formattedEvents));
+        // localStorage.setItem("monthly_events", JSON.stringify(formattedEvents));
       } catch (err) {
         console.log("Error loading events:", err);
         const cached = localStorage.getItem("monthly_events");

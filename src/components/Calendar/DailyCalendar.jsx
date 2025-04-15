@@ -70,7 +70,7 @@ const DailyCalendar = ({ onPrev, onNext }) => {
         }));
 
         setEvents(formattedEvents);
-        localStorage.setItem("daily_events", JSON.stringify(formattedEvents));
+        // localStorage.setItem("daily_events", JSON.stringify(formattedEvents));
       } catch (err) {
         const fallback = localStorage.getItem("daily_events");
         if (fallback) setEvents(JSON.parse(fallback));
