@@ -152,6 +152,7 @@ const EventList = ({
               </div>
             </div>
             <p className="text-text text-sm">{event.description}</p>
+            <p className="text-text text-sm">{event.date}</p>
             <p className="text-text text-sm mt-1">
               {new Date(event.start_time).toLocaleTimeString([], {
                 hour: "2-digit",
