@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import IconBtn from "../IconBtn";
 import EventList from "./EventList";
-import { fetchEvents, deleteEvent } from "../../utils/calendarAPI";
+import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";
 
-const MonthlyCalendar = () => {
+const MonthlyCalendar = ({ refreshTrigger }) => {
   const { user } = useUser();
   const { currentCommunity } = useCommunity();
   const today = new Date();
@@ -37,7 +37,7 @@ const MonthlyCalendar = () => {
         }));
 
         setEvents(formattedEvents);
-        localStorage.setItem("monthly_events", JSON.stringify(formattedEvents));
+        // localStorage.setItem("monthly_events", JSON.stringify(formattedEvents));
       } catch (err) {
         console.log("Error loading events:", err);
         const cached = localStorage.getItem("monthly_events");
@@ -47,7 +47,7 @@ const MonthlyCalendar = () => {
       }
     };
     loadEvents();
-  }, [user, isCommunityView, currentCommunity]);
+  }, [user, isCommunityView, currentCommunity, refreshTrigger]);
 
   const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
   const days = Array.from({ length: daysInMonth }, (_, i) => {
