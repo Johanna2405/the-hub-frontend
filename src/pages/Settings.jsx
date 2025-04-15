@@ -443,103 +443,106 @@ const Settings = () => {
           </div>
         </div>
 
-      {/* Admin community settings */}
-      {currentCommunity?.role === "admin" && (
-        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-          <input type="radio" name="my-accordion-2" />
-          <div className="collapse-title">
-            <div className="flex items-center gap-4">
-              <h4 className="font-semibold text-lg">Admin Settings</h4>
-              <span className="rounded-full border border-lilac px-4 py-1 text-sm">
-                {currentCommunity.name}
-              </span>
+        {/* Admin community settings */}
+        {currentCommunity?.role === "admin" && (
+          <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+            <input type="radio" name="my-accordion-2" />
+            <div className="collapse-title">
+              <div className="flex items-center gap-4">
+                <h4 className="font-semibold text-lg">Admin Settings</h4>
+                <span className="rounded-full border border-lilac px-4 py-1 text-sm">
+                  {currentCommunity.name}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="collapse-content ">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <h4>Select community apps</h4>
-                <div className="flex flex-col gap-4">
-                  <AppCheckbox
-                    icon={"fi-rr-text"}
-                    iconColor={"neon"}
-                    appName={"Posts"}
-                    checked={settings.posts ?? true}
-                    onChange={() => toggleSetting("posts")}
-                  />
-                  <AppCheckbox
-                    icon={"fi-rs-list-check"}
-                    iconColor={"aquamarine"}
-                    appName={"Lists"}
-                    checked={settings.lists ?? true}
-                    onChange={() => toggleSetting("lists")}
-                  />
-                  <AppCheckbox
-                    icon={"fi-rr-megaphone"}
-                    iconColor={"sage"}
-                    appName={"Messages"}
-                    checked={settings.messages ?? true}
-                    onChange={() => toggleSetting("messages")}
-                  />
-                  <AppCheckbox
-                    icon={"fi-rr-calendar"}
-                    iconColor={"lilac"}
-                    appName={"Calendar"}
-                    checked={settings.calendar ?? true}
-                    onChange={() => toggleSetting("calendar")}
+            <div className="collapse-content ">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <h4>Select community apps</h4>
+                  <div className="flex flex-col gap-4">
+                    <AppCheckbox
+                      icon={"fi-rr-text"}
+                      iconColor={"neon"}
+                      appName={"Posts"}
+                      checked={settings.posts ?? true}
+                      onChange={() => toggleSetting("posts")}
+                    />
+                    <AppCheckbox
+                      icon={"fi-rs-list-check"}
+                      iconColor={"aquamarine"}
+                      appName={"Lists"}
+                      checked={settings.lists ?? true}
+                      onChange={() => toggleSetting("lists")}
+                    />
+                    <AppCheckbox
+                      icon={"fi-rr-megaphone"}
+                      iconColor={"sage"}
+                      appName={"Messages"}
+                      checked={settings.messages ?? true}
+                      onChange={() => toggleSetting("messages")}
+                    />
+                    <AppCheckbox
+                      icon={"fi-rr-calendar"}
+                      iconColor={"lilac"}
+                      appName={"Calendar"}
+                      checked={settings.calendar ?? true}
+                      onChange={() => toggleSetting("calendar")}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <IconBtn
+                    text={`Delete ${currentCommunity.name}`}
+                    icon="fi-rr-trash"
+                    color="ultramarine"
+                    onClick={handleDelete}
                   />
                 </div>
               </div>
-              <div className="flex items-center justify-end">
-                <IconBtn
-                  text={`Delete ${currentCommunity.name}`}
-                  icon="fi-rr-trash"
-                  color="ultramarine"
-                  onClick={handleDelete}
-                />
-              </div>
             </div>
           </div>
-        </div>
-      )}
-      {/* // profile picture */}
-      <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
-        <input type="radio" name="my-accordion-2" />
-        <div className="collapse-title font-semibold text-lg">
-          Edit profile picture
-        </div>
-        <div className="collapse-content ">
-          <div className="flex flex-col gap-8 py-4">
-            <div className="avatar flex flex-col gap-4 items-center">
-              <div className="w-44 rounded-full">
-                <img
-                  src={
-                    previewUrl || user?.profilePicture || "/default-profile.png"
-                  }
-                  alt="Profile"
-                  className="object-cover w-full h-full"
+        )}
+        {/* // profile picture */}
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+          <input type="radio" name="my-accordion-2" />
+          <div className="collapse-title font-semibold text-lg">
+            Edit profile picture
+          </div>
+          <div className="collapse-content ">
+            <div className="flex flex-col gap-8 py-4">
+              <div className="avatar flex flex-col gap-4 items-center">
+                <div className="w-44 rounded-full">
+                  <img
+                    src={
+                      previewUrl ||
+                      user?.profilePicture ||
+                      "/default-profile.png"
+                    }
+                    alt="Profile"
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="file-input file-input-secondary h-full border-2"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setSelectedFile(file);
+
+                    if (file) {
+                      const objectUrl = URL.createObjectURL(file);
+                      setPreviewUrl(objectUrl);
+                    }
+                  }}
+                />
+                <IconBtn
+                  text={"save"}
+                  color={"ultramarine"}
+                  icon={"fi-rr-disk"}
+                  onClick={handlePictureUpload}
                 />
               </div>
-              <input
-                type="file"
-                accept="image/*"
-                className="file-input file-input-secondary h-full border-2"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  setSelectedFile(file);
-
-                  if (file) {
-                    const objectUrl = URL.createObjectURL(file);
-                    setPreviewUrl(objectUrl);
-                  }
-                }}
-              />
-              <IconBtn
-                text={"save"}
-                color={"ultramarine"}
-                icon={"fi-rr-disk"}
-                onClick={handlePictureUpload}
-              />
             </div>
           </div>
         </div>
