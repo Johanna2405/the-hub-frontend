@@ -6,7 +6,7 @@ import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";
 
-const WeeklyCalendar = () => {
+const WeeklyCalendar = ({ refreshTrigger }) => {
   const { user } = useUser();
   const { currentCommunity } = useCommunity();
   const today = new Date();
@@ -45,7 +45,7 @@ const WeeklyCalendar = () => {
       }
     };
     loadEvents();
-  }, [user, isCommunityView, currentCommunity]);
+  }, [user, isCommunityView, currentCommunity, refreshTrigger]);
 
   const getWeekDays = (baseDate) => {
     const week = [];

@@ -6,7 +6,7 @@ import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";
 
-const DailyCalendar = ({ onPrev, onNext }) => {
+const DailyCalendar = ({ refreshTrigger }) => {
   const { user } = useUser();
   const { currentCommunity } = useCommunity();
   const today = new Date();
@@ -79,8 +79,9 @@ const DailyCalendar = ({ onPrev, onNext }) => {
         setLoading(false);
       }
     };
+
     loadEvents();
-  }, [user, isCommunityView, currentCommunity]);
+  }, [user, isCommunityView, currentCommunity, refreshTrigger]);
 
   useEffect(() => {
     const today = new Date();

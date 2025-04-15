@@ -2,9 +2,16 @@ import { useState } from "react";
 import { generateTimeOptions, getDaysInMonth } from "../../utils/helpers";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
-import { createEvent } from "../../utils/calendarAPI";
+import { createEvent, fetchEvents } from "../../utils/calendarAPI";
+import { fetchCommunityEvents } from "../../utils/community";
 
-const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
+const NewEventModal = ({
+  show,
+  onClose,
+  onDayChange,
+  selectedDay,
+  onEventCreated,
+}) => {
   const [day, setDay] = useState(selectedDay || "");
   const [month, setMonth] = useState("03");
   const [year, setYear] = useState("2025");
@@ -20,6 +27,19 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
   if (!show) return null;
 
   const timeOptions = generateTimeOptions();
+
+  const resetForm = () => {
+    setDay("");
+    setMonth("03");
+    setYear("2025");
+    setTitle("");
+    setStartTime("");
+    setEndTime("");
+    setDescription("");
+    setType("Private");
+    setLocation("");
+    onClose();
+  };
 
   const handleSubmit = async (e) => {
     try {
@@ -62,16 +82,9 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
 
       await createEvent(eventPayload);
 
-      setDay("");
-      setMonth("03");
-      setYear("2025");
-      setTitle("");
-      setStartTime("");
-      setEndTime("");
-      setDescription("");
-      setType("Private");
-      setLocation("");
-      onClose();
+      if (onEventCreated) onEventCreated();
+
+      resetForm();
     } catch (e) {
       console.error("Error creating list:", e);
     }
