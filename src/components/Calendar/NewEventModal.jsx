@@ -209,11 +209,20 @@ const NewEventModal = ({
                 <option value="" disabled>
                   Start Time
                 </option>
-                {timeOptions.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
+                {timeOptions.map((time) => {
+                  const optionDate = new Date(
+                    `${year}-${month}-${day}T${time}:00`
+                  );
+                  const isPastTime =
+                    new Date(`${year}-${month}-${day}`).toDateString() ===
+                      new Date().toDateString() && optionDate < new Date();
+
+                  return (
+                    <option key={time} value={time} disabled={isPastTime}>
+                      {time}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div>
