@@ -113,7 +113,16 @@ const EventList = ({
           <div key={event.id} className="bg-primary rounded-2xl p-6">
             <div className="flex justify-between items-center mb-2">
               <h4 className="text-xl font-bold text-text">{event.title}</h4>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`rounded-full px-3 py-1 text-sm ${
+                    event.type === "Private"
+                      ? "border border-secondary text-secondary"
+                      : "border border-text text-text"
+                  }`}
+                >
+                  {event.type}
+                </span>
                 <IconBtn
                   color="base"
                   icon="fi-rr-pencil"
@@ -153,6 +162,12 @@ const EventList = ({
                 hour: "2-digit",
                 minute: "2-digit",
               })}
+            </p>
+            <p className="flex gap-2 items-center text-text mt-1">
+              <i className="fi-rr-home-location text-md"></i>
+              <span className="text-sm">
+                {event.location || "Not specified"}
+              </span>
             </p>
           </div>
         ))
