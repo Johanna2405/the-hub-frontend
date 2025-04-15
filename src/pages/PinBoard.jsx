@@ -171,20 +171,10 @@ const PinBoard = () => {
         />
 
         {filteredApps.length > 0 && (
-          <div className="flex gap-4 w-full justify-center">
-            {/* Column A */}
-            <div className="flex flex-col w-1/2">
-              {columnA.map((app, index) => (
-                <div key={index}>{renderCard(app, index)}</div>
-              ))}
-            </div>
-
-            {/* Column B */}
-            <div className="flex flex-col w-1/2">
-              {columnB.map((app, index) => (
-                <div key={index}>{renderCard(app, index + columnA.length)}</div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            {filteredApps.map((app, index) => (
+              <div key={index}>{renderCard(app, index)}</div>
+            ))}
           </div>
         )}
       </div>
