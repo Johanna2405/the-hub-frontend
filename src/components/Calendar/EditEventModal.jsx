@@ -92,7 +92,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-90 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 backdrop-blur-sm !bg-primary/25 flex items-center justify-center">
       <div className="bg-base-100 rounded-2xl p-6 w-full max-w-lg shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-text">Edit Event</h2>
@@ -103,11 +103,11 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="block text-text font-medium">Day</label>
+              <label className="block text-text font-medium pb-2">Day</label>
               <select
                 value={day}
                 onChange={(e) => setDay(e.target.value)}
-                className="select select-bordered w-full bg-primary text-text"
+                className="select select-bordered w-full bg-primary text-text focus:outline-lilac"
               >
                 {Array.from(
                   { length: getDaysInMonth(Number(year), Number(month)) },
@@ -120,11 +120,11 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               </select>
             </div>
             <div>
-              <label className="block text-text font-medium">Month</label>
+              <label className="block text-text font-medium pb-2">Month</label>
               <select
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
-                className="select select-bordered w-full bg-primary text-text"
+                className="select select-bordered w-full bg-primary text-text focus:outline-lilac"
               >
                 {Array.from({ length: 12 }, (_, i) => (
                   <option
@@ -137,11 +137,11 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               </select>
             </div>
             <div>
-              <label className="block text-text font-medium">Year</label>
+              <label className="block text-text font-medium pb-2">Year</label>
               <select
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
-                className="select select-bordered w-full bg-primary text-text"
+                className="select select-bordered w-full bg-primary text-text focus:outline-lilac"
               >
                 {Array.from({ length: 50 }, (_, i) => {
                   const yearOption = (new Date().getFullYear() + i).toString();
@@ -155,23 +155,25 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
             </div>
           </div>
           <div>
-            <label className="block text-text font-medium">Title</label>
+            <label className="block text-text font-medium pb-2">Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="input input-bordered w-full bg-primary text-text"
+              className="input input-bordered w-full bg-primary text-text focus:outline-lilac"
               placeholder="Event Title"
               required
             />
           </div>
 
           <div>
-            <label className="block text-text font-medium">Start Time</label>
+            <label className="block text-text font-medium pb-2">
+              Start Time
+            </label>
             <select
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="select select-bordered w-full bg-primary text-text"
+              className="select select-bordered w-full bg-primary text-text focus:outline-lilac"
               required
             >
               {timeOptions
@@ -194,11 +196,11 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
           </div>
 
           <div>
-            <label className="block text-text font-medium">End Time</label>
+            <label className="block text-text font-medium pb-2">End Time</label>
             <select
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="select select-bordered w-full bg-primary text-text"
+              className="select select-bordered w-full bg-primary text-text focus:outline-lilac"
               required
             >
               {timeOptions
@@ -219,47 +221,52 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
           </div>
 
           <div>
-            <label className="block text-text font-medium">Description</label>
+            <label className="block text-text font-medium pb-2">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="textarea textarea-bordered w-full bg-primary text-text"
+              className="textarea textarea-bordered w-full bg-primary text-text focus:outline-lilac"
               placeholder="Enter details"
               required
             />
           </div>
           <div>
-            <label className="block text-text font-medium">Location</label>
+            <label className="block text-text font-medium pb-2">Location</label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="input input-bordered w-full bg-primary text-text"
+              className="input input-bordered w-full bg-primary text-text focus:outline-lilac"
               placeholder="e.g., Conference Room A"
               required
             />
           </div>
           <div>
-            <label className="block text-text font-medium">Type</label>
+            <label className="block text-text font-medium pb-2">Type</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="select select-bordered w-full bg-primary text-text"
+              className="select select-bordered w-full bg-primary text-text focus:outline-lilac"
               required
             >
               <option value="Private">Private</option>
               <option value="Community">Community</option>
             </select>
           </div>
-          <div className="flex justify-end gap-4 mt-6">
+          <div className="flex justify-end gap-2 mt-6">
             <button
               type="button"
-              className="btn btn-secondary text-text"
+              className="btn btn-primary text-text"
               onClick={onClose}
             >
               Cancel
             </button>
-            <button type="submit" className="btn bg-neon text-text">
+            <button
+              type="submit"
+              className="btn border-none bg-lilac text-base dark:text-text"
+            >
               Save
             </button>
           </div>

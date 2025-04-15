@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import DailyCalendar from "./DailyCalendar";
-import WeeklyCalendar from "./WeeklyCalendar";
-import MonthlyCalendar from "./MonthlyCalendar";
-import Header from "../Header";
-import IconBtn from "../IconBtn";
-import NewEventModal from "./NewEventModal";
+import DailyCalendar from "../components/Calendar/DailyCalendar";
+import WeeklyCalendar from "../components/Calendar/WeeklyCalendar";
+import MonthlyCalendar from "../components/Calendar/MonthlyCalendar";
+import Header from "../components/Header";
+import IconBtn from "../components/IconBtn";
+import NewEventModal from "../components/Calendar/NewEventModal";
 
 const CalendarTabs = () => {
   const [view, setView] = useState("day");

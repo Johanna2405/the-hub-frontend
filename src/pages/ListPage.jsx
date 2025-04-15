@@ -195,7 +195,7 @@ const ListPage = () => {
       />
 
       {lists.length > 0 && (
-        <div className="pb-4">
+        <div className="pb-8">
           <ListFilter
             activeFilter={globalFilter}
             setActiveFilter={setGlobalFilter}

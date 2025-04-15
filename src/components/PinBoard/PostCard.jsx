@@ -69,9 +69,9 @@ const PostCard = ({ postId, onRemove, onSelectPost, index }) => {
   };
 
   return (
-    <div className="group relative rounded-3xl p-4 transition-all duration-300 min-h-32 bg-neon text-text flex flex-col justify-between mb-4">
+    <div className="group relative rounded-3xl p-6 transition-all duration-300 min-h-32 bg-neon text-text flex flex-col justify-between">
       <div className="flex flex-col gap-2">
-        <i className="fi-rr-text text-lg"></i>
+        <i className="fi-rr-text text-2xl"></i>
         <h3>{selectedPost?.title || "Pinned Post"}</h3>
         <div className="absolute top-2 right-2 lg:opacity-0 opacity-40 group-hover:opacity-100 transition-opacity duration-200">
           <IconBtn icon="fi-br-cross-small" transparent onClick={onRemove} />

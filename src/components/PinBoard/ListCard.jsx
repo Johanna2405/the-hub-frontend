@@ -112,14 +112,14 @@ const ListCard = ({ onRemove, listIndex, index }) => {
   const visibleItems = expanded ? listItems : listItems.slice(0, 3);
 
   return (
-    <div className="relative rounded-3xl p-4 transition-all duration-300 min-h-32 bg-primary text-text flex flex-col justify-between group mb-4">
+    <div className="relative rounded-3xl p-6 transition-all duration-300 min-h-32 bg-primary text-text flex flex-col justify-between group">
       {/* Remove-Button */}
       <div className="absolute top-2 right-2 lg:opacity-0 opacity-40 group-hover:opacity-100 transition">
         <IconBtn icon="fi-br-cross-small" transparent onClick={onRemove} />
       </div>
 
       <div className="flex flex-col gap-2">
-        <i className="fi-rr-list text-lg"></i>
+        <i className="fi-rr-list text-2xl"></i>
         <h3>{selectedList?.title || "Pinned List"}</h3>
 
         {!selectedList && (

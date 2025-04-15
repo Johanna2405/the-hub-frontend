@@ -98,14 +98,14 @@ const WeeklyCalendar = ({ refreshTrigger }) => {
   };
 
   return (
-    <div className="p-4 bg-base">
-      <div className="flex items-center justify-between mb-8">
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center justify-between mb-8 w-full lg:max-w-2xl">
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-left"
           onClick={goToPrevWeek}
         />
-        <h2 className="text-xl font-semibold text-text">Week</h2>
+
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-right"
@@ -113,7 +113,7 @@ const WeeklyCalendar = ({ refreshTrigger }) => {
         />
       </div>
 
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center lg:max-w-2xl">
         <div className="flex flex-wrap gap-2 mb-6">
           {weekDays.map(({ day, label, month, year, fullDate }) => {
             const isSelected =
@@ -144,7 +144,7 @@ const WeeklyCalendar = ({ refreshTrigger }) => {
       {detailView && (
         <div className="mb-4 text-center">
           <button
-            className="text-sm text-lilac underline"
+            className="text-lg font-semibold cursor-pointer text-lilac"
             onClick={() => setDetailView(null)}
           >
             Show full week

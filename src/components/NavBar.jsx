@@ -34,7 +34,9 @@ const NavBar = ({ isOpen, setIsOpen }) => {
           {user?.username || "Guest"}
         </span>
         <img
-          src="./default-profile.png"
+          src={
+            user?.profilePicture ? user.profilePicture : "/default-profile.png"
+          }
           alt="Profile Picture"
           className="w-10 h-10 rounded-full"
         />

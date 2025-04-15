@@ -1,5 +1,6 @@
 import IconBtn from "../components/IconBtn";
 import Header from "../components/Header";
+import ConfirmModal from "../components/ConfirmModal";
 import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
@@ -35,6 +36,7 @@ const Settings = () => {
   const [selectedId, setSelectedId] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isCommunityModalOpen, setCommunityModalOpen] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const {
     // joinedCommunities,
@@ -166,18 +168,18 @@ const Settings = () => {
     );
   };
 
-  const handleDelete = async () => {
-    const confirm = window.confirm(
-      `Are you sure you want to delete "${currentCommunity.name}"? This cannot be undone.`
-    );
-    if (!confirm) return;
+  const handleDelete = () => {
+    setShowConfirm(true);
+  };
 
+  const confirmDelete = async () => {
+    setShowConfirm(false);
     try {
       removeCommunityFromState(currentCommunity.id);
       await deleteCommunity(currentCommunity.id);
       setCurrentCommunity(null);
       showToast("Community deleted.", "success");
-      navigate(0);
+      navigate("/");
     } catch (err) {
       console.error(err);
       showToast("Failed to delete community", "error");
@@ -510,6 +512,17 @@ const Settings = () => {
             />
           </div>
         </div>
+      )}
+
+      {currentCommunity && (
+        <ConfirmModal
+          isOpen={showConfirm}
+          message={`Are you sure you want to delete "${
+            currentCommunity?.name || "this community"
+          }"? This cannot be undone.`}
+          onConfirm={confirmDelete}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
     </div>
   );

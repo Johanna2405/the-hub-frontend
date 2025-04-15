@@ -125,14 +125,14 @@ const DailyCalendar = ({ refreshTrigger }) => {
   );
 
   return (
-    <div className="p-4 bg-base">
-      <div className="flex items-center justify-between mb-8">
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center justify-between mb-8 w-full lg:max-w-2xl">
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-left"
           onClick={goToPrevDay}
         />
-        <h2 className="text-xl font-semibold text-text">Day</h2>
+
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-right"
@@ -140,7 +140,7 @@ const DailyCalendar = ({ refreshTrigger }) => {
         />
       </div>
 
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center lg:max-w-2xl">
         <div className="flex flex-wrap gap-2 mb-6">
           {weekDays.map(({ day, label, month, year }) => (
             <div

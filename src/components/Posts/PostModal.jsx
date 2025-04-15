@@ -71,17 +71,17 @@ const PostModal = ({
       )}
 
       <dialog id={modalId} className="modal backdrop-blur-sm !bg-primary/25">
-        <div className="modal-box bg-neon">
+        <div className="modal-box bg-primary">
           <h3 className="font-bold text-lg mb-4">
             {mode === "edit" ? "Edit your post" : "Create a new post"}
           </h3>
 
           <div className="flex flex-col gap-4">
             <div>
-              <label className="fieldset-label text-text">Title</label>
+              <label className="fieldset-label text-text pb-2">Title</label>
               <input
                 type="text"
-                className="input w-full"
+                className="input w-full focus:outline-lilac "
                 placeholder="Enter a post title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -89,9 +89,11 @@ const PostModal = ({
             </div>
 
             <div>
-              <label className="fieldset-label text-text">Post Content</label>
+              <label className="fieldset-label text-text pb-2">
+                Post Content
+              </label>
               <textarea
-                className="textarea h-24 w-full"
+                className="textarea h-24 w-full focus:outline-lilac"
                 placeholder="Enter the post content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -99,10 +101,12 @@ const PostModal = ({
             </div>
 
             <div>
-              <label className="fieldset-label text-text">Image URL</label>
+              <label className="fieldset-label text-text pb-2">
+                Image URL (optional)
+              </label>
               <input
                 type="text"
-                className="input w-full"
+                className="input w-full focus:outline-lilac "
                 placeholder="Paste an image URL"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
@@ -111,7 +115,7 @@ const PostModal = ({
 
             {imageUrl && (
               <div className="mt-2">
-                <label className="fieldset-label text-text">Preview</label>
+                <label className="fieldset-label text-text pb-2">Preview</label>
                 <img
                   src={imageUrl}
                   alt="Preview"

@@ -87,14 +87,14 @@ const MonthlyCalendar = ({ refreshTrigger }) => {
   };
 
   return (
-    <div className="p-4 bg-base">
-      <div className="flex items-center justify-between mb-4">
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center justify-between mb-6 w-full lg:max-w-2xl">
         <IconBtn
           color="primary"
           icon="fi-rr-angle-small-left"
           onClick={goToPrevMonth}
         />
-        <h2 className="text-xl font-semibold text-text">
+        <h2 className="text-text">
           {selectedDate.toLocaleString("default", {
             month: "long",
             year: "numeric",
@@ -108,7 +108,7 @@ const MonthlyCalendar = ({ refreshTrigger }) => {
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-2 mb-6">
+      <div className="grid grid-cols-7 gap-2 mb-6 w-full  lg:max-w-2xl">
         {days.map(({ day, label, fullDate }) => {
           const isSelected =
             (detailView &&
@@ -125,7 +125,7 @@ const MonthlyCalendar = ({ refreshTrigger }) => {
               key={day}
               onClick={() => handleDayClick(fullDate)}
               className={`flex flex-col items-center border rounded-xl px-2 py-2 cursor-pointer transition-all duration-200 ${
-                isSelected ? "bg-primary text-base" : "bg-base"
+                isSelected ? "bg-primary text-lilac" : "bg-base"
               }`}
             >
               <span className="text-text font-bold text-lg">{day}</span>
@@ -138,7 +138,7 @@ const MonthlyCalendar = ({ refreshTrigger }) => {
       {detailView && (
         <div className="mb-4 text-center">
           <button
-            className="text-sm text-lilac underline"
+            className="text-lg font-semibold cursor-pointer text-lilac"
             onClick={() => setDetailView(null)}
           >
             Show full month

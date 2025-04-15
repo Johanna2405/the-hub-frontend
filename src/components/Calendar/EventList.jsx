@@ -109,8 +109,8 @@ const EventList = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 mt-8">
-      <h3 className="text-text font-semibold mb-4">{renderHeading()}</h3>
+    <div className="flex flex-col gap-4 mt-8 w-full lg:max-w-2xl">
+      <h3 className="text-center mb-4">{renderHeading()}</h3>
 
       {filteredEvents.length ? (
         filteredEvents.map((event) => (
@@ -121,14 +121,14 @@ const EventList = ({
                 <span
                   className={`rounded-full px-3 py-1 text-sm ${
                     event.type === "Private"
-                      ? "border border-secondary text-secondary"
+                      ? "border border-lilac text-lilac"
                       : "border border-text text-text"
                   }`}
                 >
                   {event.type}
                 </span>
                 <IconBtn
-                  color="base"
+                  color="lilac"
                   icon="fi-rr-pencil"
                   onClick={() => {
                     setCurrentEvent({
@@ -149,31 +149,33 @@ const EventList = ({
                   }}
                 />
                 <IconBtn
-                  color="error"
+                  color="base"
                   icon="fi-rr-trash"
                   onClick={() => handleDelete(event.id)}
                 />
               </div>
             </div>
-            <p className="text-text text-sm">{event.description}</p>
-            <p className="text-text text-sm">{event.date}</p>
-            <p className="text-text text-sm mt-1">
-              {new Date(event.start_time).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}{" "}
-              -{" "}
-              {new Date(event.end_time).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-            <p className="flex gap-2 items-center text-text mt-1">
-              <i className="fi-rr-home-location text-md"></i>
-              <span className="text-sm">
-                {event.location || "Not specified"}
+            <div className="flex flex-col gap-2">
+              <span className="text-text font-semibold">
+                {event.date} |{" "}
+                {new Date(event.start_time).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+                -{" "}
+                {new Date(event.end_time).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </span>
-            </p>
+              <p className="text-text text-sm">{event.description}</p>
+              <p className="flex gap-2 items-center text-text mt-1">
+                <i className="fi-rr-home-location text-md text-base dark:text-text bg-lilac rounded-full py-1 px-2"></i>
+                <span className="text-sm">
+                  {event.location || "Not specified"}
+                </span>
+              </p>
+            </div>
           </div>
         ))
       ) : (
