@@ -11,17 +11,22 @@ const NewEventModal = ({
   selectedDay,
   onEventCreated,
 }) => {
+  const { user } = useUser();
+  const { currentCommunity } = useCommunity();
+
+  //make it dynamically
+  const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, "0");
+  const currentYear = new Date().getFullYear().toString();
+
   const [day, setDay] = useState(selectedDay || "");
-  const [month, setMonth] = useState("03");
-  const [year, setYear] = useState("2025");
+  const [month, setMonth] = useState(currentMonth);
+  const [year, setYear] = useState(currentYear);
   const [title, setTitle] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Private");
+  const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const { user } = useUser();
-  const { currentCommunity } = useCommunity();
 
   if (!show) return null;
 
@@ -53,6 +58,16 @@ const NewEventModal = ({
         community_id = currentCommunity.id;
       }
 
+      if (!title.trim()) {
+        alert("Title is required.");
+        return;
+      }
+
+      if (!day || !month || !year) {
+        alert("Please select a valid date.");
+        return;
+      }
+
       if (!startTime || !endTime) {
         alert("Start and end time are required.");
         return;
@@ -60,6 +75,16 @@ const NewEventModal = ({
 
       if (startTime >= endTime) {
         alert("End time must be after start time.");
+        return;
+      }
+
+      if (!description.trim()) {
+        alert("Description is required.");
+        return;
+      }
+
+      if (!location.trim()) {
+        alert("Location is required.");
         return;
       }
 
@@ -130,6 +155,7 @@ const NewEventModal = ({
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
                 className="select select-bordered w-full bg-primary text-text"
+                required
               >
                 {Array.from({ length: 12 }, (_, i) => (
                   <option
@@ -147,6 +173,7 @@ const NewEventModal = ({
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
                 className="select select-bordered w-full bg-primary text-text"
+                required
               >
                 {Array.from({ length: 20 }, (_, i) => {
                   const yearOption = (new Date().getFullYear() + i).toString();
@@ -215,6 +242,7 @@ const NewEventModal = ({
               onChange={(e) => setDescription(e.target.value)}
               className="textarea textarea-bordered w-full bg-primary text-text"
               placeholder="Enter details"
+              required
             />
           </div>
           <div>
@@ -225,6 +253,7 @@ const NewEventModal = ({
               onChange={(e) => setLocation(e.target.value)}
               className="input input-bordered w-full bg-primary text-text"
               placeholder="e.g., Conference Room A"
+              required
             />
           </div>
           <div>
@@ -233,7 +262,11 @@ const NewEventModal = ({
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="select select-bordered w-full bg-primary text-text"
+              required
             >
+              <option value="" disabled>
+                Select type
+              </option>
               <option value="Private">Private</option>
               <option value="Community">Community</option>
             </select>
