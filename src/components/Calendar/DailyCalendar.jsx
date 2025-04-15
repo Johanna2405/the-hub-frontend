@@ -5,6 +5,7 @@ import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";
+import { showToast } from "../../utils/toast";
 
 const DailyCalendar = ({ refreshTrigger }) => {
   const { user } = useUser();
@@ -75,6 +76,7 @@ const DailyCalendar = ({ refreshTrigger }) => {
         const fallback = localStorage.getItem("daily_events");
         if (fallback) setEvents(JSON.parse(fallback));
         console.log("Error fetching events:", err);
+        showToast("Error fetching events", "error");
       } finally {
         setLoading(false);
       }

@@ -3,6 +3,7 @@ import { generateTimeOptions, getDaysInMonth } from "../../utils/helpers";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { createEvent } from "../../utils/calendarAPI";
+import { showToast } from "../../utils/toast";
 
 const NewEventModal = ({
   show,
@@ -105,12 +106,14 @@ const NewEventModal = ({
       };
 
       await createEvent(eventPayload);
+      showToast(`Event added!`, "success");
 
       if (onEventCreated) onEventCreated();
 
       resetForm();
     } catch (e) {
       console.error("Error creating list:", e);
+      showToast("Failed to add event", "error");
     }
   };
 
