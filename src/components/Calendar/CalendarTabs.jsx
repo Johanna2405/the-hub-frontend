@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import DailyCalendar from "./DailyCalendar";
 import WeeklyCalendar from "./WeeklyCalendar";
 import MonthlyCalendar from "./MonthlyCalendar";
+import Header from "../Header";
+import IconBtn from "../IconBtn";
 
 const CalendarTabs = () => {
   const [view, setView] = useState("day");
+  const navigate = useNavigate();
 
   const tabStyle = (type) =>
     `px-4 py-2 rounded-full text-md font-semibold transition-all duration-200 
@@ -28,6 +32,15 @@ const CalendarTabs = () => {
 
   return (
     <div className="bg-base">
+      <Header showBackButton={true} onBack={() => navigate(-1)} />
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-4xl font-bold text-text">Calendar</h1>
+        <IconBtn
+          color="neon"
+          icon="fi-rr-plus-small"
+          onClick={() => setShowNewEventModal(true)}
+        />
+      </div>
       {/* Tab Navigation */}
       <div className="flex justify-center gap-4 mb-8">
         <button onClick={() => setView("day")} className={tabStyle("day")}>
