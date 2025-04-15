@@ -125,7 +125,7 @@ const PinBoard = () => {
         );
       case "lists":
         return <ListCard index={index} onRemove={onRemove} listIndex={index} />;
-      case "events":
+      case "calendar":
         return (
           <EventCard
             index={index}
@@ -172,9 +172,15 @@ const PinBoard = () => {
 
         {filteredApps.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            {filteredApps.map((app, index) => (
-              <div key={index}>{renderCard(app, index)}</div>
-            ))}
+            {filteredApps.map((app) => {
+              const originalIndex = activePinnedApps.findIndex(
+                (a) => a === app
+              );
+              if (originalIndex === -1) return null;
+              return (
+                <div key={originalIndex}>{renderCard(app, originalIndex)}</div>
+              );
+            })}
           </div>
         )}
       </div>
