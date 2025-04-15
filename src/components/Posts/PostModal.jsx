@@ -70,7 +70,7 @@ const PostModal = ({
         />
       )}
 
-      <dialog id={modalId} className="modal">
+      <dialog id={modalId} className="modal backdrop-blur-sm !bg-primary/25">
         <div className="modal-box bg-neon">
           <h3 className="font-bold text-lg mb-4">
             {mode === "edit" ? "Edit your post" : "Create a new post"}

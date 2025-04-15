@@ -6,7 +6,7 @@ const IconBtn = ({ text, icon, color, transparent, onClick }) => {
   return (
     <button
       className={`btn border-none flex ${bgClasses} ${
-        color === "ultramarine" ? "text-base" : "text-text"
+        color === "ultramarine" || color === "lilac" ? "text-base" : "text-text"
       } ${!text ? "gap-0" : "gap-2"}`}
       onClick={onClick}
     >

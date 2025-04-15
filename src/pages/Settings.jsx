@@ -13,7 +13,7 @@ import {
 } from "../utils/user";
 import AppCheckbox from "../components/Settings/AppCheckbox";
 import ThemeController from "../components/Settings/ThemeController";
-import CommunitySelector from "../components/CommunitySelector";
+import CommunitySettingsModal from "../components/Settings/CommunitySettingsModal";
 import { showToast } from "../utils/toast";
 import {
   fetchAllCommunities,
@@ -34,6 +34,7 @@ const Settings = () => {
   const [communities, setCommunities] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [isCommunityModalOpen, setCommunityModalOpen] = useState(false);
 
   const {
     // joinedCommunities,
@@ -71,24 +72,6 @@ const Settings = () => {
   if (!user) {
     return <div className="p-8 text-center">Loading user data...</div>;
   }
-
-  // Join selected community
-  const handleJoin = async (e) => {
-    e.preventDefault();
-    if (!selectedId) return;
-
-    try {
-      await joinCommunity(selectedId);
-      await refreshJoinedCommunities();
-
-      const joined = communities.find((c) => c.id === parseInt(selectedId));
-      setCurrentCommunity(joined);
-      showToast(`Joined "${joined.name}"!`, "success");
-      navigate("/");
-    } catch (err) {
-      showToast(err.message, "error");
-    }
-  };
 
   const handleChangeUsername = async (e) => {
     {
@@ -278,18 +261,6 @@ const Settings = () => {
                     }))
                   }
                 />
-                {/* <AppCheckbox
-              icon={"fi-rr-megaphone"}
-              iconColor={"sage"}
-              appName={"Messages"}
-              checked={pinboardSettings.messages}
-              onChange={() =>
-                setPinboardSettings((prev) => ({
-                  ...prev,
-                  messages: !prev.messages,
-                }))
-              }
-            /> */}
                 <AppCheckbox
                   icon={"fi-rr-calendar"}
                   iconColor={"lilac"}
@@ -326,7 +297,7 @@ const Settings = () => {
                 onSubmit={handleChangeUsername}
               >
                 {/* Username Input */}
-                <div className="form-control flex flex-col items-start gap-4 xl:flex-row xl:items-center pb-8 border-b border-lilac">
+                <div className="form-control flex flex-col items-start gap-4 2xl:flex-row 2xl:items-center pb-8 border-b border-lilac">
                   <label className="label">
                     <span className="label-text font-medium text-text">
                       New username
@@ -350,7 +321,7 @@ const Settings = () => {
                 onSubmit={handleChangePassword}
               >
                 {/* Password Input */}
-                <div className="form-control flex flex-col items-start gap-4 xl:flex-row xl:items-center pt-4">
+                <div className="form-control flex flex-col items-start gap-4 2xl:flex-row 2xl:items-center pt-4">
                   <label className="label">
                     <span className="label-text text-text font-medium">
                       New password (min 8 characters)
@@ -367,7 +338,7 @@ const Settings = () => {
                 </div>
 
                 {/* Confirm Password Input */}
-                <div className="form-control flex flex-col items-start gap-4 xl:flex-row xl:items-center ">
+                <div className="form-control flex flex-col items-start gap-4 2xl:flex-row 2xl:items-center ">
                   <label className="label">
                     <span className="label-text text-text font-medium">
                       Confirm new password
@@ -382,7 +353,7 @@ const Settings = () => {
                     required
                   />
                 </div>
-                <div className="flex xl:justify-end justify-start">
+                <div className="flex 2xl:justify-end justify-start">
                   <button type="submit" className="btn btn-secondary text-base">
                     change password
                   </button>
@@ -399,38 +370,15 @@ const Settings = () => {
           </div>
           <div className="collapse-content ">
             <div className="flex flex-col gap-4">
-              {/* Removed the selector bc sidebar alone works fine  */}
-              {/* <h4>Choose your community</h4> */}
-              {/* <CommunitySelector
-              communities={joinedCommunities}
-              onSelect={(slug) => {
-                const selected = joinedCommunities.find((c) => c.slug === slug);
-                if (selected) {
-                  setCurrentCommunity(selected); // set it globally in your context
-                }
-              }}
-            /> */}
-              <h4>Join a new Community</h4>
-              <form onSubmit={handleJoin} className="w-full max-w-sm">
-                <div className="flex items-center gap-4">
-                  <select
-                    className="w-full p-3 border-base text-text bg-primary rounded-2xl appearance-none pr-10 focus:outline-lilac"
-                    value={selectedId}
-                    onChange={(e) => setSelectedId(e.target.value)}
-                  >
-                    <option value="">Select a community</option>
-                    {communities.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                  <IconBtn text="Join" icon="fi-rr-arrow-right" color="lilac" />
-                </div>
-              </form>
+              <IconBtn
+                text={`Join or add a community`}
+                icon="fi-rr-plus-small"
+                color="lilac"
+                onClick={() => setCommunityModalOpen(true)}
+              />
+
               {currentCommunity && (
-                <div className="flex flex-col gap-4 items-start">
-                  <h4>Leave your Community</h4>
+                <div className="flex flex-col gap-4">
                   <IconBtn
                     text={`Leave ${currentCommunity.name}`}
                     icon="fi-rr-leave"
@@ -445,7 +393,7 @@ const Settings = () => {
 
         {/* Admin community settings */}
         {currentCommunity?.role === "admin" && (
-          <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+          <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
             <input type="radio" name="my-accordion-2" />
             <div className="collapse-title">
               <div className="flex items-center gap-4">
@@ -492,7 +440,7 @@ const Settings = () => {
                 </div>
                 <div className="flex items-center justify-end">
                   <IconBtn
-                    text={`Delete ${currentCommunity.name}`}
+                    text={`Delete ${currentCommunity.name} community`}
                     icon="fi-rr-trash"
                     color="ultramarine"
                     onClick={handleDelete}
@@ -547,6 +495,22 @@ const Settings = () => {
           </div>
         </div>
       </div>
+
+      {isCommunityModalOpen && (
+        <div className="fixed inset-0 bg-primary/25 backdrop-blur-sm z-50 flex items-center justify-center framer-motion">
+          <div className="bg-base p-4 md:p-6 rounded-3xl shadow-lg relative w-full max-w-xl mx-4">
+            <button
+              className="absolute top-6 right-6 text-lg text-text "
+              onClick={() => setCommunityModalOpen(false)}
+            >
+              ✕
+            </button>
+            <CommunitySettingsModal
+              closeModal={() => setCommunityModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

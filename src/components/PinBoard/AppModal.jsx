@@ -33,7 +33,10 @@ const AppModal = ({ onSelect }) => {
           color="neon"
           onClick={() => document.getElementById("app_modal").showModal()}
         />
-        <dialog id="app_modal" className="modal">
+        <dialog
+          id="app_modal"
+          className="modal backdrop-blur-sm !bg-primary/25"
+        >
           <div className="modal-box bg-primary">
             <h3 className="font-bold text-lg  mb-4">Choose an App</h3>
 

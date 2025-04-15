@@ -65,7 +65,6 @@ function App() {
               <Route path="/" element={<SignedOutLayout />}>
                 <Route path="signin" element={<SignIn />} />
                 <Route path="signup" element={<SignUp />} />
-                <Route path="onboarding" element={<Onboarding />} />
               </Route>
               <Route path="get-started" element={<LandingPage />} />
             </Routes>
