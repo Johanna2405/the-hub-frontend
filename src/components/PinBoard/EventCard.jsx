@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { useCommunity } from "../../context/CommunityContext";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router";
+import {
+  fetchEvents,
+  fetchCommunityEvents,
+  fetchCommunityPinBoard,
+  updateCommunityPin,
+  updateCommunityPinBoard,
+} from "../../utils/calendarAPI";
 import IconBtn from "../IconBtn";
-import { fetchEvents } from "../../utils/calendarAPI";
 
 const EventCard = ({ onRemove, index }) => {
   const { currentCommunity, pinBoard, setPinBoard } = useCommunity();
@@ -27,48 +33,66 @@ const EventCard = ({ onRemove, index }) => {
 
   // Fetch events
   useEffect(() => {
-    const loadEvents = async () => {
+    const loadEventsAndPin = async () => {
       try {
-        let result = [];
+        let fetchedEvents = [];
 
         if (isCommunity && currentCommunity?.id) {
-          console.log("🌐 Fetching events for community (not implemented)");
-          result = [];
+          console.log("Fetching pinboard for community:", currentCommunity?.id);
+          console.log("🌐 Fetching community events...");
+          fetchedEvents = await fetchCommunityEvents(currentCommunity.id);
+          const res = await fetchCommunityPinBoard(currentCommunity.id);
+          const pins = res.pin_board || [];
+          console.log("📌 Loaded pins from API:", pins);
+
+          const pinned = pins[index];
+          if (pinned?.type === "calendar" && pinned.eventId) {
+            const pinnedEvent = fetchedEvents.find(
+              (e) => e.id === pinned.eventId
+            );
+            if (pinnedEvent) setSelectedEvent(pinnedEvent);
+          }
         } else {
-          console.log("👤 Fetching events for user...");
-          result = await fetchEvents();
+          console.log("👤 Fetching user events...");
+          fetchedEvents = await fetchEvents();
+          const localPinned = pinnedApps[index];
+          if (localPinned?.eventId) {
+            const pinnedEvent = fetchedEvents.find(
+              (e) => e.id === localPinned.eventId
+            );
+            if (pinnedEvent) setSelectedEvent(pinnedEvent);
+          }
         }
 
-        setEvents(result);
-
-        if (eventId) {
-          const found = result.find((e) => e.id === eventId);
-          if (found) setSelectedEvent(found);
-        }
+        setEvents(fetchedEvents);
       } catch (err) {
-        console.error("Failed to fetch events:", err);
+        console.error("Failed to load events or pins:", err);
       }
     };
 
-    loadEvents();
+    loadEventsAndPin();
   }, [user, currentCommunity]);
 
-  const handleSelect = (event) => {
+  const handleSelect = async (event) => {
     setSelectedEvent(event);
     setShowDropdown(false);
 
-    // Update PinBoard
     const updated = isCommunity ? [...pinBoard] : [...pinnedApps];
-    updated[index] = { ...updated[index], eventId: event.id };
+    updated[index] = { ...updated[index], eventId: event.id, type: "calendar" };
 
     if (isCommunity) {
-      setPinBoard(updated);
-      // no updateCommunityPinBoard call -> implement bei Bedarf
+      try {
+        await updateCommunityPinBoard(currentCommunity.id, updated);
+        setPinBoard(updated);
+        console.log("✅ Pinboard updated in backend");
+      } catch (err) {
+        console.error("❌ Failed to update community pin:", err);
+      }
     } else {
       localStorage.setItem("pinnedApps", JSON.stringify(updated));
     }
 
-    console.log("Selected event:", event);
+    console.log("📌 Selected event:", event);
   };
 
   const formattedDate = selectedEvent
