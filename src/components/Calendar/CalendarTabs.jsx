@@ -70,7 +70,6 @@ const CalendarTabs = () => {
       <NewEventModal
         show={showNewEventModal}
         onClose={() => setShowNewEventModal(false)}
-        onSave={() => setShowNewEventModal(false)}
         selectedDay={new Date().getDate().toString().padStart(2, "0")}
         selectedMonth={(new Date().getMonth() + 1).toString().padStart(2, "0")}
         selectedYear={new Date().getFullYear().toString()}

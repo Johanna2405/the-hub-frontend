@@ -45,7 +45,7 @@ const MessageBubble = ({ message, onlineUserIds, lastSeenMap }) => {
             absolute top-[40%] left-2 
             ${
               isLastSeen
-                ? "px-1.5 py-0.5 text-[10px] leading-tight"
+                ? "px-1.5 py-0.5 text-[10px] leading-tight w-24"
                 : "px-2 py-0.5 text-xs"
             }
             text-white rounded shadow-lg z-10
