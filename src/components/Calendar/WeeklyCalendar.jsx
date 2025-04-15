@@ -45,7 +45,7 @@ const WeeklyCalendar = () => {
       }
     };
     loadEvents();
-  }, []);
+  }, [user, isCommunityView, currentCommunity]);
 
   const getWeekDays = (baseDate) => {
     const week = [];
@@ -96,15 +96,6 @@ const WeeklyCalendar = () => {
       setDetailView(date);
     }
   };
-
-  // const handleDeleteEvent = async (id) => {
-  //   try {
-  //     await deleteEvent(id);
-  //     setEvents((prev) => prev.filter((e) => e.id !== id));
-  //   } catch (err) {
-  //     alert("Failed to delete event");
-  //   }
-  // };
 
   return (
     <div className="p-4 bg-base">

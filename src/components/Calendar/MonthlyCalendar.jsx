@@ -47,16 +47,7 @@ const MonthlyCalendar = () => {
       }
     };
     loadEvents();
-  }, []);
-
-  // const handleDeleteEvent = async (id) => {
-  //   try {
-  //     await deleteEvent(id);
-  //     setEvents((prev) => prev.filter((e) => e.id !== id));
-  //   } catch (err) {
-  //     alert("Failed to delete event");
-  //   }
-  // };
+  }, [user, isCommunityView, currentCommunity]);
 
   const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
   const days = Array.from({ length: daysInMonth }, (_, i) => {
