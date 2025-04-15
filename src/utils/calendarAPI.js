@@ -76,3 +76,32 @@ export const removeAttendee = async (event_id, user_id) => {
   const response = await API.delete(`/event-attendees/${event_id}/${user_id}`);
   return response.data;
 };
+
+// GET community events
+export const fetchCommunityEvents = async (communityId) => {
+  const response = await API.get(`/communities/${communityId}/events`);
+  return response.data;
+};
+
+// GET: Community-Pinboard
+export const fetchCommunityPinBoard = async (communityId) => {
+  const res = await API.get(`/communities/${communityId}/pinboard`);
+  return res.data;
+};
+
+// POST: Update Pin at specific index
+export const updateCommunityPin = async (communityId, index, eventId) => {
+  const res = await API.post(`/communities/${communityId}/pinboard`, {
+    index,
+    eventId,
+  });
+  return res.data;
+};
+
+// POST: Update Community Pinboard
+export const updateCommunityPinBoard = async (communityId, pinBoard) => {
+  const response = await API.put(`/communities/${communityId}/pinboard`, {
+    pin_board: pinBoard,
+  });
+  return response.data;
+};
