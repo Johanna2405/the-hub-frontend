@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import IconBtn from "../IconBtn";
 import EventList from "./EventList";
-import { fetchEvents, deleteEvent } from "../../utils/calendarAPI";
+import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
 
 const DailyCalendar = ({ onPrev, onNext }) => {
@@ -57,6 +57,7 @@ const DailyCalendar = ({ onPrev, onNext }) => {
       } catch (err) {
         const fallback = localStorage.getItem("daily_events");
         if (fallback) setEvents(JSON.parse(fallback));
+        console.log("Error fetching events:", err);
       } finally {
         setLoading(false);
       }

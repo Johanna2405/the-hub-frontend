@@ -85,6 +85,7 @@ const EventList = ({
       await deleteEvent(id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err) {
+      console.log(err);
       alert("Delete failed");
     }
   };
@@ -92,11 +93,13 @@ const EventList = ({
   const handleEditSave = async (updatedEvent) => {
     try {
       const result = await updateEvent(updatedEvent.id, updatedEvent);
+
       setEvents((prev) =>
         prev.map((e) => (e.id === updatedEvent.id ? result : e))
       );
       setShowEditModal(false);
     } catch (err) {
+      console.log(err);
       alert("Update failed");
     }
   };
