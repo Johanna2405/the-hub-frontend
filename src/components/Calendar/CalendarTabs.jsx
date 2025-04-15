@@ -5,9 +5,11 @@ import WeeklyCalendar from "./WeeklyCalendar";
 import MonthlyCalendar from "./MonthlyCalendar";
 import Header from "../Header";
 import IconBtn from "../IconBtn";
+import NewEventModal from "./NewEventModal";
 
 const CalendarTabs = () => {
   const [view, setView] = useState("day");
+  const [showNewEventModal, setShowNewEventModal] = useState(false);
   const navigate = useNavigate();
 
   const tabStyle = (type) =>
@@ -64,6 +66,15 @@ const CalendarTabs = () => {
       {view === "month" && (
         <MonthlyCalendar onPrev={goToPrevView} onNext={goToNextView} />
       )}
+
+      <NewEventModal
+        show={showNewEventModal}
+        onClose={() => setShowNewEventModal(false)}
+        onSave={() => setShowNewEventModal(false)}
+        selectedDay={new Date().getDate().toString().padStart(2, "0")}
+        selectedMonth={(new Date().getMonth() + 1).toString().padStart(2, "0")}
+        selectedYear={new Date().getFullYear().toString()}
+      />
     </div>
   );
 };
