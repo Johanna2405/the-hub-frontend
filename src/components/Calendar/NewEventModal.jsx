@@ -209,20 +209,22 @@ const NewEventModal = ({
                 <option value="" disabled>
                   Start Time
                 </option>
-                {timeOptions.map((time) => {
-                  const optionDate = new Date(
-                    `${year}-${month}-${day}T${time}:00`
-                  );
-                  const isPastTime =
-                    new Date(`${year}-${month}-${day}`).toDateString() ===
-                      new Date().toDateString() && optionDate < new Date();
+                {timeOptions
+                  .filter((time) => {
+                    const optionDate = new Date(
+                      `${year}-${month}-${day}T${time}:00`
+                    );
+                    const isToday =
+                      new Date(`${year}-${month}-${day}`).toDateString() ===
+                      new Date().toDateString();
 
-                  return (
-                    <option key={time} value={time} disabled={isPastTime}>
+                    return !(isToday && optionDate < new Date());
+                  })
+                  .map((time) => (
+                    <option key={time} value={time}>
                       {time}
                     </option>
-                  );
-                })}
+                  ))}
               </select>
             </div>
             <div>
@@ -236,11 +238,20 @@ const NewEventModal = ({
                 <option value="" disabled>
                   End Time
                 </option>
-                {timeOptions.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
+                {timeOptions
+                  .filter((time) => {
+                    if (!startTime) return true;
+                    const start = new Date(
+                      `${year}-${month}-${day}T${startTime}:00`
+                    );
+                    const end = new Date(`${year}-${month}-${day}T${time}:00`);
+                    return end > start; // only times after start time
+                  })
+                  .map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>
