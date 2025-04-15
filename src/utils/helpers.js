@@ -18,3 +18,20 @@ export const formatTime = (date) =>
     minute: "2-digit",
     hour12: false,
   });
+
+export const generateTimeOptions = () => {
+  const options = [];
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const h = hour.toString().padStart(2, "0");
+      const m = minute.toString().padStart(2, "0");
+      options.push(`${h}:${m}`);
+    }
+  }
+  return options;
+};
+
+export const timeOptions = Array.from({ length: 24 }, (_, hour) => {
+  const h = hour.toString().padStart(2, "0");
+  return [`${h}:00`, `${h}:30`];
+}).flat();

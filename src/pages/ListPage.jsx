@@ -34,10 +34,10 @@ const ListPage = () => {
 
         if (isCommunityView) {
           data = await fetchCommunityLists(currentCommunity?.id);
-          console.log("Fetched lists community:", data);
+          // console.log("Fetched lists community:", data);
         } else {
           data = await fetchListsPerUserId(user_id);
-          console.log("Fetched lists:", data);
+          // console.log("Fetched lists:", data);
         }
 
         const formatted = data.map((list) => ({

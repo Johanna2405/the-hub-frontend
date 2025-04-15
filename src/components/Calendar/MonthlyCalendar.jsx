@@ -3,26 +3,43 @@ import IconBtn from "../IconBtn";
 import EventList from "./EventList";
 import { fetchEvents, deleteEvent } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
+import { useCommunity } from "../../context/CommunityContext";
+import { fetchCommunityEvents } from "../../utils/community";
 
 const MonthlyCalendar = () => {
   const { user } = useUser();
+  const { currentCommunity } = useCommunity();
   const today = new Date();
-
   const [selectedDate, setSelectedDate] = useState(today);
   const [detailView, setDetailView] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const selectedMonth = selectedDate.getMonth();
   const selectedYear = selectedDate.getFullYear();
+  const isCommunityView = Boolean(currentCommunity?.id);
 
   useEffect(() => {
+    const user_id = user?.id;
+    if (!user_id) return;
+
     const loadEvents = async () => {
       try {
-        const allEvents = await fetchEvents();
-        setEvents(allEvents);
-        localStorage.setItem("monthly_events", JSON.stringify(allEvents));
+        let events = [];
+
+        if (isCommunityView) {
+          events = await fetchCommunityEvents(currentCommunity?.id);
+        } else {
+          events = await fetchEvents();
+        }
+
+        const formattedEvents = events.map((event) => ({
+          ...event,
+        }));
+
+        setEvents(formattedEvents);
+        localStorage.setItem("monthly_events", JSON.stringify(formattedEvents));
       } catch (err) {
+        console.log("Error loading events:", err);
         const cached = localStorage.getItem("monthly_events");
         if (cached) setEvents(JSON.parse(cached));
       } finally {
@@ -30,16 +47,7 @@ const MonthlyCalendar = () => {
       }
     };
     loadEvents();
-  }, []);
-
-  const handleDeleteEvent = async (id) => {
-    try {
-      await deleteEvent(id);
-      setEvents((prev) => prev.filter((e) => e.id !== id));
-    } catch (err) {
-      alert("Failed to delete event");
-    }
-  };
+  }, [user, isCommunityView, currentCommunity]);
 
   const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
   const days = Array.from({ length: daysInMonth }, (_, i) => {

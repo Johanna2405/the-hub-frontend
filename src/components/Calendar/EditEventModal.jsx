@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { formatTime, getDaysInMonth } from "../../utils/helpers";
+import { formatTime, getDaysInMonth, timeOptions } from "../../utils/helpers";
 
 const EditEventModal = ({ show, onClose, onSave, event }) => {
   const [title, setTitle] = useState("");
@@ -11,11 +11,6 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
   const [day, setDay] = useState("01");
   const [month, setMonth] = useState("01");
   const [year, setYear] = useState(new Date().getFullYear().toString());
-
-  const timeOptions = Array.from({ length: 24 }, (_, hour) => {
-    const h = hour.toString().padStart(2, "0");
-    return [`${h}:00`, `${h}:30`];
-  }).flat();
 
   useEffect(() => {
     if (event) {
@@ -52,12 +47,17 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const date = `${year}-${month}-${day}`;
+    const start_time = new Date(`${date}T${startTime}:00`).toISOString();
+    const end_time = new Date(`${date}T${endTime}:00`).toISOString();
+
     onSave({
       id: event.id,
-      date: `${year}-${month}-${day}`,
+      date,
       title,
-      start_time: `${year}-${month}-${day}T${startTime}:00`,
-      end_time: `${year}-${month}-${day}T${endTime}:00`,
+      start_time,
+      end_time,
       description,
       type,
       location,

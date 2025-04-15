@@ -85,6 +85,7 @@ const EventList = ({
       await deleteEvent(id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err) {
+      console.log(err);
       alert("Delete failed");
     }
   };
@@ -92,11 +93,13 @@ const EventList = ({
   const handleEditSave = async (updatedEvent) => {
     try {
       const result = await updateEvent(updatedEvent.id, updatedEvent);
+
       setEvents((prev) =>
         prev.map((e) => (e.id === updatedEvent.id ? result : e))
       );
       setShowEditModal(false);
     } catch (err) {
+      console.log(err);
       alert("Update failed");
     }
   };
@@ -110,7 +113,16 @@ const EventList = ({
           <div key={event.id} className="bg-primary rounded-2xl p-6">
             <div className="flex justify-between items-center mb-2">
               <h4 className="text-xl font-bold text-text">{event.title}</h4>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`rounded-full px-3 py-1 text-sm ${
+                    event.type === "Private"
+                      ? "border border-secondary text-secondary"
+                      : "border border-text text-text"
+                  }`}
+                >
+                  {event.type}
+                </span>
                 <IconBtn
                   color="base"
                   icon="fi-rr-pencil"
@@ -140,6 +152,7 @@ const EventList = ({
               </div>
             </div>
             <p className="text-text text-sm">{event.description}</p>
+            <p className="text-text text-sm">{event.date}</p>
             <p className="text-text text-sm mt-1">
               {new Date(event.start_time).toLocaleTimeString([], {
                 hour: "2-digit",
@@ -150,6 +163,12 @@ const EventList = ({
                 hour: "2-digit",
                 minute: "2-digit",
               })}
+            </p>
+            <p className="flex gap-2 items-center text-text mt-1">
+              <i className="fi-rr-home-location text-md"></i>
+              <span className="text-sm">
+                {event.location || "Not specified"}
+              </span>
             </p>
           </div>
         ))
