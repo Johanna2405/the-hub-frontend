@@ -6,7 +6,6 @@ import {
   fetchEvents,
   fetchCommunityEvents,
   fetchCommunityPinBoard,
-  updateCommunityPin,
   updateCommunityPinBoard,
 } from "../../utils/calendarAPI";
 import IconBtn from "../IconBtn";
@@ -38,12 +37,9 @@ const EventCard = ({ onRemove, index }) => {
         let fetchedEvents = [];
 
         if (isCommunity && currentCommunity?.id) {
-          console.log("Fetching pinboard for community:", currentCommunity?.id);
-          console.log("🌐 Fetching community events...");
           fetchedEvents = await fetchCommunityEvents(currentCommunity.id);
           const res = await fetchCommunityPinBoard(currentCommunity.id);
           const pins = res.pin_board || [];
-          console.log("📌 Loaded pins from API:", pins);
 
           const pinned = pins[index];
           if (pinned?.type === "calendar" && pinned.eventId) {
@@ -53,7 +49,6 @@ const EventCard = ({ onRemove, index }) => {
             if (pinnedEvent) setSelectedEvent(pinnedEvent);
           }
         } else {
-          console.log("👤 Fetching user events...");
           fetchedEvents = await fetchEvents();
           const localPinned = pinnedApps[index];
           if (localPinned?.eventId) {
@@ -84,15 +79,12 @@ const EventCard = ({ onRemove, index }) => {
       try {
         await updateCommunityPinBoard(currentCommunity.id, updated);
         setPinBoard(updated);
-        console.log("✅ Pinboard updated in backend");
       } catch (err) {
-        console.error("❌ Failed to update community pin:", err);
+        console.error("Failed to update community pin:", err);
       }
     } else {
       localStorage.setItem("pinnedApps", JSON.stringify(updated));
     }
-
-    console.log("📌 Selected event:", event);
   };
 
   const formattedDate = selectedEvent
