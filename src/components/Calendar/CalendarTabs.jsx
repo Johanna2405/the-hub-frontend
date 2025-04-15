@@ -11,6 +11,7 @@ const CalendarTabs = () => {
   const [view, setView] = useState("day");
   const [showNewEventModal, setShowNewEventModal] = useState(false);
   const navigate = useNavigate();
+  const [refreshEvents, setRefreshEvents] = useState(false);
 
   const tabStyle = (type) =>
     `px-4 py-2 rounded-full text-md font-semibold transition-all duration-200 
@@ -58,13 +59,25 @@ const CalendarTabs = () => {
 
       {/* Inject Navigation Button Handlers */}
       {view === "day" && (
-        <DailyCalendar onPrev={goToPrevView} onNext={goToNextView} />
+        <DailyCalendar
+          onPrev={goToPrevView}
+          onNext={goToNextView}
+          refreshTrigger={refreshEvents}
+        />
       )}
       {view === "week" && (
-        <WeeklyCalendar onPrev={goToPrevView} onNext={goToNextView} />
+        <WeeklyCalendar
+          onPrev={goToPrevView}
+          onNext={goToNextView}
+          refreshTrigger={refreshEvents}
+        />
       )}
       {view === "month" && (
-        <MonthlyCalendar onPrev={goToPrevView} onNext={goToNextView} />
+        <MonthlyCalendar
+          onPrev={goToPrevView}
+          onNext={goToNextView}
+          refreshTrigger={refreshEvents}
+        />
       )}
 
       <NewEventModal
@@ -73,6 +86,7 @@ const CalendarTabs = () => {
         selectedDay={new Date().getDate().toString().padStart(2, "0")}
         selectedMonth={(new Date().getMonth() + 1).toString().padStart(2, "0")}
         selectedYear={new Date().getFullYear().toString()}
+        onEventCreated={() => setRefreshEvents((prev) => !prev)}
       />
     </div>
   );

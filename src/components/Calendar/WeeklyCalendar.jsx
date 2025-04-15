@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import IconBtn from "../IconBtn";
 import EventList from "./EventList";
-import { fetchEvents, deleteEvent } from "../../utils/calendarAPI";
+import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";
 
-const WeeklyCalendar = () => {
+const WeeklyCalendar = ({ refreshTrigger }) => {
   const { user } = useUser();
   const { currentCommunity } = useCommunity();
   const today = new Date();
@@ -35,7 +35,7 @@ const WeeklyCalendar = () => {
         }));
 
         setEvents(formattedEvents);
-        localStorage.setItem("weekly_events", JSON.stringify(formattedEvents));
+        // localStorage.setItem("weekly_events", JSON.stringify(formattedEvents));
       } catch (err) {
         console.log("Error loading events:", err);
         const fallback = localStorage.getItem("weekly_events");
@@ -45,7 +45,7 @@ const WeeklyCalendar = () => {
       }
     };
     loadEvents();
-  }, [user, isCommunityView, currentCommunity]);
+  }, [user, isCommunityView, currentCommunity, refreshTrigger]);
 
   const getWeekDays = (baseDate) => {
     const week = [];

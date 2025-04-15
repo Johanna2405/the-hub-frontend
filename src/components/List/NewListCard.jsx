@@ -4,6 +4,7 @@ import { createList } from "../../utils/listsAPI";
 import { useNavigate } from "react-router";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
+import { showToast } from "../../utils/toast";
 
 const NewListCard = ({
   defaultValues = {
@@ -37,13 +38,13 @@ const NewListCard = ({
         community_id,
       };
 
-      // console.log("Sending payload:", listPayload);
       await createList(listPayload);
 
-      // console.log("List created:", createdList);
+      showToast(`List added!`, "success");
       navigate(`/lists`);
     } catch (error) {
       console.error("Error creating list:", error);
+      showToast(`Error creating list!`, "error");
     }
   };
 
@@ -57,12 +58,22 @@ const NewListCard = ({
         <div className="flex flex-col">
           <label className="block font-semibold mb-1 text-text">Title</label>
           <input
-            {...register("title", { required: "Title is required" })}
+            {...register("title", {
+              required: "Title is required",
+              minLength: {
+                value: 3,
+                message: "Title must be at least 3 characters",
+              },
+              maxLength: {
+                value: 50,
+                message: "Title must be 50 characters or less",
+              },
+            })}
             placeholder="Title"
             className="w-full p-3 rounded-xl border-base bg-base font-extralight text-text focus:outline-none"
           />
           {errors.title && (
-            <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>
+            <p className="text-sm !text-red-600 mt-1">{errors.title.message}</p>
           )}
         </div>
 
@@ -71,7 +82,9 @@ const NewListCard = ({
             Choose Category
           </label>
           <select
-            {...register("category")}
+            {...register("category", {
+              required: "Please select a category",
+            })}
             className="w-full p-3 border-base text-text bg-base rounded-2xl font-extralight appearance-none pr-10 focus:outline-none"
           >
             <option value="To Do List">To Do List</option>
@@ -81,6 +94,11 @@ const NewListCard = ({
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
             <ListIconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
           </div>
+          {errors.category && (
+            <p className="text-sm !text-red-600 mt-1">
+              {errors.category.message}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col relative">
@@ -88,7 +106,13 @@ const NewListCard = ({
             Choose Privacy
           </label>
           <select
-            {...register("privacy")}
+            {...register("privacy", {
+              required: "Please select privacy level",
+              validate: (value) =>
+                value === "Private" ||
+                value === "Community" ||
+                "Invalid option",
+            })}
             className="w-full p-3 border-base text-text bg-base rounded-2xl font-extralight appearance-none pr-10 focus:outline-none"
           >
             <option value="Private">Private</option>
@@ -97,6 +121,11 @@ const NewListCard = ({
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
             <ListIconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
           </div>
+          {errors.privacy && (
+            <p className="text-sm !text-red-600 mt-1">
+              {errors.privacy.message}
+            </p>
+          )}
         </div>
 
         <div className="flex justify-end mt-6 gap-3">

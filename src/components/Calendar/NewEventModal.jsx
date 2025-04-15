@@ -3,23 +3,48 @@ import { generateTimeOptions, getDaysInMonth } from "../../utils/helpers";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { createEvent } from "../../utils/calendarAPI";
+import { showToast } from "../../utils/toast";
 
-const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
+const NewEventModal = ({
+  show,
+  onClose,
+  onDayChange,
+  selectedDay,
+  onEventCreated,
+}) => {
+  const { user } = useUser();
+  const { currentCommunity } = useCommunity();
+
+  //make it dynamically
+  const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, "0");
+  const currentYear = new Date().getFullYear().toString();
+
   const [day, setDay] = useState(selectedDay || "");
-  const [month, setMonth] = useState("03");
-  const [year, setYear] = useState("2025");
+  const [month, setMonth] = useState(currentMonth);
+  const [year, setYear] = useState(currentYear);
   const [title, setTitle] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Private");
+  const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const { user } = useUser();
-  const { currentCommunity } = useCommunity();
 
   if (!show) return null;
 
   const timeOptions = generateTimeOptions();
+
+  const resetForm = () => {
+    setDay("");
+    setMonth("03");
+    setYear("2025");
+    setTitle("");
+    setStartTime("");
+    setEndTime("");
+    setDescription("");
+    setType("Private");
+    setLocation("");
+    onClose();
+  };
 
   const handleSubmit = async (e) => {
     try {
@@ -34,13 +59,33 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
         community_id = currentCommunity.id;
       }
 
+      if (!title.trim()) {
+        showToast("Title is required.", "error");
+        return;
+      }
+
+      if (!day || !month || !year) {
+        showToast("Please select a valid date.", "error");
+        return;
+      }
+
       if (!startTime || !endTime) {
-        alert("Start and end time are required.");
+        showToast("Start and end time are required.", "error");
         return;
       }
 
       if (startTime >= endTime) {
-        alert("End time must be after start time.");
+        showToast("End time must be after start time.", "error");
+        return;
+      }
+
+      if (!description.trim()) {
+        showToast("Description is required.", "error");
+        return;
+      }
+
+      if (!location.trim()) {
+        showToast("Location is required.", "error");
         return;
       }
 
@@ -61,19 +106,14 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
       };
 
       await createEvent(eventPayload);
+      showToast(`Event added!`, "success");
 
-      setDay("");
-      setMonth("03");
-      setYear("2025");
-      setTitle("");
-      setStartTime("");
-      setEndTime("");
-      setDescription("");
-      setType("Private");
-      setLocation("");
-      onClose();
+      if (onEventCreated) onEventCreated();
+
+      resetForm();
     } catch (e) {
       console.error("Error creating list:", e);
+      showToast("Failed to add event", "error");
     }
   };
 
@@ -118,6 +158,7 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
                 className="select select-bordered w-full bg-primary text-text"
+                required
               >
                 {Array.from({ length: 12 }, (_, i) => (
                   <option
@@ -135,6 +176,7 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
                 className="select select-bordered w-full bg-primary text-text"
+                required
               >
                 {Array.from({ length: 20 }, (_, i) => {
                   const yearOption = (new Date().getFullYear() + i).toString();
@@ -170,11 +212,22 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
                 <option value="" disabled>
                   Start Time
                 </option>
-                {timeOptions.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
+                {timeOptions
+                  .filter((time) => {
+                    const optionDate = new Date(
+                      `${year}-${month}-${day}T${time}:00`
+                    );
+                    const isToday =
+                      new Date(`${year}-${month}-${day}`).toDateString() ===
+                      new Date().toDateString();
+
+                    return !(isToday && optionDate < new Date());
+                  })
+                  .map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
               </select>
             </div>
             <div>
@@ -188,11 +241,20 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
                 <option value="" disabled>
                   End Time
                 </option>
-                {timeOptions.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
+                {timeOptions
+                  .filter((time) => {
+                    if (!startTime) return true;
+                    const start = new Date(
+                      `${year}-${month}-${day}T${startTime}:00`
+                    );
+                    const end = new Date(`${year}-${month}-${day}T${time}:00`);
+                    return end > start;
+                  })
+                  .map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>
@@ -203,6 +265,7 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
               onChange={(e) => setDescription(e.target.value)}
               className="textarea textarea-bordered w-full bg-primary text-text"
               placeholder="Enter details"
+              required
             />
           </div>
           <div>
@@ -213,6 +276,7 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
               onChange={(e) => setLocation(e.target.value)}
               className="input input-bordered w-full bg-primary text-text"
               placeholder="e.g., Conference Room A"
+              required
             />
           </div>
           <div>
@@ -221,7 +285,11 @@ const NewEventModal = ({ show, onClose, onDayChange, selectedDay }) => {
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="select select-bordered w-full bg-primary text-text"
+              required
             >
+              <option value="" disabled>
+                Select type
+              </option>
               <option value="Private">Private</option>
               <option value="Community">Community</option>
             </select>
