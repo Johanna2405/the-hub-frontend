@@ -1,41 +1,35 @@
+import { useUser } from "../../context/UserContext";
+import { useEffect } from "react";
+
 const ThemeController = () => {
+  const { currentTheme, setCurrentTheme } = useUser();
+
+  // Apply theme to <html> when it changes
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+  }, [currentTheme]);
+
+  // Toggle function
+  const toggleTheme = () => {
+    setCurrentTheme(currentTheme === "thehub" ? "thedarkhub" : "thehub");
+  };
+
   return (
-    <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-secondary text-base">
-        Choose your theme
-        <svg
-          width="12px"
-          height="12px"
-          className="inline-block h-2 w-2 fill-current opacity-60"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 2048 2048"
-        >
-          <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-        </svg>
-      </div>
-      <ul
-        tabIndex={0}
-        className="dropdown-content bg-base-300  rounded-2xl z-1 w-52 p-2 shadow-2xl"
-      >
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller w-full btn btn-sm  btn-ghost justify-start hover:border-none"
-            aria-label="Default light"
-            value="thehub"
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller w-full btn btn-sm btn-ghost justify-start  hover:border-none"
-            aria-label="Default dark"
-            value="thedarkhub"
-          />
-        </li>
-      </ul>
+    <div className="flex items-center gap-4 px-4 py-2 bg-base rounded-2xl">
+      <label className="swap swap-rotate">
+        {/* this hidden checkbox controls the state */}
+        <input
+          type="checkbox"
+          className="theme-controller"
+          checked={currentTheme === "thedarkhub"}
+          onChange={toggleTheme}
+        />
+        {/* sun icon */}
+        <i className="fi-rr-brightness swap-off text-text text-2xl pt-1"></i>
+        {/* moon icon */}
+        <i className="fi-rr-moon-stars swap-on text-text text-2xl pt-1"></i>
+        <span className="text-lg font-normal ml-10 mt-1">Switch theme</span>
+      </label>
     </div>
   );
 };

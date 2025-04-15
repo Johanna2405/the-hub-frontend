@@ -503,7 +503,7 @@ const Settings = () => {
           </div>
         )}
         {/* // profile picture */}
-        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl md:w-3/4">
+        <div className="collapse collapse-arrow bg-base-100 border border-lilac rounded-3xl">
           <input type="radio" name="my-accordion-2" />
           <div className="collapse-title font-semibold text-lg">
             Edit profile picture

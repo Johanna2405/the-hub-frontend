@@ -20,12 +20,25 @@ export const UserProvider = ({ children }) => {
           calendar: true,
         };
   });
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    return stored ? JSON.parse(stored) : "thehub";
+  });
 
   const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("pinboardSettings", JSON.stringify(pinboardSettings));
   }, [pinboardSettings]);
+
+  // Load and apply current Theme
+  useEffect(() => {
+    localStorage.setItem("theme", JSON.stringify(currentTheme));
+  }, [currentTheme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+  }, []);
 
   // Fetch user on initial load
   useEffect(() => {
@@ -79,6 +92,8 @@ export const UserProvider = ({ children }) => {
         setUser,
         pinboardSettings,
         setPinboardSettings,
+        currentTheme,
+        setCurrentTheme,
       }}
     >
       {children}

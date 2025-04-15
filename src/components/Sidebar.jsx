@@ -1,8 +1,9 @@
 import SidebarLink from "./SidebarLink";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
-import CommunitySelector from "./CommunitySelector";
 import { useNavigate } from "react-router";
+import CommunitySelector from "./CommunitySelector";
+import ThemeController from "./Settings/ThemeController";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
@@ -142,7 +143,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           })}
         </nav>
         <h3>Settings</h3>
+        {/* Theme controller */}
         <div className="flex flex-col gap-4">
+          <ThemeController />
           <SidebarLink
             target={"/settings"}
             icon={"fi-rr-settings-sliders"}
