@@ -245,7 +245,7 @@ const NewEventModal = ({
                       `${year}-${month}-${day}T${startTime}:00`
                     );
                     const end = new Date(`${year}-${month}-${day}T${time}:00`);
-                    return end > start; // only times after start time
+                    return end > start;
                   })
                   .map((time) => (
                     <option key={time} value={time}>

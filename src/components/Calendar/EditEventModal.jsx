@@ -46,23 +46,47 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
   if (!show) return null;
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const date = `${year}-${month}-${day}`;
-    const start_time = new Date(`${date}T${startTime}:00`).toISOString();
-    const end_time = new Date(`${date}T${endTime}:00`).toISOString();
+      if (!title.trim()) {
+        alert("Title is required.");
+        return;
+      }
 
-    onSave({
-      id: event.id,
-      date,
-      title,
-      start_time,
-      end_time,
-      description,
-      type,
-      location,
-    });
-    onClose();
+      if (!description.trim()) {
+        alert("Description is required.");
+        return;
+      }
+
+      if (!location.trim()) {
+        alert("Location is required.");
+        return;
+      }
+
+      if (!type) {
+        alert("Please select a type.");
+        return;
+      }
+
+      const date = `${year}-${month}-${day}`;
+      const start_time = new Date(`${date}T${startTime}:00`).toISOString();
+      const end_time = new Date(`${date}T${endTime}:00`).toISOString();
+
+      onSave({
+        id: event.id,
+        date,
+        title,
+        start_time,
+        end_time,
+        description,
+        type,
+        location,
+      });
+      onClose();
+    } catch (error) {
+      console.error("Error saving event:", error);
+    }
   };
 
   return (
@@ -148,11 +172,22 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               className="select select-bordered w-full bg-primary text-text"
               required
             >
-              {timeOptions.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
+              {timeOptions
+                .filter((time) => {
+                  const optionDate = new Date(
+                    `${year}-${month}-${day}T${time}:00`
+                  );
+                  const isToday =
+                    new Date(`${year}-${month}-${day}`).toDateString() ===
+                    new Date().toDateString();
+
+                  return !(isToday && optionDate < new Date());
+                })
+                .map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -164,11 +199,20 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               className="select select-bordered w-full bg-primary text-text"
               required
             >
-              {timeOptions.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
+              {timeOptions
+                .filter((time) => {
+                  if (!startTime) return true;
+                  const start = new Date(
+                    `${year}-${month}-${day}T${startTime}:00`
+                  );
+                  const end = new Date(`${year}-${month}-${day}T${time}:00`);
+                  return end > start;
+                })
+                .map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -179,6 +223,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               onChange={(e) => setDescription(e.target.value)}
               className="textarea textarea-bordered w-full bg-primary text-text"
               placeholder="Enter details"
+              required
             />
           </div>
           <div>
@@ -189,6 +234,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               onChange={(e) => setLocation(e.target.value)}
               className="input input-bordered w-full bg-primary text-text"
               placeholder="e.g., Conference Room A"
+              required
             />
           </div>
           <div>
@@ -197,6 +243,7 @@ const EditEventModal = ({ show, onClose, onSave, event }) => {
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="select select-bordered w-full bg-primary text-text"
+              required
             >
               <option value="Private">Private</option>
               <option value="Community">Community</option>
