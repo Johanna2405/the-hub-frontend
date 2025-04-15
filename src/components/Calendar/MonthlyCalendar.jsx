@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import IconBtn from "../IconBtn";
 import EventList from "./EventList";
-import { fetchEvents, deleteEvent } from "../../utils/calendarAPI";
+import { fetchEvents } from "../../utils/calendarAPI";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
 import { fetchCommunityEvents } from "../../utils/community";

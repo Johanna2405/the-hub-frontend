@@ -2,8 +2,7 @@ import { useState } from "react";
 import { generateTimeOptions, getDaysInMonth } from "../../utils/helpers";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";
-import { createEvent, fetchEvents } from "../../utils/calendarAPI";
-import { fetchCommunityEvents } from "../../utils/community";
+import { createEvent } from "../../utils/calendarAPI";
 
 const NewEventModal = ({
   show,
