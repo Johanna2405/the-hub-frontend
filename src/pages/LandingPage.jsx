@@ -1,13 +1,20 @@
 import { Link } from "react-router";
 import IconBtn from "../components/IconBtn";
 import Footer from "../components/Footer";
+import useSystemDarkMode from "../utils/useSystemDarkMode";
 
 const LandingPage = () => {
+  const isDarkMode = useSystemDarkMode();
+
   return (
     <div className="flex flex-col overflow-x-hidden font-sora justify-center items-center">
       <header className="flex items-center justify-between p-4 gap-4 w-full bg-primary fixed top-0 shadow-sm">
         <Link to={"/get-started"}>
-          <img src="./hub-dark.svg" alt="Logo" className="w-32" />
+          <img
+            src={isDarkMode ? "./hub-light.svg" : "./hub-dark.svg"}
+            alt="Logo"
+            className="w-32"
+          />
         </Link>
         <nav className="flex gap-4 items-center">
           <span className="font-semibold text-xs md:text-sm ">Features</span>
@@ -69,7 +76,7 @@ const LandingPage = () => {
             </p>
           </div>
           <div className="p-4 py-8 flex flex-col gap-4 rounded-3xl hover:bg-primary">
-            <i className="fi-rs-list-check text-aquamarine text-6xl pt-1"></i>
+            <i className="fi-rs-list-check text-ultramarine text-6xl pt-1"></i>
             <h3>Lists</h3>
             <p>
               From shopping to task management, Lists help your group stay

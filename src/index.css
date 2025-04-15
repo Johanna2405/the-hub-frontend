@@ -24,7 +24,7 @@
 }
 
 @plugin "daisyui" {
-  themes: thehub --default, thedarkhub --prefersdark;
+  themes: thehub --default, thedarkhub;
 }
 
 @plugin "daisyui/theme" {
@@ -33,6 +33,7 @@
   prefersdark: false;
   color-scheme: light;
 
+  --color-text: #181a4d;
   --color-base-100: #f5f5f5;
   --color-base-200: #d4dee8;
   --color-base-300: #d4dee8;
@@ -62,8 +63,10 @@
 
 @plugin "daisyui/theme" {
   name: "thedarkhub";
-  prefersdark: true;
+  /* prefersdark: true; */
   color-scheme: dark;
+
+  --color-text: #f5f5f5;
 
   --color-base-100: #1a1a1a; /* Background */
   --color-base-200: #2b2e34; /* Slightly lighter bg */
@@ -214,80 +217,3 @@ a {
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
 }
-
-/* Icon List 
-
-Lists 
-<i className="fi-rs-list-check"></i>
-
- Calendar
-<i className="fi-rr-calendar"></i> 
-
-Messages
-<i className="fi-rr-megaphone"></i>
-
-Posts
-<i className="fi-rr-text"></i>
-
-Save
-<i className="fi-rr-disk"></i>
-
-Delete
-<i className="fi-rr-trash"></i>
-
-Log Out
-<i className="fi fi-rr-exit"></i>
-
-Profile Settings
-<i className="fi-rr-settings-sliders"></i>
-
-Community Settings
-<i className="fi-rs-settings"></i>
-
-Search
-<i className="fi-rr-search"></i>
-
-User
-<i className="fi fi-rr-user"></i>
-
-Notification Bell 
-<i className="fi-rs-bell"></i>
-
-Close X
-<i className="fi fi-br-cross"></i>
-
-Plus
-<i className="fi-rr-plus-small"></i>
-
-Go back Arrow
-<i className="fi-ss-arrow-small-down"></i>
-
-Menu
-<i className="fi-rr-menu-burger"></i>
-
-Checkmark
-<i className="fi-ss-check"></i>
-
-Heart 
-<i className="fi-rr-heart"></i>
-
-Thumbs Up
-<i className="fi-rr-thumbs-up"></i>
-
-Thumbs Down
-<i className="fi-rr-thumbs-down"></i>
-
-Camera
-<i className="fi-rr-camera"></i>
-
-Arrow right / left / up / down
-<i className="fi-rr-angle-small-right"></i>
-<i className="fi-rr-angle-small-left"></i>
-<i className="fi fi-rr-arrow-small-up"></i>
-<i className="fi-rr-angle-small-down"></i>
-
-Location
-<i className="fi-rr-home-location"></i>
-
-Edit pen
-<i className="fi-rr-pencil"></i> */

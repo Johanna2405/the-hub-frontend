@@ -7,7 +7,7 @@ import ThemeController from "./Settings/ThemeController";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
-  const { pinboardSettings } = useUser();
+  const { pinboardSettings, currentTheme } = useUser();
   const {
     joinedCommunities,
     currentCommunity,
@@ -66,7 +66,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       `}
     >
       <div className="flex justify-between p-4">
-        <img src="/hub-dark.svg" alt="Logo" className="w-32" />
+        <img
+          src={`${
+            currentTheme === "thedarkhub" ? "/hub-light.svg" : "/hub-dark.svg"
+          }`}
+          alt="Logo"
+          className="w-32"
+        />
         <button
           className="btn bg-base border-none pt-1"
           onClick={() => setIsOpen(false)}

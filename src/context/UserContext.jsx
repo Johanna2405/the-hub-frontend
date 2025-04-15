@@ -22,7 +22,13 @@ export const UserProvider = ({ children }) => {
   });
   const [currentTheme, setCurrentTheme] = useState(() => {
     const stored = localStorage.getItem("theme");
-    return stored ? JSON.parse(stored) : "thehub";
+    if (stored) return JSON.parse(stored);
+
+    // fallback to system preference
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    return prefersDark ? "thedarkhub" : "thehub";
   });
 
   const navigate = useNavigate();
@@ -33,12 +39,11 @@ export const UserProvider = ({ children }) => {
 
   // Load and apply current Theme
   useEffect(() => {
-    localStorage.setItem("theme", JSON.stringify(currentTheme));
+    if (currentTheme) {
+      localStorage.setItem("theme", JSON.stringify(currentTheme));
+      document.documentElement.setAttribute("data-theme", currentTheme);
+    }
   }, [currentTheme]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", currentTheme);
-  }, []);
 
   // Fetch user on initial load
   useEffect(() => {

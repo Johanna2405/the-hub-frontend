@@ -1,12 +1,19 @@
 import { Link } from "react-router";
+import useSystemDarkMode from "../utils/useSystemDarkMode";
 
 const Footer = () => {
+  const isDarkMode = useSystemDarkMode();
+
   return (
     <footer className="bg-primary w-full px-4 pt-8 pap-8 min-h-[33vh] md:min-h-[28vh] flex flex-col justify-between">
       <div className="flex flex-col md:flex-row items-center justify-between">
         <div className="p-8 flex flex-col items-center md:items-start gap-4">
           <Link to={"/get-started"}>
-            <img src="./hub-dark.svg" alt="Logo" className="w-40 lg:w-56" />
+            <img
+              src={isDarkMode ? "./hub-light.svg" : "./hub-dark.svg"}
+              alt="Logo"
+              className="w-40 lg:w-56"
+            />
           </Link>
         </div>
         <div className="flex gap-12">

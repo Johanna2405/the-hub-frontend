@@ -1,13 +1,7 @@
 import { useUser } from "../../context/UserContext";
-import { useEffect } from "react";
 
 const ThemeController = () => {
   const { currentTheme, setCurrentTheme } = useUser();
-
-  // Apply theme to <html> when it changes
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", currentTheme);
-  }, [currentTheme]);
 
   // Toggle function
   const toggleTheme = () => {
