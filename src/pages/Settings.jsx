@@ -37,6 +37,7 @@ const Settings = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isCommunityModalOpen, setCommunityModalOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
   const {
     // joinedCommunities,
@@ -191,6 +192,19 @@ const Settings = () => {
       await leaveCommunity(communityId);
 
       setCurrentCommunity(null);
+      navigate(0);
+    } catch (err) {
+      console.error("Failed to leave community:", err);
+      showToast("Failed to leave community", "error");
+    }
+  };
+
+  const confirmLeave = async () => {
+    setShowLeaveConfirm(false);
+    try {
+      await leaveCommunity(currentCommunity.id);
+      setCurrentCommunity(null);
+      showToast(`You left "${currentCommunity.name}".`, "success");
       navigate(0);
     } catch (err) {
       console.error("Failed to leave community:", err);
@@ -385,7 +399,7 @@ const Settings = () => {
                     text={`Leave ${currentCommunity.name}`}
                     icon="fi-rr-leave"
                     color="ultramarine"
-                    onClick={() => handleLeave(currentCommunity.id)}
+                    onClick={() => setShowLeaveConfirm(true)}
                   />
                 </div>
               )}
@@ -513,7 +527,7 @@ const Settings = () => {
           </div>
         </div>
       )}
-
+      {/* Modal for deleting a community */}
       {currentCommunity && (
         <ConfirmModal
           isOpen={showConfirm}
@@ -522,6 +536,17 @@ const Settings = () => {
           }"? This cannot be undone.`}
           onConfirm={confirmDelete}
           onCancel={() => setShowConfirm(false)}
+          btnText={"Confrim"}
+        />
+      )}
+      {/* Modal for leaving a community */}
+      {currentCommunity && (
+        <ConfirmModal
+          isOpen={showLeaveConfirm}
+          message={`Are you sure you want to leave "${currentCommunity.name}"?`}
+          onConfirm={confirmLeave}
+          onCancel={() => setShowLeaveConfirm(false)}
+          btnText={"Leave"}
         />
       )}
     </div>

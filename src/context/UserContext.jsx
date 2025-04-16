@@ -7,8 +7,10 @@ const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [pinboardSettings, setPinboardSettings] = useState(() => {
     const stored = localStorage.getItem("pinboardSettings");
     return stored
@@ -20,38 +22,54 @@ export const UserProvider = ({ children }) => {
           calendar: true,
         };
   });
-  const [currentTheme, setCurrentTheme] = useState(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored) return JSON.parse(stored);
 
-    // fallback to system preference
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    return prefersDark ? "thedarkhub" : "thehub";
+  // Theme mode: "light", "dark", or "system"
+  const [themeMode, setThemeMode] = useState(() => {
+    return localStorage.getItem("themeMode") || "system";
   });
 
-  const navigate = useNavigate();
+  // System theme preference (true = dark)
+  const [systemPrefersDark, setSystemPrefersDark] = useState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
 
+  // Determine effective theme based on mode
+  const effectiveTheme =
+    themeMode === "light"
+      ? "thehub"
+      : themeMode === "dark"
+      ? "thedarkhub"
+      : systemPrefersDark
+      ? "thedarkhub"
+      : "thehub";
+
+  // Apply effective theme to <html> and persist mode
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", effectiveTheme);
+    localStorage.setItem("themeMode", themeMode);
+  }, [themeMode, effectiveTheme]);
+
+  // Track system preference changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e) => setSystemPrefersDark(e.matches);
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  // Persist pinboard settings
   useEffect(() => {
     localStorage.setItem("pinboardSettings", JSON.stringify(pinboardSettings));
   }, [pinboardSettings]);
 
-  // Load and apply current Theme
-  useEffect(() => {
-    if (currentTheme) {
-      localStorage.setItem("theme", JSON.stringify(currentTheme));
-      document.documentElement.setAttribute("data-theme", currentTheme);
-    }
-  }, [currentTheme]);
-
-  // Fetch user on initial load
+  // Fetch user on mount
   useEffect(() => {
     const initializeUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setLoading(false);
-        return; // Skip API call if no token
+        return;
       }
 
       try {
@@ -68,7 +86,6 @@ export const UserProvider = ({ children }) => {
     initializeUser();
   }, []);
 
-  // Login function
   const login = async (email, password) => {
     try {
       const userData = await userLogin(email, password);
@@ -80,11 +97,10 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Logout function
   const logout = () => {
     userLogout();
     setUser(null);
-    setCurrentTheme("thehub");
+    setThemeMode("system"); // Reset theme to system on logout
     navigate("/get-started");
   };
 
@@ -98,8 +114,9 @@ export const UserProvider = ({ children }) => {
         setUser,
         pinboardSettings,
         setPinboardSettings,
-        currentTheme,
-        setCurrentTheme,
+        themeMode,
+        setThemeMode,
+        effectiveTheme,
       }}
     >
       {children}

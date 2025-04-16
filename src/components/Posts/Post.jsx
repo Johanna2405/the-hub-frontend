@@ -126,6 +126,7 @@ const Post = ({ post, setPosts }) => {
         message="Are you sure you want to delete this post?"
         onConfirm={confirmDelete}
         onCancel={() => setShowConfirm(false)}
+        btnText={"Confirm"}
       />
     </div>
   );

@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import IconBtn from "./IconBtn";
 
-const ConfirmModal = ({ isOpen, message, onConfirm, onCancel }) => {
+const ConfirmModal = ({ isOpen, message, onConfirm, onCancel, btnText }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -21,7 +21,7 @@ const ConfirmModal = ({ isOpen, message, onConfirm, onCancel }) => {
                 icon="fi-br-check"
                 color="lilac"
                 onClick={onConfirm}
-                text={"Confirm"}
+                text={btnText}
               />
             </div>
           </motion.div>

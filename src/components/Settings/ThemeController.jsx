@@ -1,30 +1,41 @@
 import { useUser } from "../../context/UserContext";
 
 const ThemeController = () => {
-  const { currentTheme, setCurrentTheme } = useUser();
+  const { themeMode, setThemeMode, effectiveTheme } = useUser();
 
-  // Toggle function
-  const toggleTheme = () => {
-    setCurrentTheme(currentTheme === "thehub" ? "thedarkhub" : "thehub");
+  const cycleTheme = () => {
+    const next =
+      themeMode === "light"
+        ? "dark"
+        : themeMode === "dark"
+        ? "system"
+        : "light";
+    setThemeMode(next);
+  };
+
+  const renderIcon = () => {
+    switch (themeMode) {
+      case "light":
+        return <i className="fi-rr-brightness text-text text-2xl"></i>;
+      case "dark":
+        return <i className="fi-rr-moon-stars text-text text-2xl"></i>;
+      case "system":
+      default:
+        return <i className="fi-rr-computer text-text text-2xl"></i>;
+    }
   };
 
   return (
-    <div className="flex items-center gap-4 px-4 py-2 bg-base rounded-2xl">
-      <label className="swap swap-rotate">
-        {/* this hidden checkbox controls the state */}
-        <input
-          type="checkbox"
-          className="theme-controller"
-          checked={currentTheme === "thedarkhub"}
-          onChange={toggleTheme}
-        />
-        {/* sun icon */}
-        <i className="fi-rr-brightness swap-off text-text text-2xl pt-1"></i>
-        {/* moon icon */}
-        <i className="fi-rr-moon-stars swap-on text-text text-2xl pt-1"></i>
-        <span className="text-lg font-normal ml-10 mt-1">Switch theme</span>
-      </label>
+    <div
+      className="flex items-center justify-between gap-4 px-4 py-3 bg-base rounded-2xl cursor-pointer select-none"
+      onClick={cycleTheme}
+    >
+      <div className="flex items-center gap-4 w-full">
+        <div className="text-text pt-1">{renderIcon()}</div>
+        <span className="text-lg font-normal">Switch theme</span>
+      </div>
     </div>
   );
 };
+
 export default ThemeController;
