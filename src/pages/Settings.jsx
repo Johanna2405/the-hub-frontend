@@ -190,9 +190,11 @@ const Settings = () => {
   const handleLeave = async (communityId) => {
     try {
       await leaveCommunity(communityId);
-
-      setCurrentCommunity(null);
-      navigate(0);
+      showToast("You’ve successfully left the community", "success");
+      setTimeout(() => {
+        setCurrentCommunity(null);
+        navigate(0);
+      }, 750);
     } catch (err) {
       console.error("Failed to leave community:", err);
       showToast("Failed to leave community", "error");

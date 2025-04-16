@@ -52,7 +52,6 @@ const CommunitySettingsModal = ({ closeModal }) => {
 
     try {
       const community = await createCommunity({ name: newName });
-      await joinCommunity(community.id);
       setCurrentCommunity(community);
       showToast(`Created "${community.name}"!`, "success");
       closeModal();
