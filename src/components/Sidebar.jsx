@@ -1,12 +1,13 @@
 import SidebarLink from "./SidebarLink";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
-import CommunitySelector from "./CommunitySelector";
 import { useNavigate } from "react-router";
+import CommunitySelector from "./CommunitySelector";
+import ThemeController from "./Settings/ThemeController";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
-  const { pinboardSettings } = useUser();
+  const { pinboardSettings, currentTheme } = useUser();
   const {
     joinedCommunities,
     currentCommunity,
@@ -27,7 +28,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     },
     {
       icon: "fi-rs-list-check",
-      iconColor: "aquamarine",
+      iconColor: "ultramarine",
       text: "Lists",
       settingKey: "lists",
       target: "lists",
@@ -65,7 +66,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       `}
     >
       <div className="flex justify-between p-4">
-        <img src="/logoipsum-329.svg" alt="Logo" />
+        <img
+          src={`${
+            currentTheme === "thedarkhub" ? "/hub-light.svg" : "/hub-dark.svg"
+          }`}
+          alt="Logo"
+          className="w-32"
+        />
         <button
           className="btn bg-base border-none pt-1"
           onClick={() => setIsOpen(false)}
@@ -79,14 +86,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         } transition-opacity duration-300`}
       >
         <div className="flex flex-col gap-4">
-          <SidebarLink
-            target={"/"}
-            icon={"fi-rr-thumbtack"}
-            iconColor={"ultramarine"}
-            text={"Your Pinboard"}
-            setIsOpen={setIsOpen}
-            className={"bg-primary py-2"}
-          />
+          {!currentCommunity && (
+            <SidebarLink
+              target={"/"}
+              icon={"fi-rr-thumbtack"}
+              iconColor={"ultramarine"}
+              text={"Your Pinboard"}
+              setIsOpen={setIsOpen}
+              className={"bg-primary py-2"}
+            />
+          )}
+
           {currentCommunity && (
             <SidebarLink
               target={`/community/${currentCommunity.id}/pinboard`}
@@ -139,7 +149,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           })}
         </nav>
         <h3>Settings</h3>
+        {/* Theme controller */}
         <div className="flex flex-col gap-4">
+          <ThemeController />
           <SidebarLink
             target={"/settings"}
             icon={"fi-rr-settings-sliders"}

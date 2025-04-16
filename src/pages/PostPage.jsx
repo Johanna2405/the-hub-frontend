@@ -46,7 +46,7 @@ const PostPage = () => {
 
   return (
     <div>
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <div className="flex justify-between items-center">
           <Header
             title={
@@ -73,11 +73,11 @@ const PostPage = () => {
           </div>
         ) : posts.length === 0 ? (
           <div className="flex flex-col items-center gap-6 py-8 w-full">
-            <p className="text-[#181B4D]">No posts yet.</p>
+            <p className="text-text">No posts yet.</p>
             <Post />
           </div>
         ) : (
-          <div className="flex flex-col justify-center items-center gap-4">
+          <div className="flex flex-col justify-center items-center gap-4 lg:grid lg:grid-cols-2 lg:items-stretch">
             {posts.map((post) => (
               <Post key={post.id} post={post} setPosts={setPosts} />
             ))}

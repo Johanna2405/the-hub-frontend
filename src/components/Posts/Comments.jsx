@@ -51,7 +51,7 @@ const Comments = ({ postId }) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="text-lg font-semibold">Comments</h3>
+      <h3 className="!text-xl">Comments</h3>
 
       {loading ? (
         <span className="loading loading-dots loading-sm text-lilac"></span>
@@ -78,12 +78,12 @@ const Comments = ({ postId }) => {
           placeholder="Add a comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className="input input-bordered flex-1 bg-white/90"
+          className="input input-bordered flex-1 focus:outline-lilac"
         />
         <IconBtn
           icon="fi fi-rr-arrow-small-up"
           text="Comment"
-          color="lilac"
+          color="neon"
           onClick={handleAddComment}
         />
       </div>

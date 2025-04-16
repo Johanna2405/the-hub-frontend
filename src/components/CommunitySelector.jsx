@@ -49,7 +49,7 @@ const CommunitySelector = ({
   }
 
   return (
-    <div className="relative w-full max-w-sm">
+    <div className="relative w-full">
       <div
         onClick={() => {
           if (!open) refreshCommunities?.();

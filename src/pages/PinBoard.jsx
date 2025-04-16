@@ -152,33 +152,30 @@ const PinBoard = () => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col">
       <h2 className="text-neon">Hello {user?.username}</h2>
-      <div className="grid grid-cols-3 w-full items-center ">
-        <div></div>
-        <div className="flex items-center justify-center">
-          <h1>{getGreeting()}</h1>
-        </div>
+      <div className="flex gap-4 justify-between w-full items-center pb-4">
+        <h1 className="pt-2 !text-5xl md:!text-6xl">{getGreeting()}</h1>
         {/* App Modal always visible for admins or private space */}
-        <div className="flex items-center justify-end">
-          {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
-        </div>
+        {(!isCommunity || isAdmin) && <AppModal onSelect={handleAddApp} />}
       </div>
-      <div className="container mx-auto flex flex-col w-1/2 items-center justify-center gap-4">
+      <div className="flex flex-col gap-4 ">
         <CardFilter
           selected={selectedFilter}
           onFilterChange={setSelectedFilter}
         />
 
         {filteredApps.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+          <div className="columns-2 md:columns-2 lg:columns-3 gap-4 w-full space-y-4">
             {filteredApps.map((app) => {
               const originalIndex = activePinnedApps.findIndex(
                 (a) => a === app
               );
               if (originalIndex === -1) return null;
               return (
-                <div key={originalIndex}>{renderCard(app, originalIndex)}</div>
+                <div key={originalIndex} className="break-inside-avoid">
+                  {renderCard(app, originalIndex)}
+                </div>
               );
             })}
           </div>

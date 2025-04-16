@@ -92,17 +92,15 @@ const EventCard = ({ onRemove, index }) => {
     : null;
 
   return (
-    <div className="relative group rounded-3xl p-4 m-2 max-w-64 transition-all duration-300 min-h-[280px] bg-lilac text-[#181B4D] flex flex-col justify-between">
+    <div className="relative group rounded-3xl p-6 transition-all duration-300 min-h-32 bg-lilac text-text flex flex-col justify-between">
       {/* Remove-Button */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
-        <IconBtn icon="fi fi-br-cross" transparent onClick={onRemove} />
+      <div className="absolute top-2 right-2 lg:opacity-0 opacity-40 group-hover:opacity-100 transition">
+        <IconBtn icon="fi-br-cross-small" transparent onClick={onRemove} />
       </div>
 
-      <div>
-        <i className="fi-rr-calendar"></i>
-        <h2 className="font-bold text-lg mb-2">
-          {selectedEvent?.title || "Pinned Event"}
-        </h2>
+      <div className="flex flex-col gap-2">
+        <i className="fi-rr-calendar text-2xl"></i>
+        <h3>{selectedEvent?.title || "Pinned Event"}</h3>
 
         {/* No event selected */}
         {!selectedEvent && (
@@ -156,8 +154,8 @@ const EventCard = ({ onRemove, index }) => {
 
             {expanded && (
               <div className="mt-2">
-                <h3
-                  className="text-sm font-medium hover:underline cursor-pointer"
+                <span
+                  className="mt-2 hover:underline text-sm font-bold cursor-pointer"
                   onClick={() =>
                     navigate(
                       isCommunity
@@ -167,7 +165,7 @@ const EventCard = ({ onRemove, index }) => {
                   }
                 >
                   View more
-                </h3>
+                </span>
               </div>
             )}
           </>

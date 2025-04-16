@@ -5,9 +5,11 @@ import { useUser } from "../../context/UserContext";
 import IconBtn from "../IconBtn";
 import PostModal from "./PostModal";
 import Comments from "./Comments";
+import ConfirmModal from "../ConfirmModal";
 
 const Post = ({ post, setPosts }) => {
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const { currentCommunity } = useCommunity();
   const { user } = useUser();
 
@@ -19,24 +21,27 @@ const Post = ({ post, setPosts }) => {
   const isAuthor = user?.id === currentPost?.author?.id;
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this post?")) {
-      try {
-        if (currentPost.community_id && currentCommunity) {
-          await deleteCommunityPost(currentCommunity.id, currentPost.id);
-        } else {
-          await deletePost(currentPost.id);
-        }
+    setShowConfirm(true);
+  };
 
-        setPosts((prev) => prev.filter((p) => p.id !== currentPost.id));
-      } catch (err) {
-        console.error("Failed to delete post", err);
-        alert("Error deleting post.");
+  const confirmDelete = async () => {
+    setShowConfirm(false);
+    try {
+      if (currentPost.community_id && currentCommunity) {
+        await deleteCommunityPost(currentCommunity.id, currentPost.id);
+      } else {
+        await deletePost(currentPost.id);
       }
+
+      setPosts((prev) => prev.filter((p) => p.id !== currentPost.id));
+    } catch (err) {
+      console.error("Failed to delete post", err);
+      alert("Error deleting post.");
     }
   };
 
   return (
-    <div className="flex flex-col min-h-[400px] w-full gap-4 bg-neon p-6 rounded-2xl">
+    <div className="flex flex-col w-full gap-4 bg-primary p-6 rounded-2xl">
       {/* Author */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
@@ -52,11 +57,11 @@ const Post = ({ post, setPosts }) => {
               />
             </div>
           </div>
-          <p className="text-[#181B4D]">{currentPost.author?.username}</p>
+          <p className="!font-semibold">{currentPost.author?.username}</p>
         </div>
         {/* Post Type Tag (only in private view) */}
         {isPrivateSpace && (
-          <span className="text-xs text-white bg-lilac px-2 py-1 rounded-full self-start">
+          <span className="text-sm text-white bg-neon px-3 py-1 rounded-full self-start">
             {currentPost.Community?.name
               ? `${currentPost.Community.name}`
               : "Private"}
@@ -65,7 +70,7 @@ const Post = ({ post, setPosts }) => {
       </div>
 
       {/* Title + Image */}
-      <h2 className="text-xl font-bold">{currentPost.title}</h2>
+      <h2 className="!text-2xl">{currentPost.title}</h2>
 
       {currentPost.imageUrl && (
         <img
@@ -83,14 +88,14 @@ const Post = ({ post, setPosts }) => {
           <IconBtn
             icon="fi fi-rr-pencil"
             text="Update"
-            color="ultramarine"
+            color="neon"
             onClick={() => setShowEditModal(true)}
           />
 
           <IconBtn
             icon="fi fi-rr-trash"
             text="Delete"
-            color="red"
+            color="base"
             onClick={handleDelete}
           />
         </div>
@@ -114,6 +119,14 @@ const Post = ({ post, setPosts }) => {
       <div className="divider"></div>
       {/* Comments */}
       <Comments postId={currentPost.id} />
+
+      {/* Confirm modal */}
+      <ConfirmModal
+        isOpen={showConfirm}
+        message="Are you sure you want to delete this post?"
+        onConfirm={confirmDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 };

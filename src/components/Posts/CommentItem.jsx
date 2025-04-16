@@ -35,7 +35,7 @@ const CommentItem = ({ comment, currentUserId, setComments }) => {
   };
 
   return (
-    <div className="bg-white/60 rounded-xl px-4 py-2 text-sm">
+    <div className="bg-base/60 rounded-2xl px-4 py-2 text-sm">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
           <div className="avatar">
@@ -50,7 +50,7 @@ const CommentItem = ({ comment, currentUserId, setComments }) => {
             <p className="font-medium text-xs">{comment.author?.username}</p>
             {isEditing ? (
               <textarea
-                className="textarea textarea-bordered w-full mt-1"
+                className="textarea textarea-bordered w-full mt-1 bg-primary"
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
               />
@@ -71,7 +71,7 @@ const CommentItem = ({ comment, currentUserId, setComments }) => {
                 />
                 <IconBtn
                   icon="fi fi-rr-cross-small"
-                  color="base"
+                  color="primary"
                   onClick={() => setIsEditing(false)}
                 />
               </>
@@ -79,12 +79,12 @@ const CommentItem = ({ comment, currentUserId, setComments }) => {
               <>
                 <IconBtn
                   icon="fi fi-rr-pencil"
-                  color="ultramarine"
+                  color="lilac"
                   onClick={() => setIsEditing(true)}
                 />
                 <IconBtn
                   icon="fi fi-rr-trash"
-                  color="red"
+                  color="primary"
                   onClick={handleDelete}
                 />
               </>

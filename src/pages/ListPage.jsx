@@ -178,7 +178,7 @@ const ListPage = () => {
         );
 
   return (
-    <div className="p-4">
+    <div>
       <Header
         title={
           isCommunityView ? `${currentCommunity.name} Lists` : "Your Lists"
@@ -195,7 +195,7 @@ const ListPage = () => {
       />
 
       {lists.length > 0 && (
-        <div className="pb-4">
+        <div className="pb-8">
           <ListFilter
             activeFilter={globalFilter}
             setActiveFilter={setGlobalFilter}
@@ -203,24 +203,28 @@ const ListPage = () => {
         </div>
       )}
 
-      {filteredLists.length === 0 ? (
-        <EmpyList />
-      ) : (
-        filteredLists.map((list) => (
-          <ListCard
-            key={list.id}
-            title={list.title}
-            items={list.ListItems}
-            privacy={list.privacy}
-            onItemToggle={(itemId) => handleItemToggle(list.id, itemId)}
-            onAddItem={(name) => handleAddItem(list.id, name)}
-            onUpdate={(itemId, name) => handleUpdateItem(list.id, itemId, name)}
-            onDelete={(itemId) => handleDeleteItem(list.id, itemId)}
-            showAddItemInput={true}
-            category={list.category}
-          />
-        ))
-      )}
+      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
+        {filteredLists.length === 0 ? (
+          <EmpyList />
+        ) : (
+          filteredLists.map((list) => (
+            <ListCard
+              key={list.id}
+              title={list.title}
+              items={list.ListItems}
+              privacy={list.privacy}
+              onItemToggle={(itemId) => handleItemToggle(list.id, itemId)}
+              onAddItem={(name) => handleAddItem(list.id, name)}
+              onUpdate={(itemId, name) =>
+                handleUpdateItem(list.id, itemId, name)
+              }
+              onDelete={(itemId) => handleDeleteItem(list.id, itemId)}
+              showAddItemInput={true}
+              category={list.category}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 };

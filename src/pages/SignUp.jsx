@@ -58,9 +58,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between">
+    <div className="flex flex-col items-center justify-between">
       {/* Main Content */}
-      <div className="flex flex-col items-center w-full max-w-md px-4 py-8 sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+      <div className="flex flex-col items-center py-8 ">
         {/* Welcome Text */}
         <h1 className="m-7 mb-8 sm:text-4xl text-center">
           Welcome to the hub.
@@ -109,7 +109,7 @@ const SignUp = () => {
           <div className="form-control">
             <label className="label">
               <span className="label-text text-text font-medium pb-2">
-                Password
+                Password (min 8 characters)
               </span>
             </label>
             <input

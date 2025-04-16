@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import ListIconBtn from "./ListIconBtn";
 import ListItemFilter from "./ListItemFilter";
+import { useUser } from "../../context/UserContext";
 
 const ListCard = ({
   title = "",
@@ -18,6 +19,7 @@ const ListCard = ({
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("All");
+  const { currentTheme } = useUser();
 
   useEffect(() => {
     if (items.length === 0) {
@@ -26,11 +28,6 @@ const ListCard = ({
     }
   }, [items]);
 
-  const cardStyles = {
-    default: "bg-primary text-text",
-    grocery: "bg-ultramarine text-primary",
-  };
-
   const normalizedTitle = title.toLowerCase();
   const normalizedCategory = category?.toLowerCase() || "";
   const isGrocery =
@@ -38,9 +35,18 @@ const ListCard = ({
     normalizedTitle.includes("groceries") ||
     normalizedCategory === "shopping list";
 
+  const isDarkGrocery = currentTheme === "thedarkhub" && isGrocery;
   const colorClass = isGrocery ? "ultramarine" : "base";
 
-  const cardStyleClass = isGrocery ? cardStyles.grocery : cardStyles.default;
+  const textColorClass = isDarkGrocery
+    ? "text-[#f5f5f5]"
+    : isGrocery
+    ? "text-base"
+    : "text-text";
+
+  const cardStyleClass = isGrocery
+    ? "bg-ultramarine text-base"
+    : "bg-primary text-text";
 
   const filteredItems = items.filter((item) => {
     if (globalFilter === "Checked") return item.is_completed;
@@ -62,29 +68,36 @@ const ListCard = ({
 
   return (
     <div
-      className={`rounded-xl p-4 mb-4 transition-all duration-300 ${cardStyleClass}`}
+      className={`rounded-xl p-6 transition-all duration-300 ${cardStyleClass}`}
     >
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-bold">{title}</h3>
-        <span className="text-xs border px-2 py-1 rounded-full">{privacy}</span>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className={`text-lg font-bold ${textColorClass}`}>{title}</h3>
+        <span
+          className={`text-xs border px-2 py-1 rounded-full ${textColorClass} ${
+            isDarkGrocery ? "border-[#f5f5f5]" : ""
+          }`}
+        >
+          {privacy}
+        </span>
       </div>
 
       {items.length > 0 && (
         <ListItemFilter
           activeFilter={globalFilter}
           setActiveFilter={setGlobalFilter}
+          isGrocery={isGrocery}
         />
       )}
 
       {visibleItems.length === 0 && (
-        <div className="text-center py-4 font-semibold">
+        <div className={`text-center py-4 font-semibold ${textColorClass}`}>
           {items.length === 0
             ? "List is empty, add some items..."
             : "No items match this filter."}
         </div>
       )}
 
-      <ul className="space-y-1">
+      <ul className="space-y-1 py-2">
         {visibleItems.map((item) => (
           <ListItem
             key={item.id}
@@ -103,36 +116,34 @@ const ListCard = ({
       </ul>
 
       {showAddItemInput && expanded && (
-        <>
-          <div className="mt-3 flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="New List Item"
-              className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base !text-[#181a4d]"
-              value={newItemText}
-              onChange={(e) => setNewItemText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleAddItem();
-              }}
-            />
+        <div className="mt-3 flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="New List Item"
+            className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base !text-text"
+            value={newItemText}
+            onChange={(e) => setNewItemText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleAddItem();
+            }}
+          />
+          <ListIconBtn
+            color={colorClass}
+            icon="fi-ss-check"
+            onClick={handleAddItem}
+            className={`text-sm ${isDarkGrocery ? "text-text" : ""}`}
+            title="Add Item"
+          />
+          {items.length > 0 && (
             <ListIconBtn
               color={colorClass}
-              icon="fi-ss-check"
-              onClick={handleAddItem}
-              className="text-sm"
-              title="Add Item"
+              icon="fi-rr-tools"
+              onClick={toggleEditMode}
+              className={`text-sm ${isDarkGrocery ? "text-text" : ""}`}
+              title="Manage Items"
             />
-            {items.length > 0 && (
-              <ListIconBtn
-                color={colorClass}
-                icon="fi-rr-tools"
-                onClick={toggleEditMode}
-                className="text-sm"
-                title="Manage Items"
-              />
-            )}
-          </div>
-        </>
+          )}
+        </div>
       )}
 
       {items.length > 0 && (

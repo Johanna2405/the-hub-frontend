@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ListIconBtn from "./ListIconBtn";
+import { useUser } from "../../context/UserContext";
 
 const ListItem = ({
   id,
@@ -15,6 +16,7 @@ const ListItem = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
+  const { currentTheme } = useUser();
 
   const normalizedCategory = category?.toLowerCase() || "";
   const isGrocery =
@@ -98,7 +100,11 @@ const ListItem = ({
             onChange={(e) => setEditText(e.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
-            className={`flex-1 ${ringColorClass} rounded-md focus:outline-none ${textClass}`}
+            className={`flex-1 ${ringColorClass} rounded-md focus:outline-none ${
+              currentTheme === "thedarkhub" && isGrocery
+                ? "text-text"
+                : textClass
+            }`}
             autoFocus
           />
 
@@ -142,12 +148,21 @@ const ListItem = ({
                   color={colorClass}
                   icon="fi-ss-check"
                   transparent
+                  className={`${
+                    currentTheme === "thedarkhub" && isGrocery
+                      ? "text-text"
+                      : ""
+                  }`}
                 />
               </div>
             )}
           </label>
 
-          <span className={`${checked ? "line-through opacity-90" : ""}`}>
+          <span
+            className={`${checked ? "line-through opacity-90" : ""} ${
+              currentTheme === "thedarkhub" && isGrocery ? "text-text" : ""
+            }`}
+          >
             {text}
           </span>
 
@@ -158,14 +173,18 @@ const ListItem = ({
                 icon="fi-rr-pencil"
                 onClick={handleEditClick}
                 transparent
-                className="text-sm"
+                className={`text-sm ${
+                  currentTheme === "thedarkhub" && isGrocery ? "text-text" : ""
+                }`}
               />
               <ListIconBtn
                 color={colorClass}
                 icon="fi-rr-trash"
                 onClick={() => onDelete(id)}
                 transparent
-                className="text-sm"
+                className={`text-sm ${
+                  currentTheme === "thedarkhub" && isGrocery ? "text-text" : ""
+                }`}
               />
             </div>
           )}

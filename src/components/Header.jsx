@@ -2,7 +2,7 @@ import IconBtn from "../components/IconBtn";
 
 const Header = ({ title, showBackButton, onBack, RightAction }) => {
   return (
-    <header className="mb-6">
+    <header className="mb-12">
       {showBackButton && (
         <div className="mb-4 flex items-center">
           <IconBtn

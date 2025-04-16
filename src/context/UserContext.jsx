@@ -20,12 +20,30 @@ export const UserProvider = ({ children }) => {
           calendar: true,
         };
   });
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored) return JSON.parse(stored);
+
+    // fallback to system preference
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    return prefersDark ? "thedarkhub" : "thehub";
+  });
 
   const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("pinboardSettings", JSON.stringify(pinboardSettings));
   }, [pinboardSettings]);
+
+  // Load and apply current Theme
+  useEffect(() => {
+    if (currentTheme) {
+      localStorage.setItem("theme", JSON.stringify(currentTheme));
+      document.documentElement.setAttribute("data-theme", currentTheme);
+    }
+  }, [currentTheme]);
 
   // Fetch user on initial load
   useEffect(() => {
@@ -66,6 +84,7 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     userLogout();
     setUser(null);
+    setCurrentTheme("thehub");
     navigate("/get-started");
   };
 
@@ -79,6 +98,8 @@ export const UserProvider = ({ children }) => {
         setUser,
         pinboardSettings,
         setPinboardSettings,
+        currentTheme,
+        setCurrentTheme,
       }}
     >
       {children}
