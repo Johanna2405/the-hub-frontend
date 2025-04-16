@@ -63,7 +63,7 @@
 
 @plugin "daisyui/theme" {
   name: "thedarkhub";
-  /* prefersdark: true; */
+  prefersdark: true;
   color-scheme: dark;
 
   --color-text: #f5f5f5;

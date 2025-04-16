@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { createUser } from "../utils/user";
+import ConfirmModal from "../components/ConfirmModal";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -10,6 +11,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -36,12 +38,12 @@ const SignUp = () => {
         username: username,
         email,
         password,
-        community_id: null, // Assuming a default community ID
+        community_id: null,
         profile_picture: null,
       });
 
-      alert("Sign up successful!");
-      navigate("/signin"); // Redirect to Sign In after success
+      // Show confirmation modal instead of redirect
+      setShowModal(true);
     } catch (error) {
       console.error("Signup error:", error);
 
@@ -55,6 +57,15 @@ const SignUp = () => {
 
       setError(message);
     }
+  };
+
+  const handleModalConfirm = () => {
+    setShowModal(false);
+    navigate("/signin");
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
   };
 
   return (
@@ -161,6 +172,14 @@ const SignUp = () => {
           </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showModal}
+        message="Sign up successful!"
+        onConfirm={handleModalConfirm}
+        onCancel={handleModalCancel}
+        btnText={"Sign in"}
+      />
     </div>
   );
 };
