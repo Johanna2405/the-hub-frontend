@@ -84,6 +84,7 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     userLogout();
     setUser(null);
+    setCurrentTheme("thehub");
     navigate("/get-started");
   };
 
