@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateComment, deleteComment } from "../../utils/commentsAPI";
+import { updateComment, deleteComment } from "../../utils/comments";
 import IconBtn from "../IconBtn";
 
 const CommentItem = ({ comment, currentUserId, setComments }) => {

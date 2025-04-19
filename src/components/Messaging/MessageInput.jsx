@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useUser } from "../../context/UserContext";
-import { emitTyping } from "../../utils/messageApi";
+import { emitTyping } from "../../utils/messages";
 
 const MessageInput = ({ onSend }) => {
   const [text, setText] = useState("");

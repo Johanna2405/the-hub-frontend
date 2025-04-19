@@ -18,7 +18,6 @@ import CommunitySettingsModal from "../components/Settings/CommunitySettingsModa
 import { showToast } from "../utils/toast";
 import {
   fetchAllCommunities,
-  joinCommunity,
   updateCommunitySettings,
   deleteCommunity,
   leaveCommunity,
@@ -26,14 +25,13 @@ import {
 
 const Settings = () => {
   const navigate = useNavigate();
-  const [status, setStatus] = useState("");
+  // const [status, setStatus] = useState("");
   const { user, setUser, pinboardSettings, setPinboardSettings } = useUser();
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [communities, setCommunities] = useState([]);
-  const [selectedId, setSelectedId] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isCommunityModalOpen, setCommunityModalOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -276,18 +274,6 @@ const Settings = () => {
                     setPinboardSettings((prev) => ({
                       ...prev,
                       lists: !prev.lists,
-                    }))
-                  }
-                />
-                <AppCheckbox
-                  icon={"fi-rr-calendar"}
-                  iconColor={"lilac"}
-                  appName={"Calendar"}
-                  checked={pinboardSettings.calendar}
-                  onChange={() =>
-                    setPinboardSettings((prev) => ({
-                      ...prev,
-                      calendar: !prev.calendar,
                     }))
                   }
                 />

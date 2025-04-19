@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ListIconBtn from "./ListIconBtn";
-import { createList } from "../../utils/listsAPI";
+import { createList } from "../../utils/lists";
 import { useNavigate } from "react-router";
 import { useUser } from "../../context/UserContext";
 import { useCommunity } from "../../context/CommunityContext";

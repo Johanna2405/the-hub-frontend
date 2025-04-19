@@ -12,7 +12,7 @@ import {
   createListItem,
   updateListItem,
   deleteListItem,
-} from "../utils/listsAPI";
+} from "../utils/lists";
 import { fetchCommunityLists } from "../utils/community";
 
 const ListPage = () => {

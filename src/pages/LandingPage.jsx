@@ -65,7 +65,7 @@ const LandingPage = () => {
       </section>
       <section className="px-8 py-16 text-center flex flex-col gap-12 items-center justify-center lg:w-2/3 lg:py-28">
         <h2>the hub core features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-2 border-ultramarine rounded-4xl p-8">
+        <div className="flex flex-col lg:flex-row gap-8 border-2 border-ultramarine rounded-4xl p-8">
           <div className="p-4 py-8 flex flex-col gap-4 rounded-3xl hover:bg-primary">
             <i className="fi-rr-text text-neon text-6xl pt-1"></i>
             <h3>Posts</h3>
@@ -91,15 +91,6 @@ const LandingPage = () => {
               Quick chats or deeper conversations — Messages let your community
               talk, plan, and connect in real time, without the noise of other
               platforms.
-            </p>
-          </div>
-          <div className="p-4 py-8 flex flex-col gap-4 rounded-3xl hover:bg-primary">
-            <i className="fi-rr-calendar text-lilac text-6xl pt-1"></i>
-            <h3>Calendar</h3>
-            <p>
-              Stay organized with shared events and deadlines. Our collaborative
-              calendar keeps your community in sync, whether it’s meetings,
-              birthdays, or project milestones.
             </p>
           </div>
         </div>

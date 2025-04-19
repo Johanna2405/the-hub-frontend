@@ -12,11 +12,9 @@ import LandingPage from "./pages/LandingPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import ListPage from "./pages/ListPage.jsx";
 import NewListPage from "./pages/NewListPage.jsx";
-import CalendarTabs from "./components/Calendar/CalendarTabs.jsx";
-import Calendar from "./pages/Calendar.jsx";
 import Settings from "./pages/Settings.jsx";
-import "./toast.css";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import "./toast.css";
 
 function App() {
   return (
@@ -47,7 +45,6 @@ function App() {
                 <Route path="posts" element={<PostPage />} />
                 <Route path="lists" element={<ListPage />} />
                 <Route path="add-list" element={<NewListPage />} />
-                <Route path="events" element={<Calendar />} />
                 <Route path="settings" element={<Settings />} />
 
                 {/* Community Routes */}
@@ -57,7 +54,6 @@ function App() {
                   <Route path="messages" element={<MessagePage />} />
                   <Route path="lists" element={<ListPage />} />
                   <Route path="add-list" element={<NewListPage />} />
-                  <Route path="events" element={<Calendar />} />
                 </Route>
               </Route>
 

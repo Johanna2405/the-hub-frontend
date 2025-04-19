@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
-import { createPost, updatePost } from "../../utils/postsAPI";
+import { createPost, updatePost } from "../../utils/posts";
 import { createCommunityPost } from "../../utils/community";
 import IconBtn from "../IconBtn";
 

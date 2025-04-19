@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { deletePost, deleteCommunityPost } from "../../utils/postsAPI";
+import { deletePost, deleteCommunityPost } from "../../utils/posts";
 import { useCommunity } from "../../context/CommunityContext";
 import { useUser } from "../../context/UserContext";
 import IconBtn from "../IconBtn";

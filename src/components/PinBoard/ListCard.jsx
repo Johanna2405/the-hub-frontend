@@ -3,7 +3,7 @@ import { useCommunity } from "../../context/CommunityContext";
 import { useUser } from "../../context/UserContext";
 import { fetchCommunityLists } from "../../utils/community";
 import { updateCommunityPinBoard } from "../../utils/community";
-import { fetchListItems, fetchListsPerUserId } from "../../utils/listsAPI";
+import { fetchListItems, fetchListsPerUserId } from "../../utils/lists";
 import { useNavigate } from "react-router";
 
 import IconBtn from "../IconBtn";

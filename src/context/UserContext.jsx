@@ -19,7 +19,6 @@ export const UserProvider = ({ children }) => {
           all: true,
           posts: true,
           lists: true,
-          calendar: true,
         };
   });
 

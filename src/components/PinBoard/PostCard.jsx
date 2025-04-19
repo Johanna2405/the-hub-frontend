@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCommunity } from "../../context/CommunityContext";
-import { fetchCommunityPosts, fetchUserPosts } from "../../utils/postsAPI";
+import { fetchCommunityPosts, fetchUserPosts } from "../../utils/posts";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router";
 import IconBtn from "../IconBtn";

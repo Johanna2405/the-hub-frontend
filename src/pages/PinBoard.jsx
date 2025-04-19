@@ -4,7 +4,6 @@ import { useCommunity } from "../context/CommunityContext";
 import { updateCommunityPinBoard } from "../utils/community";
 
 import PostCard from "../components/PinBoard/PostCard";
-import EventCard from "../components/PinBoard/EventCard";
 import ListCard from "../components/PinBoard/ListCard";
 import CardFilter from "../components/PinBoard/CardFilter";
 import AppModal from "../components/PinBoard/AppModal";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCommentsByPost, createComment } from "../../utils/commentsAPI";
+import { getCommentsByPost, createComment } from "../../utils/comments";
 import CommentItem from "./CommentItem";
 import IconBtn from "../IconBtn";
 import { useUser } from "../../context/UserContext";

@@ -98,7 +98,6 @@ export const CommunityProvider = ({ children }) => {
       calendar: true,
       lists: true,
       posts: true,
-      events: true,
       messages: true,
     });
     setPinBoard([]);

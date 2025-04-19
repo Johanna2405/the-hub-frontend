@@ -4,11 +4,7 @@ import MessageInput from "../components/Messaging/MessageInput";
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
-import {
-  setupChatListener,
-  sendMessage,
-  connectUser,
-} from "../utils/messageApi";
+import { setupChatListener, sendMessage, connectUser } from "../utils/messages";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
 import { fetchCommunityMessages } from "../utils/community";

@@ -17,12 +17,6 @@ const AppModal = ({ onSelect }) => {
       icon: "fi fi-rr-list",
       color: "ultramarine",
     },
-    {
-      label: "Events",
-      type: "events",
-      icon: "fi fi-rr-calendar",
-      color: "lilac",
-    },
   ];
 
   return (

@@ -39,13 +39,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       settingKey: "messages",
       target: "messages",
     },
-    {
-      icon: "fi-rr-calendar",
-      iconColor: "lilac",
-      text: "Calendar",
-      settingKey: "calendar",
-      target: "events",
-    },
   ];
 
   const handleLogout = () => {

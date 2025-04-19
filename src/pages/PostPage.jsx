@@ -6,7 +6,7 @@ import {
   fetchUserPosts,
   fetchCommunityPosts,
   sortPostsByNewest,
-} from "../utils/postsAPI";
+} from "../utils/posts";
 
 import Header from "../components/Header";
 import PostModal from "../components/Posts/PostModal";
