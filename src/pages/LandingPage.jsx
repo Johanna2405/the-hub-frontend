@@ -17,7 +17,7 @@ const LandingPage = () => {
           />
         </Link>
         <nav className="flex gap-4 items-center">
-          <span className="font-semibold text-xs md:text-sm ">Features</span>
+          <span className="font-semibold text-xs md:text-sm">Features</span>
           <Link to={"/signin"}>
             <IconBtn text={"sign in"} color={"lilac"} />
           </Link>

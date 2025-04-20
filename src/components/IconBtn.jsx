@@ -1,8 +1,8 @@
 import { useUser } from "../context/UserContext";
 
 const IconBtn = ({ text, icon, color, transparent, onClick }) => {
-  const { currentTheme } = useUser();
-  const isDarkMode = currentTheme === "thedarkhub";
+  const { effectiveTheme } = useUser();
+  const isDarkMode = effectiveTheme === "thedarkhub";
 
   const bgClasses = transparent
     ? "!bg-transparent btn-no-noise"
