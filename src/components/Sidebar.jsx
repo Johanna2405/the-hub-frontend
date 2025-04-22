@@ -1,6 +1,51 @@
-import { NavLink } from "react-router";
+import SidebarLink from "./SidebarLink";
+import { useUser } from "../context/UserContext";
+import { useCommunity } from "../context/CommunityContext";
+import { useNavigate } from "react-router";
+import CommunitySelector from "./CommunitySelector";
+import ThemeController from "./Settings/ThemeController";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
+  const navigate = useNavigate();
+  const { pinboardSettings, logout, currentTheme, effectiveTheme } = useUser();
+  const {
+    joinedCommunities,
+    currentCommunity,
+    setCurrentCommunity,
+    settings,
+    cleanUpCommunity,
+    refreshJoinedCommunities,
+  } = useCommunity();
+
+  const sidebarLinks = [
+    {
+      icon: "fi-rr-text",
+      iconColor: "neon",
+      text: "Posts",
+      settingKey: "posts",
+      target: "posts",
+    },
+    {
+      icon: "fi-rs-list-check",
+      iconColor: "ultramarine",
+      text: "Lists",
+      settingKey: "lists",
+      target: "lists",
+    },
+    {
+      icon: "fi-rr-megaphone",
+      iconColor: "sage",
+      text: "Messages",
+      settingKey: "messages",
+      target: "messages",
+    },
+  ];
+
+  const handleLogout = () => {
+    cleanUpCommunity();
+    logout();
+  };
+
   return (
     <div
       className={`bg-primary transform transition-all duration-300 
@@ -13,7 +58,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       `}
     >
       <div className="flex justify-between p-4">
-        <img src="./logoipsum-329.svg" alt="Logo" />
+        <img
+          src={
+            effectiveTheme === "thedarkhub" ? "/hub-light.svg" : "/hub-dark.svg"
+          }
+          alt="Logo"
+          className="w-32"
+        />
         <button
           className="btn bg-base border-none pt-1"
           onClick={() => setIsOpen(false)}
@@ -22,56 +73,91 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </button>
       </div>
       <div
-        className={`p-4 flex flex-col gap-8 ${
+        className={`p-4 flex flex-col gap-8  ${
           isOpen ? "opacity-100" : "opacity-0"
         } transition-opacity duration-300`}
       >
+        <div className="flex flex-col gap-4">
+          {!currentCommunity && (
+            <SidebarLink
+              target={"/"}
+              icon={"fi-rr-thumbtack"}
+              iconColor={"ultramarine"}
+              text={"Your Pinboard"}
+              setIsOpen={setIsOpen}
+              className={"bg-primary py-2"}
+            />
+          )}
+
+          {currentCommunity && (
+            <SidebarLink
+              target={`/community/${currentCommunity.id}/pinboard`}
+              icon={"fi-rr-thumbtack"}
+              iconColor={"ultramarine"}
+              text={"Community Pinboard"}
+              setIsOpen={setIsOpen}
+              className={"bg-primary py-2"}
+            />
+          )}
+          <CommunitySelector
+            communities={joinedCommunities}
+            onSelect={(slug) => {
+              const selected = joinedCommunities.find((c) => c.slug === slug);
+              if (selected) {
+                setCurrentCommunity(selected);
+                navigate(`/community/${selected.id}/pinboard`);
+              }
+            }}
+            refreshCommunities={refreshJoinedCommunities}
+          />
+        </div>
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
-          <NavLink to={"/pinboard"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-text text-neon text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Posts</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/lists"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rs-list-check text-aquamarine text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Lists</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/messages"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-megaphone text-sage text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Messages</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/calendar"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-calendar text-lilac text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Calendar</span>
-            </div>
-          </NavLink>
+          {sidebarLinks.map((link) => {
+            const isInPrivateSpace = !currentCommunity;
+
+            // Decide whether the link should render
+            const shouldRender = isInPrivateSpace
+              ? pinboardSettings[link.settingKey] &&
+                link.settingKey !== "messages"
+              : settings[link.settingKey];
+
+            return (
+              shouldRender && (
+                <SidebarLink
+                  key={link.text}
+                  target={
+                    currentCommunity
+                      ? `/community/${currentCommunity.id}/${link.target}`
+                      : `/${link.target}`
+                  }
+                  icon={link.icon}
+                  iconColor={link.iconColor}
+                  text={link.text}
+                  setIsOpen={setIsOpen}
+                />
+              )
+            );
+          })}
         </nav>
         <h3>Settings</h3>
+        {/* Theme controller */}
         <div className="flex flex-col gap-4">
-          <NavLink to={"/settings"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rr-settings-sliders text-text text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Profile Settings</span>
-            </div>
-          </NavLink>
-          <NavLink to={"/community-settings"}>
-            <div className="flex gap-4 p-4 bg-base rounded-2xl items-center">
-              <i className="fi-rs-settings text-text text-2xl pt-1"></i>
-              <span className="font-normal text-lg">Community Settings</span>
-            </div>
-          </NavLink>
+          <ThemeController />
+          <SidebarLink
+            target={"/settings"}
+            icon={"fi-rr-settings-sliders"}
+            iconColor={"text"}
+            text={"Settings"}
+            setIsOpen={setIsOpen}
+          />
         </div>
-        {/* Add onClick to the button for sign out function */}
-        <button className="flex items-center gap-4">
-          <i className="fi fi-rr-exit text-text text-3xl bg-base rounded-xl px-3 pt-3 pb-1 "></i>
-          <span className="font-bold text-xl">Sign out</span>
+        <button
+          className="flex items-center gap-4 cursor-pointer"
+          onClick={handleLogout}
+        >
+          <i className="fi fi-rr-exit text-text text-2xl bg-base rounded-xl px-3 pt-3 pb-1 "></i>
+          <span className="font-bold text-lg">Sign out</span>
         </button>
       </div>
     </div>

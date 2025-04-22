@@ -1,30 +1,48 @@
-import { Link, NavLink } from "react-router";
+import { useCommunity } from "../context/CommunityContext";
+import { useUser } from "../context/UserContext";
+import { Link } from "react-router";
+import IconBtn from "./IconBtn";
 
 const NavBar = ({ isOpen, setIsOpen }) => {
+  const { currentCommunity, cleanUpCommunity } = useCommunity();
+  const { user, logout } = useUser();
+
+  const handleLogout = () => {
+    cleanUpCommunity();
+    logout();
+  };
+
   return (
-    <div className="flex items-center justify-between p-4 gap-4">
-      <button
-        className={`btn btn-primary text-xl pt-1 ${isOpen ? "hidden" : "flex"}`}
-        onClick={() => setIsOpen((prev) => !prev)}
-      >
-        <i className="fi-rr-sidebar"></i>
-      </button>
-      <Link to={"/"}>
+    <nav className="flex items-center justify-between p-4 w-full">
+      <div className="flex items-center gap-4">
+        {!isOpen && (
+          <IconBtn
+            icon="fi-rr-menu-burger"
+            color="text"
+            onClick={() => setIsOpen(!isOpen)}
+          />
+        )}
+
+        {/* Add null check for currentCommunity */}
+        <span className="text-xs lg:text-sm border-1 rounded-full px-2 py-1 border-lilac">
+          {currentCommunity?.name || "Private Space"}
+        </span>
+      </div>
+
+      <Link to={"/settings"} className="flex items-center gap-4">
+        <span className="text-sm lg:text-sm font-semibold">
+          {user?.username || "Guest"}
+        </span>
         <img
-          src="./logoipsum-329.svg"
-          alt="Logo"
-          className={` ${isOpen ? "hidden" : "flex"}`}
+          src={
+            user?.profilePicture ? user.profilePicture : "/default-profile.png"
+          }
+          alt="Profile Picture"
+          className="w-10 h-10 rounded-full"
         />
       </Link>
-      <div className="flex gap-2">
-        <button className="btn btn-primary btn-icon text-xl">
-          <i className="fi-rs-bell"></i>
-        </button>
-        <button className="btn btn-primary btn-icon text-xl">
-          <i className="fi fi-rr-user"></i>
-        </button>
-      </div>
-    </div>
+      {/* <IconBtn icon="fi-rr-exit" color="text" onClick={handleLogout} /> */}
+    </nav>
   );
 };
 

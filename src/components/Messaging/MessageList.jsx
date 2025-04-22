@@ -1,13 +1,14 @@
 import MessageBubble from "./MessageBubble";
 
-const MessageList = ({ messages, currentUserId }) => {
+const MessageList = ({ messages, onlineUserIds, lastSeenMap }) => {
   return (
     <div>
-      {messages.map((msg) => (
+      {messages.map((msg, index) => (
         <MessageBubble
-          key={msg.id}
+          key={msg.id ?? index}
           message={msg}
-          currentUserId={currentUserId}
+          onlineUserIds={onlineUserIds || []}
+          lastSeenMap={lastSeenMap || {}}
         />
       ))}
     </div>
