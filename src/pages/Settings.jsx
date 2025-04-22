@@ -24,7 +24,6 @@ import {
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { user, setUser, pinboardSettings, setPinboardSettings } = useUser();
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,12 +34,14 @@ const Settings = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
+  const { user, setUser, pinboardSettings, setPinboardSettings, logout } =
+    useUser();
   const {
     currentCommunity,
     setCurrentCommunity,
     settings,
     setSettings,
-    refreshJoinedCommunities,
+    cleanUpCommunity,
   } = useCommunity();
 
   //clear old object URLs for profile temporary images
@@ -198,6 +199,11 @@ const Settings = () => {
       console.error("Failed to leave community:", err);
       showToast("Failed to leave community", "error");
     }
+  };
+
+  const handleLogout = () => {
+    cleanUpCommunity();
+    logout();
   };
 
   return (
@@ -460,7 +466,16 @@ const Settings = () => {
           </div>
         </div>
       </div>
+      {/* Log out */}
+      <button
+        className="flex items-center gap-4 cursor-pointer"
+        onClick={handleLogout}
+      >
+        <i className="fi fi-rr-exit text-text text-2xl bg-base rounded-xl px-3 pt-3 pb-1 "></i>
+        <span className="font-bold text-lg">Sign out</span>
+      </button>
 
+      {/* Community settings modal */}
       {isCommunityModalOpen && (
         <div className="fixed inset-0 bg-primary/25 backdrop-blur-sm z-50 flex items-center justify-center framer-motion">
           <div className="bg-base p-4 md:p-6 rounded-3xl shadow-lg relative w-full max-w-xl mx-4">
