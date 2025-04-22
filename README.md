@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./hub-dark.svg" alt="The Hub Logo" width="200"/>
+  <img src="./public/hub-dark.svg" alt="The Hub Logo" width="200"/>
 </p>
 
 # 🌐 The Hub — Frontend
