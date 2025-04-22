@@ -42,7 +42,7 @@ const PostPage = () => {
     };
 
     loadPosts();
-  }, [loadingUser, user, currentCommunity]);
+  }, [loadingUser, user, currentCommunity, posts]);
 
   return (
     <div>

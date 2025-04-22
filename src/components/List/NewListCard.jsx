@@ -101,32 +101,38 @@ const NewListCard = ({
           )}
         </div>
 
-        <div className="flex flex-col relative">
-          <label className="block font-semibold mb-1 text-text">
-            Choose Privacy
-          </label>
-          <select
-            {...register("privacy", {
-              required: "Please select privacy level",
-              validate: (value) =>
-                value === "Private" ||
-                value === "Community" ||
-                "Invalid option",
-            })}
-            className="w-full p-3 border-base text-text bg-base rounded-2xl font-extralight appearance-none pr-10 focus:outline-none"
-          >
-            <option value="Private">Private</option>
-            <option value="Community">Community</option>
-          </select>
-          <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
-            <ListIconBtn color={"text"} icon={"fi-rr-angle-down"} transparent />
+        {currentCommunity && (
+          <div className="flex flex-col relative">
+            <label className="block font-semibold mb-1 text-text">
+              Choose Privacy
+            </label>
+            <select
+              {...register("privacy", {
+                required: "Please select privacy level",
+                validate: (value) =>
+                  value === "Private" ||
+                  value === "Community" ||
+                  "Invalid option",
+              })}
+              className="w-full p-3 border-base text-text bg-base rounded-2xl font-extralight appearance-none pr-10 focus:outline-none"
+            >
+              <option value="Private">Private</option>
+              <option value="Community">Community</option>
+            </select>
+            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-[10%]">
+              <ListIconBtn
+                color={"text"}
+                icon={"fi-rr-angle-down"}
+                transparent
+              />
+            </div>
+            {errors.privacy && (
+              <p className="text-sm !text-red-600 mt-1">
+                {errors.privacy.message}
+              </p>
+            )}
           </div>
-          {errors.privacy && (
-            <p className="text-sm !text-red-600 mt-1">
-              {errors.privacy.message}
-            </p>
-          )}
-        </div>
+        )}
 
         <div className="flex justify-end mt-6 gap-3">
           <ListIconBtn

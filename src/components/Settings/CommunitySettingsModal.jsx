@@ -39,8 +39,10 @@ const CommunitySettingsModal = ({ closeModal }) => {
       const joined = communities.find((c) => c.id === parseInt(selectedId));
       setCurrentCommunity(joined);
       showToast(`Joined "${joined.name}"!`, "success");
-      closeModal(); // close modal first
-      navigate("/"); // then navigate
+      setTimeout(() => {
+        closeModal(); // close modal first
+        navigate(0); // then navigate
+      }, 750);
     } catch (err) {
       showToast(err.message, "error");
     }
@@ -54,8 +56,10 @@ const CommunitySettingsModal = ({ closeModal }) => {
       const community = await createCommunity({ name: newName });
       setCurrentCommunity(community);
       showToast(`Created "${community.name}"!`, "success");
-      closeModal();
-      navigate("/");
+      setTimeout(() => {
+        closeModal();
+        navigate(0);
+      }, 750);
     } catch (err) {
       showToast(err.message, "error");
     }

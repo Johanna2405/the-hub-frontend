@@ -8,7 +8,6 @@ import { useNavigate } from "react-router";
 import {
   changeUsername,
   changePassword,
-  // updateStatus,
   updateProfilePicture,
   fetchUser,
 } from "../utils/user";
@@ -25,7 +24,6 @@ import {
 
 const Settings = () => {
   const navigate = useNavigate();
-  // const [status, setStatus] = useState("");
   const { user, setUser, pinboardSettings, setPinboardSettings } = useUser();
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -38,7 +36,6 @@ const Settings = () => {
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
   const {
-    // joinedCommunities,
     currentCommunity,
     setCurrentCommunity,
     settings,
@@ -134,17 +131,6 @@ const Settings = () => {
     }
   };
 
-  // const handleStatusUpdate = async () => {
-  //   try {
-  //     const updated = await updateStatus(user.id, status);
-  //     setUser((prev) => ({ ...prev, status }));
-  //     alert("Status updated!");
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert("Failed to update status");
-  //   }
-  // };
-
   const toggleSetting = async (key) => {
     try {
       const updated = {
@@ -203,9 +189,11 @@ const Settings = () => {
     setShowLeaveConfirm(false);
     try {
       await leaveCommunity(currentCommunity.id);
-      setCurrentCommunity(null);
       showToast(`You left "${currentCommunity.name}".`, "success");
-      navigate(0);
+      setTimeout(() => {
+        setCurrentCommunity(null);
+        navigate(0);
+      }, 750);
     } catch (err) {
       console.error("Failed to leave community:", err);
       showToast("Failed to leave community", "error");
@@ -223,26 +211,6 @@ const Settings = () => {
       <div className="flex gap-4 justify-start">
         <ThemeController />
       </div>
-      {/* update status */}
-      {/* <div className="bg-primary rounded-3xl p-4 flex flex-col gap-4 md:w-3/4">
-        <h2>{user.username}</h2>
-        <span className="font-semibold">Update your status</span>
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="latest status"
-            className="flex-1 px-2 py-2 rounded-2xl placeholder:text-gray-400 focus:outline-none bg-base text-text"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          />
-          <IconBtn
-            text={"update"}
-            color={"ultramarine"}
-            icon={"fi-rr-disk"}
-            // onClick={handleStatusUpdate}
-          />
-        </div>
-      </div> */}
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
         {/* Pinboard settings */}
         {currentCommunity === null && (
@@ -432,13 +400,6 @@ const Settings = () => {
                       appName={"Messages"}
                       checked={settings.messages ?? true}
                       onChange={() => toggleSetting("messages")}
-                    />
-                    <AppCheckbox
-                      icon={"fi-rr-calendar"}
-                      iconColor={"lilac"}
-                      appName={"Calendar"}
-                      checked={settings.calendar ?? true}
-                      onChange={() => toggleSetting("calendar")}
                     />
                   </div>
                 </div>

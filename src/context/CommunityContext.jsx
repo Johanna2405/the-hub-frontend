@@ -95,7 +95,6 @@ export const CommunityProvider = ({ children }) => {
     setCurrentCommunity(null);
     setJoinedCommunities([]);
     setSettings({
-      calendar: true,
       lists: true,
       posts: true,
       messages: true,
