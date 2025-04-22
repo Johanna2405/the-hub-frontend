@@ -1,12 +1,16 @@
-import SidebarLink from "./SidebarLink";
+import { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useCommunity } from "../context/CommunityContext";
 import { useNavigate } from "react-router";
+import SidebarLink from "./SidebarLink";
+import IconBtn from "./IconBtn";
 import CommunitySelector from "./CommunitySelector";
 import ThemeController from "./Settings/ThemeController";
+import CommunitySettingsModal from "../components/Settings/CommunitySettingsModal";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
+  const [isCommunityModalOpen, setCommunityModalOpen] = useState(false);
   const { pinboardSettings, logout, currentTheme, effectiveTheme } = useUser();
   const {
     joinedCommunities,
@@ -110,6 +114,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             }}
             refreshCommunities={refreshJoinedCommunities}
           />
+          {!currentCommunity && (
+            <IconBtn
+              text={`Join or add a community`}
+              icon="fi-rr-plus-small"
+              color="lilac"
+              onClick={() => setCommunityModalOpen(true)}
+            />
+          )}
         </div>
         <h3>Apps</h3>
         <nav className="flex flex-col gap-4">
@@ -160,6 +172,22 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-lg">Sign out</span>
         </button>
       </div>
+
+      {isCommunityModalOpen && (
+        <div className="fixed inset-0 bg-primary/25 backdrop-blur-sm z-50 flex items-center justify-center framer-motion">
+          <div className="bg-base p-4 md:p-6 rounded-3xl shadow-lg relative w-full max-w-xl mx-4">
+            <button
+              className="absolute top-6 right-6 text-lg text-text "
+              onClick={() => setCommunityModalOpen(false)}
+            >
+              ✕
+            </button>
+            <CommunitySettingsModal
+              closeModal={() => setCommunityModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
